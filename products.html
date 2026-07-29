@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>FAD3D Barbers</title>
+<title>Products | FAD3D Barbers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -441,22 +441,6 @@
     height: 56px;
   }
 
-  .service-book-row {
-    display: flex;
-    justify-content: center;
-    margin-top: 28px;
-  }
-
-  .service-book-row a.hero-btn {
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-    position: static;
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
-
   /* ---------- CONTACTS ---------- */
 
   .contact {
@@ -869,6 +853,7 @@
     .about-line,
     .about-text,
     .service-card,
+    .product-card,
     .contact-inner,
     .review-card {
       animation: none !important;
@@ -933,6 +918,214 @@
       padding: 48px 24px 64px;
     }
   }
+
+  /* ---------- PRODUCTS PAGE INTRO ---------- */
+
+  .page-intro {
+    width: 100%;
+    padding: 56px 24px 40px;
+  }
+
+  .page-intro-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .page-intro .hero-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page-intro .hero-text {
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---------- PRODUCTS GRID ---------- */
+
+  .products-section {
+    width: 100%;
+    padding: 56px 24px 0;
+  }
+
+  .products-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .products-header {
+    margin-bottom: 56px;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 32px;
+  }
+
+  .product-card {
+    background: #f4f2f0;
+    border-top: 4px solid #7c1fa0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .product-card.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .product-img {
+    width: 100%;
+    height: clamp(200px, 38vw, 280px);
+    overflow: hidden;
+  }
+
+  .product-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .product-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    color: #ffffff;
+    z-index: 2;
+  }
+
+  .product-badge.in-stock {
+    background: #7c1fa0;
+  }
+
+  .product-badge.low-stock {
+    background: #f5a623;
+    color: #000000;
+  }
+
+  .product-badge.sold-out {
+    background: #000000;
+  }
+
+  .product-body {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .product-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #000000;
+    font-size: clamp(20px, 3.5vw, 25px);
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .product-text {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #1a1a1a;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+
+  .product-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 12px;
+  }
+
+  .product-price {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #7c1fa0;
+    font-size: clamp(19px, 3.5vw, 23px);
+  }
+
+  .product-stock-text {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #777777;
+    text-align: right;
+  }
+
+  .product-stock-text.low {
+    color: #c77b00;
+  }
+
+  .product-stock-text.out {
+    color: #b00020;
+  }
+
+  .product-btn {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+    background: #7c1fa0;
+    border: none;
+    padding: 15px 20px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    transition: background 0.2s ease;
+  }
+
+  .product-btn:hover {
+    background: #661a86;
+  }
+
+  .product-btn.disabled {
+    background: #cccccc;
+    color: #777777;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .products-bottom-spacer {
+    height: 56px;
+  }
+
+  @media (min-width: 1024px) {
+    .products-section {
+      padding: 40px 24px 0;
+    }
+
+    .products-header {
+      margin-bottom: 40px;
+    }
+
+    .products-bottom-spacer {
+      height: 40px;
+    }
+  }
 </style>
 </head>
 <body>
@@ -952,154 +1145,154 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
-    <a href="services.html">Services</a>
+    <a href="services.html#offer">Services</a>
     <a href="products.html">Products</a>
-    <a href="#reviews">Reviews</a>
+    <a href="index.html#reviews">Reviews</a>
     <a href="#contact">Location</a>
     <a href="#contact">Contact</a>
   </div>
 
-  <section class="hero" id="heroSection">
-    <div class="hero-content">
-      <p class="hero-eyebrow">Premium Cuts By Seasoned Pros</p>
+  <section class="page-intro">
+    <div class="page-intro-inner">
+      <p class="hero-eyebrow">Take The Shop Home</p>
       <h1 class="hero-heading">
-        <span class="line-one">BEST CUTS</span>
-        <span class="line-two">IN AYLESBURY</span>
+        <span class="line-one">SHOP OUR</span>
+        <span class="line-two">PRODUCTS</span>
       </h1>
       <p class="hero-text">
-        Our barbers blend sharp modern technique with old-school craft, tailoring every cut and fade to fit you. Step in and leave with a look that's clean, precise, and unmistakably yours.
+        The same grooming essentials we use in the chair, ready to keep your cut, beard, and style sharp between visits.
       </p>
-      <button class="hero-btn">Book An Appointment</button>
-    </div>
-  </section>
-
-  <div class="hero-spacer"></div>
-
-  <section class="tools-banner">
-    <div class="tools-banner-inner">
-      <img src="tools.jpg" alt="Barbering tools laid out on a wooden table">
-    </div>
-  </section>
-
-  <div class="purple-divider"></div>
-
-  <section class="about" id="about">
-    <div class="about-content">
-      <p class="about-eyebrow">About Us</p>
-      <h2 class="about-heading">
-        <span class="about-line">SKILLED HANDS,</span>
-        <span class="about-line">SHARP RESULTS</span>
-      </h2>
-      <p class="about-text">
-        At FAD3D Barbers, every cut is built on precision, patience, and a genuine love for the craft. Our team blends classic barbering technique with modern trends to give each client a style that actually suits them, not just what's trending. From clean fades to traditional hot shaves, we take pride in creating a relaxed, welcoming space where good conversation meets even better grooming. Step in, get comfortable, and leave looking your best.
-      </p>
+      <button class="hero-btn" onclick="window.location.href='#contact'">Book An Appointment</button>
     </div>
   </section>
 
   <div class="purple-bar"></div>
 
-  <section class="offer" id="offer">
-    <div class="offer-inner">
-      <div class="offer-header">
-        <p class="about-eyebrow">What We're Offering</p>
+  <section class="products-section" id="products">
+    <div class="products-inner">
+      <div class="products-header">
+        <p class="about-eyebrow">In The Shop</p>
         <h2 class="about-heading">
           <span class="about-line">BARBER</span>
-          <span class="about-line">SERVICES</span>
+          <span class="about-line">PRODUCTS</span>
         </h2>
       </div>
 
-      <div class="services">
-        <div class="service-card">
-          <div class="service-img">
-            <img src="haircutting.jpg" alt="Hair cutting at FAD3D Barbers">
+      <div class="products-grid">
+
+        <div class="product-card">
+          <span class="product-badge in-stock">In Stock</span>
+          <div class="product-img">
+            <img src="beard_oil.jpg" alt="Beard Oil">
           </div>
-          <h3 class="service-title">HAIR CUTTING</h3>
-          <p class="service-text">
-            Every cut starts with a conversation about what actually works for you, not just what's trending. Our barbers combine sharp technique with a real eye for detail, blending classic tapers with modern styling for a look that holds up long after you leave the chair.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
+          <div class="product-body">
+            <h3 class="product-title">Beard Oil</h3>
+            <p class="product-text">
+              A lightweight, fast-absorbing oil that softens and conditions facial hair while keeping the skin underneath calm and moisturised.
+            </p>
+            <div class="product-meta">
+              <span class="product-price">&pound;12.00</span>
+              <span class="product-stock-text">34 In Stock</span>
+            </div>
+            <a href="#contact" class="product-btn">Order Now</a>
           </div>
         </div>
 
-        <div class="service-card">
-          <div class="service-img">
-            <img src="shaving.jpg" alt="Traditional straight razor shave at FAD3D Barbers">
+        <div class="product-card">
+          <span class="product-badge in-stock">In Stock</span>
+          <div class="product-img">
+            <img src="beardbalm.jpg" alt="Beard Balm">
           </div>
-          <h3 class="service-title">SHAVING</h3>
-          <p class="service-text">
-            Sit back and let us take it from here. Our traditional straight razor shaves are unhurried and precise, finished with hot towels and quality oils that leave your skin smooth. It's less of a quick service and more of a proper reset.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
+          <div class="product-body">
+            <h3 class="product-title">Beard Balm</h3>
+            <p class="product-text">
+              A light-hold balm that tames flyaways and shapes your beard, made with natural ingredients that soften and moisturise.
+            </p>
+            <div class="product-meta">
+              <span class="product-price">&pound;14.00</span>
+              <span class="product-stock-text">21 In Stock</span>
+            </div>
+            <a href="#contact" class="product-btn">Order Now</a>
           </div>
         </div>
 
-        <div class="service-card">
-          <div class="service-img">
-            <img src="beard.jpg" alt="Beard trim and shaping at FAD3D Barbers">
+        <div class="product-card">
+          <span class="product-badge sold-out">Sold Out</span>
+          <div class="product-img">
+            <img src="seasaltspray.jpg" alt="Sea Salt Spray">
           </div>
-          <h3 class="service-title">BEARD</h3>
-          <p class="service-text">
-            From a tight lineup to a full shape-up, we treat beard work as its own craft. We shape around your natural growth and facial structure so everything stays sharp, balanced, and simple to maintain between visits.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
+          <div class="product-body">
+            <h3 class="product-title">Sea Salt Spray</h3>
+            <p class="product-text">
+              A texturising spray that builds effortless, matte, beach-style volume without weighing hair down.
+            </p>
+            <div class="product-meta">
+              <span class="product-price">&pound;16.00</span>
+              <span class="product-stock-text out">Sold Out</span>
+            </div>
+            <span class="product-btn disabled">Sold Out</span>
           </div>
         </div>
+
+        <div class="product-card">
+          <span class="product-badge in-stock">In Stock</span>
+          <div class="product-img">
+            <img src="fullcutset.jpg" alt="Full Clipper Set">
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">Full Clipper Set</h3>
+            <p class="product-text">
+              A complete cordless clipper kit with guide combs, thinning and cutting scissors, and a comb for sharp cuts at home.
+            </p>
+            <div class="product-meta">
+              <span class="product-price">&pound;45.00</span>
+              <span class="product-stock-text">12 In Stock</span>
+            </div>
+            <a href="#contact" class="product-btn">Order Now</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <span class="product-badge low-stock">Selling Fast</span>
+          <div class="product-img">
+            <img src="clay.jpg" alt="Hair Clay">
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">Hair Clay</h3>
+            <p class="product-text">
+              A strong-hold, matte clay that builds natural texture and keeps styles in place all day without shine.
+            </p>
+            <div class="product-meta">
+              <span class="product-price">&pound;13.00</span>
+              <span class="product-stock-text low">Only 3 Left</span>
+            </div>
+            <a href="#contact" class="product-btn">Order Now</a>
+          </div>
+        </div>
+
+        <div class="product-card">
+          <span class="product-badge in-stock">In Stock</span>
+          <div class="product-img">
+            <img src="premiumpomade.jpg" alt="Premium Pomade">
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">Premium Pomade</h3>
+            <p class="product-text">
+              A classic, high-shine pomade with firm, long-lasting hold for sharp, styled looks that stay put.
+            </p>
+            <div class="product-meta">
+              <span class="product-price">&pound;15.00</span>
+              <span class="product-stock-text">27 In Stock</span>
+            </div>
+            <a href="#contact" class="product-btn">Order Now</a>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
 
-  <div class="offer-bottom-spacer"></div>
-
-  <div class="purple-bar"></div>
-
-  <section class="reviews" id="reviews">
-    <div class="reviews-inner">
-      <p class="about-eyebrow">What They Say</p>
-      <h2 class="about-heading">
-        <span class="about-line">CUSTOMER</span>
-        <span class="about-line">REVIEWS</span>
-      </h2>
-
-      <div class="reviews-grid" id="reviewsGrid"></div>
-
-      <div class="reviews-actions">
-        <button class="hero-btn" id="leaveReviewBtn">Leave A Review</button>
-      </div>
-    </div>
-  </section>
-
-  <div class="review-modal-overlay" id="reviewModalOverlay">
-    <div class="review-modal">
-      <button class="review-modal-close" id="reviewModalClose" aria-label="Close">&times;</button>
-      <h3>Leave A Review</h3>
-      <form id="reviewForm">
-        <div class="review-field">
-          <label for="reviewNameInput">Your Name</label>
-          <input type="text" id="reviewNameInput" required maxlength="60">
-        </div>
-        <div class="review-field">
-          <label>Rating</label>
-          <div class="star-picker" id="starPicker">
-            <span data-value="1">&#9733;</span>
-            <span data-value="2">&#9733;</span>
-            <span data-value="3">&#9733;</span>
-            <span data-value="4">&#9733;</span>
-            <span data-value="5">&#9733;</span>
-          </div>
-        </div>
-        <div class="review-field">
-          <label for="reviewTextInput">Your Review</label>
-          <textarea id="reviewTextInput" required maxlength="400"></textarea>
-        </div>
-        <button type="submit" class="review-submit-btn">Submit Review</button>
-      </form>
-    </div>
-  </div>
-
-  <div class="offer-bottom-spacer"></div>
+  <div class="products-bottom-spacer"></div>
 
   <div class="purple-bar"></div>
 
@@ -1135,7 +1328,7 @@
         </div>
         <div class="contact-row">
           <i class="fa-regular fa-clock"></i>
-          <span>Mon–Thu: 9am–7.30pm, Fri: 9am–7pm, Sat–Sun: 10am–6pm</span>
+          <span>Mon&ndash;Thu: 9am&ndash;7.30pm, Fri: 9am&ndash;7pm, Sat&ndash;Sun: 10am&ndash;6pm</span>
         </div>
         <div class="contact-row">
           <i class="fa-solid fa-phone"></i>
@@ -1158,9 +1351,9 @@
     <nav class="footer-nav">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
-      <a href="services.html">Services</a>
+      <a href="services.html#offer">Services</a>
       <a href="products.html">Products</a>
-      <a href="#reviews">Reviews</a>
+      <a href="index.html#reviews">Reviews</a>
       <a href="#contact">Location</a>
       <a href="#contact">Contact</a>
     </nav>
@@ -1179,28 +1372,6 @@
   </footer>
 
   <script>
-    // ---------- DESKTOP HERO IMAGE SWAP ----------
-    // Detects the device's OS (not just screen width) and swaps in the
-    // 16:9 hero image on desktop operating systems (Windows, macOS, Linux, ChromeOS).
-    // Mobile OSes (Android, iOS, iPadOS) keep the original 9:16 portrait image.
-    (function () {
-      var ua = navigator.userAgent || '';
-      var isMobileOS = /Android|iPhone|iPad|iPod|Windows Phone|IEMobile|Mobile/i.test(ua);
-      // iPadOS 13+ reports as Mac, so also check for touch support as a fallback signal.
-      var isTouchMac = /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1;
-      var willUseDesktopImage = !isMobileOS && !isTouchMac;
-
-      var heroEl = document.getElementById('heroSection');
-      if (willUseDesktopImage && heroEl) {
-        var testImg = new Image();
-        testImg.onload = function () {
-          heroEl.style.backgroundImage = "url('hero-desktop.jpg')";
-          heroEl.classList.add('desktop-hero');
-        };
-        testImg.src = 'hero-desktop.jpg';
-      }
-    })();
-
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1219,130 +1390,18 @@
       });
     }
 
-    const aboutContent = document.querySelector('.about-content');
-    if (aboutContent) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            aboutContent.classList.add('in-view');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      observer.observe(aboutContent);
-    }
-
-    const serviceCards = document.querySelectorAll('.service-card');
-    if (serviceCards.length) {
-      const serviceObserver = new IntersectionObserver((entries) => {
+    const productCards = document.querySelectorAll('.product-card');
+    if (productCards.length) {
+      const productObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('in-view');
-            serviceObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.25 });
-      serviceCards.forEach(card => serviceObserver.observe(card));
-    }
-
-    // ---------- REVIEWS ----------
-    let reviews = [
-      { name: 'James Carter', stars: 5, text: "Been coming here for over a year now, always a clean fade and the lads are sound. Best barbers in Aylesbury by far.", date: '2026-06-14' },
-      { name: 'Michael Osei', stars: 5, text: 'Booked a beard trim and haircut, walked out looking like a new man. Great attention to detail and good banter too.', date: '2026-05-30' },
-      { name: 'Daniel Hughes', stars: 4, text: 'Solid haircut and friendly service. Gets busy on weekends so worth booking ahead, but always worth the wait.', date: '2026-05-09' }
-    ];
-
-    const reviewsGrid = document.getElementById('reviewsGrid');
-
-    function starString(count) {
-      return '&#9733;'.repeat(count) + '&#9734;'.repeat(5 - count);
-    }
-
-    function initials(name) {
-      return name.trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
-    }
-
-    function renderReviews() {
-      reviewsGrid.innerHTML = '';
-      reviews.forEach(r => {
-        const card = document.createElement('div');
-        card.className = 'review-card';
-        card.innerHTML = `
-          <div class="review-top">
-            <div class="review-avatar">${initials(r.name)}</div>
-            <div>
-              <div class="review-name">${r.name}</div>
-              <div class="review-date">${r.date}</div>
-            </div>
-          </div>
-          <div class="review-stars">${starString(r.stars)}</div>
-          <p class="review-text">${r.text}</p>
-        `;
-        reviewsGrid.appendChild(card);
-      });
-
-      const cards = reviewsGrid.querySelectorAll('.review-card');
-      const cardObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            cardObserver.unobserve(entry.target);
+            productObserver.unobserve(entry.target);
           }
         });
       }, { threshold: 0.2 });
-      cards.forEach(c => cardObserver.observe(c));
+      productCards.forEach(card => productObserver.observe(card));
     }
-
-    renderReviews();
-
-    // ---------- REVIEW MODAL ----------
-    const reviewModalOverlay = document.getElementById('reviewModalOverlay');
-    const leaveReviewBtn = document.getElementById('leaveReviewBtn');
-    const reviewModalClose = document.getElementById('reviewModalClose');
-    const reviewForm = document.getElementById('reviewForm');
-    const starPicker = document.getElementById('starPicker');
-    const starSpans = starPicker.querySelectorAll('span');
-    let selectedStars = 0;
-
-    function openReviewModal() {
-      reviewModalOverlay.classList.add('open');
-    }
-
-    function closeReviewModal() {
-      reviewModalOverlay.classList.remove('open');
-      reviewForm.reset();
-      selectedStars = 0;
-      starSpans.forEach(s => s.classList.remove('active'));
-    }
-
-    leaveReviewBtn.addEventListener('click', openReviewModal);
-    reviewModalClose.addEventListener('click', closeReviewModal);
-    reviewModalOverlay.addEventListener('click', (e) => {
-      if (e.target === reviewModalOverlay) closeReviewModal();
-    });
-
-    starSpans.forEach(span => {
-      span.addEventListener('click', () => {
-        selectedStars = parseInt(span.dataset.value, 10);
-        starSpans.forEach(s => {
-          s.classList.toggle('active', parseInt(s.dataset.value, 10) <= selectedStars);
-        });
-      });
-    });
-
-    reviewForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('reviewNameInput').value.trim();
-      const text = document.getElementById('reviewTextInput').value.trim();
-      if (!name || !text || selectedStars === 0) {
-        if (selectedStars === 0) alert('Please select a star rating.');
-        return;
-      }
-      const today = new Date().toISOString().slice(0, 10);
-      reviews.unshift({ name, stars: selectedStars, text, date: today });
-      renderReviews();
-      closeReviewModal();
-    });
 
     const contactInner = document.querySelector('.contact-inner');
     if (contactInner) {
