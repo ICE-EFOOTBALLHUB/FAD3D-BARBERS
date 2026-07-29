@@ -377,107 +377,11 @@
     margin: 0 auto;
   }
 
-  .offer {
-    width: 100%;
-    padding: 56px 24px 0;
-  }
-
-  .offer-inner {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .offer-header {
-    margin-bottom: 56px;
-  }
-
-  .services {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-  .service-card {
-    margin-bottom: 72px;
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .service-card.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .service-card:last-child {
-    margin-bottom: 0;
-  }
-
-  .service-img {
-    width: 100%;
-    height: clamp(220px, 42vw, 380px);
-    overflow: hidden;
-    margin-bottom: 24px;
-  }
-
-  .service-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
-
-  .service-title {
-    font-family: 'Archivo Black', sans-serif;
-    font-weight: 400;
-    color: #000000;
-    font-size: clamp(22px, 4vw, 32px);
-    text-align: center;
-    letter-spacing: 1px;
-    margin-bottom: 16px;
-  }
-
-  .service-text {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(15px, 2.4vw, 18px);
-    line-height: 1.8;
-    color: #1a1a1a;
-    text-align: center;
-    max-width: 640px;
-    margin: 0 auto;
-  }
-
-  .offer-bottom-spacer {
-    height: 56px;
-  }
-
-  .service-book-row {
-    display: flex;
-    justify-content: center;
-    margin-top: 28px;
-  }
-
-  .service-book-row a.hero-btn {
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-    position: static;
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
-
   .about-cta {
     margin-top: 28px;
   }
 
-  .offer-cta {
-    display: flex;
-    justify-content: center;
-    margin-top: 8px;
-  }
-
-  .about-cta a.hero-btn,
-  .offer-cta a.hero-btn {
+  .about-cta a.hero-btn {
     text-decoration: none;
     display: inline-block;
     text-align: center;
@@ -490,8 +394,7 @@
     border: 2px solid #7c1fa0;
   }
 
-  .about-cta a.hero-btn:hover,
-  .offer-cta a.hero-btn:hover {
+  .about-cta a.hero-btn:hover {
     background: #7c1fa0;
     color: #ffffff;
   }
@@ -907,7 +810,6 @@
     .about-eyebrow,
     .about-line,
     .about-text,
-    .service-card,
     .contact-inner,
     .review-card {
       animation: none !important;
@@ -946,22 +848,6 @@
 
     .about {
       padding: 48px 24px;
-    }
-
-    .offer {
-      padding: 40px 24px 0;
-    }
-
-    .offer-header {
-      margin-bottom: 40px;
-    }
-
-    .service-card {
-      margin-bottom: 48px;
-    }
-
-    .offer-bottom-spacer {
-      height: 40px;
     }
 
     .reviews {
@@ -1066,67 +952,6 @@
 
   <div class="purple-bar"></div>
 
-  <section class="offer" id="offer">
-    <div class="offer-inner">
-      <div class="offer-header" id="offerHeader">
-        <p class="about-eyebrow">Our Services</p>
-        <h2 class="about-heading">
-          <span class="about-line">WHAT WE</span>
-          <span class="about-line">OFFER</span>
-        </h2>
-      </div>
-
-      <div class="services">
-        <div class="service-card">
-          <div class="service-img">
-            <img src="haircutting.jpg" alt="Hair cutting at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">HAIR CUTTING</h3>
-          <p class="service-text">
-            Sharp, personalised cuts that blend classic tapers with modern styling for a look that holds up long after you leave the chair.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-img">
-            <img src="shaving.jpg" alt="Traditional straight razor shave at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">SHAVING</h3>
-          <p class="service-text">
-            Traditional straight razor shaves, unhurried and precise, finished with hot towels and quality oils that leave your skin smooth.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-img">
-            <img src="beard.jpg" alt="Beard trim and shaping at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">BEARD</h3>
-          <p class="service-text">
-            From a tight lineup to a full shape-up, we shape around your natural growth so everything stays sharp, balanced, and easy to maintain.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="offer-cta">
-        <a href="services.html" class="hero-btn">View All Services</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="offer-bottom-spacer"></div>
-
-  <div class="purple-bar"></div>
-
   <footer class="site-footer">
     <a href="index.html" aria-label="FAD3D Barbers home"><img src="logo.png" alt="FAD3D logo" class="footer-logo"></a>
     <div class="footer-brand">FAD3D BARBERS</div>
@@ -1206,32 +1031,6 @@
         });
       }, { threshold: 0.3 });
       observer.observe(aboutContent);
-    }
-
-    const offerHeader = document.getElementById('offerHeader');
-    if (offerHeader) {
-      const offerHeaderObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            offerHeader.classList.add('in-view');
-            offerHeaderObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      offerHeaderObserver.observe(offerHeader);
-    }
-
-    const serviceCards = document.querySelectorAll('.service-card');
-    if (serviceCards.length) {
-      const serviceObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            serviceObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.25 });
-      serviceCards.forEach(card => serviceObserver.observe(card));
     }
 
   </script>
