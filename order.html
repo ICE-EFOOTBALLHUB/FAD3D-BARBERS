@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>Products | FAD3D Barbers</title>
+<title>Order Product | FAD3D Barbers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -856,7 +856,7 @@
     .about-line,
     .about-text,
     .service-card,
-    .product-card,
+    .booking-card,
     .contact-inner,
     .review-card {
       animation: none !important;
@@ -947,185 +947,292 @@
     margin-right: auto;
   }
 
-  /* ---------- PRODUCTS GRID ---------- */
+  /* ---------- ORDER FORM ---------- */
 
-  .products-section {
+  .booking-section {
     width: 100%;
-    padding: 56px 24px 0;
+    padding: 40px 24px 0;
   }
 
-  .products-inner {
-    max-width: 1100px;
+  .booking-inner {
+    max-width: 640px;
     margin: 0 auto;
   }
 
-  .products-header {
-    margin-bottom: 56px;
-  }
-
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 32px;
-  }
-
-  .product-card {
+  .booking-card {
     background: #f4f2f0;
     border-top: 4px solid #7c1fa0;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
+    padding: clamp(24px, 5vw, 48px);
     opacity: 0;
     transform: translateY(40px);
     transition: opacity 0.7s ease, transform 0.7s ease;
   }
 
-  .product-card.in-view {
+  .booking-card.in-view {
     opacity: 1;
     transform: translateY(0);
   }
 
-  .product-img {
-    width: 100%;
-    height: clamp(200px, 38vw, 280px);
-    overflow: hidden;
+  .form-group {
+    margin-bottom: 28px;
   }
 
-  .product-img img {
+  .form-group label {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #000000;
+    margin-bottom: 10px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="tel"] {
+    width: 100%;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+    padding: 14px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #000000;
+  }
+
+  .form-group input:focus {
+    outline: 2px solid #7c1fa0;
+    outline-offset: -2px;
+  }
+
+  /* Product summary */
+
+  .order-product {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #e6e4e2;
+    padding: 20px;
+    margin-bottom: 28px;
+  }
+
+  .order-product-img {
+    width: 96px;
+    height: 96px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: #f4f2f0;
+  }
+
+  .order-product-img img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
   }
 
-  .product-badge {
-    position: absolute;
-    top: 16px;
-    right: 16px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 11px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    padding: 6px 14px;
-    color: #ffffff;
-    z-index: 2;
-  }
-
-  .product-badge.in-stock {
-    background: #7c1fa0;
-  }
-
-  .product-badge.low-stock {
-    background: #f5a623;
-    color: #000000;
-  }
-
-  .product-badge.sold-out {
-    background: #000000;
-  }
-
-  .product-body {
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
+  .order-product-info {
     flex: 1;
+    min-width: 0;
   }
 
-  .product-title {
+  .order-product-title {
     font-family: 'Archivo Black', sans-serif;
     font-weight: 400;
     color: #000000;
-    font-size: clamp(20px, 3.5vw, 25px);
+    font-size: clamp(18px, 3.5vw, 22px);
     letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .order-product-desc {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #555555;
     margin-bottom: 10px;
   }
 
-  .product-text {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.7;
-    color: #1a1a1a;
-    margin-bottom: 20px;
-    flex: 1;
-  }
-
-  .product-meta {
+  .order-product-meta {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-    gap: 12px;
+    gap: 14px;
+    flex-wrap: wrap;
   }
 
-  .product-price {
+  .order-product-price {
     font-family: 'Archivo Black', sans-serif;
     font-weight: 400;
     color: #7c1fa0;
-    font-size: clamp(19px, 3.5vw, 23px);
+    font-size: clamp(18px, 3.5vw, 22px);
   }
 
-  .product-stock-text {
+  .order-stock-text {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-weight: 700;
     font-size: 11px;
     letter-spacing: 0.5px;
     text-transform: uppercase;
     color: #777777;
-    text-align: right;
   }
 
-  .product-stock-text.low {
+  .order-stock-text.low {
     color: #c77b00;
   }
 
-  .product-stock-text.out {
+  .order-stock-text.out {
     color: #b00020;
   }
 
-  .product-btn {
+  /* Quantity stepper */
+
+  .qty-stepper {
+    display: flex;
+    align-items: stretch;
+    max-width: 180px;
+    border: 1px solid #cccccc;
+  }
+
+  .qty-btn {
+    width: 44px;
+    background: #f4f2f0;
+    border: none;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: #7c1fa0;
+    cursor: pointer;
+    transition: background 0.15s ease;
+    flex-shrink: 0;
+  }
+
+  .qty-btn:hover:not(:disabled) {
+    background: #e9e6e3;
+  }
+
+  .qty-btn:disabled {
+    color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .qty-input {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    border: none;
+    border-left: 1px solid #cccccc;
+    border-right: 1px solid #cccccc;
+    background: #ffffff;
+    text-align: center;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #000000;
+    -moz-appearance: textfield;
+  }
+
+  .qty-input::-webkit-outer-spin-button,
+  .qty-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .qty-input:focus {
+    outline: 2px solid #7c1fa0;
+    outline-offset: -2px;
+  }
+
+  .qty-max-note {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    color: #777777;
+    margin-top: 10px;
+  }
+
+  .booking-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+
+  .booking-total-row span:first-child {
     font-family: 'Poppins', sans-serif;
     font-weight: 600;
-    font-size: 14px;
-    letter-spacing: 1px;
+    font-size: 13px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
-    color: #ffffff;
-    background: #7c1fa0;
+    color: #000000;
+  }
+
+  .booking-total-row span:last-child {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #7c1fa0;
+    font-size: 22px;
+  }
+
+  .booking-submit-btn {
+    width: 100%;
+    margin-top: 8px;
     border: none;
-    padding: 15px 20px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    display: block;
-    transition: background 0.2s ease;
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 
-  .product-btn:hover {
-    background: #661a86;
-  }
-
-  .product-btn.disabled {
+  .booking-submit-btn:disabled {
     background: #cccccc;
     color: #777777;
     cursor: not-allowed;
-    pointer-events: none;
   }
 
-  .products-bottom-spacer {
+  .order-sold-out-msg {
+    display: none;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #b00020;
+    background: #ffffff;
+    border: 1px solid #f0c4cc;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+  }
+
+  .booking-card.is-sold-out .order-sold-out-msg {
+    display: block;
+  }
+
+  .booking-card.is-sold-out .order-form-fields {
+    display: none;
+  }
+
+  .order-not-found {
+    display: none;
+    text-align: center;
+    padding: 24px 0;
+  }
+
+  .order-not-found p {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 16px;
+    color: #1a1a1a;
+    margin-bottom: 24px;
+  }
+
+  .booking-bottom-spacer {
     height: 56px;
   }
 
   @media (min-width: 1024px) {
-    .products-section {
-      padding: 40px 24px 0;
+    .booking-section {
+      padding: 32px 24px 0;
     }
 
-    .products-header {
-      margin-bottom: 40px;
-    }
-
-    .products-bottom-spacer {
+    .booking-bottom-spacer {
       height: 40px;
     }
   }
@@ -1157,145 +1264,85 @@
 
   <section class="page-intro">
     <div class="page-intro-inner">
-      <p class="hero-eyebrow">Take The Shop Home</p>
+      <p class="hero-eyebrow" id="orderEyebrow">Take The Shop Home</p>
       <h1 class="hero-heading">
-        <span class="line-one">SHOP OUR</span>
-        <span class="line-two">PRODUCTS</span>
+        <span class="line-one">COMPLETE</span>
+        <span class="line-two">YOUR ORDER</span>
       </h1>
-      <p class="hero-text">
-        The same grooming essentials we use in the chair, ready to keep your cut, beard, and style sharp between visits.
+      <p class="hero-text" id="orderIntroText">
+        Confirm the quantity you'd like, pop in your details, and we'll get it ready for you.
       </p>
-      <button class="hero-btn" onclick="window.location.href='book.html'">Book An Appointment</button>
     </div>
   </section>
 
   <div class="purple-bar"></div>
 
-  <section class="products-section" id="products">
-    <div class="products-inner">
-      <div class="products-header">
-        <p class="about-eyebrow">In The Shop</p>
-        <h2 class="about-heading">
-          <span class="about-line">BARBER</span>
-          <span class="about-line">PRODUCTS</span>
-        </h2>
-      </div>
+  <section class="booking-section" id="booking">
+    <div class="booking-inner">
+      <div class="booking-card" id="orderCard">
 
-      <div class="products-grid">
-
-        <div class="product-card">
-          <span class="product-badge in-stock">In Stock</span>
-          <div class="product-img">
-            <img src="beard_oil.jpg" alt="Beard Oil">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Beard Oil</h3>
-            <p class="product-text">
-              A lightweight, fast-absorbing oil that softens and conditions facial hair while keeping the skin underneath calm and moisturised.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;12.00</span>
-              <span class="product-stock-text">34 In Stock</span>
-            </div>
-            <a href="order.html?product=beard-oil" class="product-btn">Order Now</a>
-          </div>
+        <div class="order-not-found" id="orderNotFound">
+          <p>We couldn't find that product. It may have been removed or the link is out of date.</p>
+          <a href="products.html" class="hero-btn" style="opacity:1; transform:none; animation:none; text-decoration:none; display:inline-block;">Back To Products</a>
         </div>
 
-        <div class="product-card">
-          <span class="product-badge in-stock">In Stock</span>
-          <div class="product-img">
-            <img src="beardbalm.jpg" alt="Beard Balm">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Beard Balm</h3>
-            <p class="product-text">
-              A light-hold balm that tames flyaways and shapes your beard, made with natural ingredients that soften and moisturise.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;14.00</span>
-              <span class="product-stock-text">21 In Stock</span>
+        <div id="orderContent">
+          <div class="order-product" id="orderProduct">
+            <div class="order-product-img">
+              <img id="orderProductImg" src="" alt="">
             </div>
-            <a href="order.html?product=beard-balm" class="product-btn">Order Now</a>
+            <div class="order-product-info">
+              <h3 class="order-product-title" id="orderProductTitle"></h3>
+              <p class="order-product-desc" id="orderProductDesc"></p>
+              <div class="order-product-meta">
+                <span class="order-product-price" id="orderProductPrice"></span>
+                <span class="order-stock-text" id="orderStockText"></span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <div class="product-card">
-          <span class="product-badge sold-out">Sold Out</span>
-          <div class="product-img">
-            <img src="seasaltspray.jpg" alt="Sea Salt Spray">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Sea Salt Spray</h3>
-            <p class="product-text">
-              A texturising spray that builds effortless, matte, beach-style volume without weighing hair down.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;16.00</span>
-              <span class="product-stock-text out">Sold Out</span>
-            </div>
-            <span class="product-btn disabled">Sold Out</span>
-          </div>
-        </div>
+          <p class="order-sold-out-msg" id="orderSoldOutMsg">
+            Sorry, this product is currently sold out. Please check back soon or browse the rest of our range.
+          </p>
 
-        <div class="product-card">
-          <span class="product-badge in-stock">In Stock</span>
-          <div class="product-img">
-            <img src="fullcutset.jpg" alt="Full Clipper Set">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Full Clipper Set</h3>
-            <p class="product-text">
-              A complete cordless clipper kit with guide combs, thinning and cutting scissors, and a comb for sharp cuts at home.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;45.00</span>
-              <span class="product-stock-text">12 In Stock</span>
-            </div>
-            <a href="order.html?product=clipper-set" class="product-btn">Order Now</a>
-          </div>
-        </div>
+          <form id="orderForm" novalidate>
+            <div class="order-form-fields" id="orderFormFields">
 
-        <div class="product-card">
-          <span class="product-badge low-stock">Selling Fast</span>
-          <div class="product-img">
-            <img src="clay.jpg" alt="Hair Clay">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Hair Clay</h3>
-            <p class="product-text">
-              A strong-hold, matte clay that builds natural texture and keeps styles in place all day without shine.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;13.00</span>
-              <span class="product-stock-text low">Only 3 Left</span>
-            </div>
-            <a href="order.html?product=hair-clay" class="product-btn">Order Now</a>
-          </div>
-        </div>
+              <div class="form-group">
+                <label>Quantity</label>
+                <div class="qty-stepper">
+                  <button type="button" class="qty-btn" id="qtyMinus" aria-label="Decrease quantity">&minus;</button>
+                  <input type="number" class="qty-input" id="qtyInput" value="1" min="1" step="1" inputmode="numeric">
+                  <button type="button" class="qty-btn" id="qtyPlus" aria-label="Increase quantity">&plus;</button>
+                </div>
+                <p class="qty-max-note" id="qtyMaxNote"></p>
+              </div>
 
-        <div class="product-card">
-          <span class="product-badge in-stock">In Stock</span>
-          <div class="product-img">
-            <img src="premiumpomade.jpg" alt="Premium Pomade">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Premium Pomade</h3>
-            <p class="product-text">
-              A classic, high-shine pomade with firm, long-lasting hold for sharp, styled looks that stay put.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;15.00</span>
-              <span class="product-stock-text">27 In Stock</span>
+              <div class="form-group">
+                <label for="custName">Full Name</label>
+                <input type="text" id="custName" name="custName" required maxlength="60">
+              </div>
+
+              <div class="form-group">
+                <label for="custPhone">Phone Number</label>
+                <input type="tel" id="custPhone" name="custPhone" required maxlength="20">
+              </div>
+
+              <div class="booking-total-row">
+                <span>Order Total</span>
+                <span id="totalPrice">&pound;0</span>
+              </div>
+
+              <button type="submit" class="hero-btn booking-submit-btn" id="orderSubmitBtn" disabled>Proceed To Pay</button>
             </div>
-            <a href="order.html?product=premium-pomade" class="product-btn">Order Now</a>
-          </div>
+          </form>
         </div>
 
       </div>
     </div>
   </section>
 
-  <div class="products-bottom-spacer"></div>
+  <div class="booking-bottom-spacer"></div>
 
   <div class="purple-bar"></div>
 
@@ -1393,17 +1440,17 @@
       });
     }
 
-    const productCards = document.querySelectorAll('.product-card');
-    if (productCards.length) {
-      const productObserver = new IntersectionObserver((entries) => {
+    const orderCard = document.querySelector('.booking-card');
+    if (orderCard) {
+      const orderCardObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('in-view');
-            productObserver.unobserve(entry.target);
+            orderCardObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.2 });
-      productCards.forEach(card => productObserver.observe(card));
+      }, { threshold: 0.15 });
+      orderCardObserver.observe(orderCard);
     }
 
     const contactInner = document.querySelector('.contact-inner');
@@ -1417,6 +1464,175 @@
         });
       }, { threshold: 0.25 });
       contactObserver.observe(contactInner);
+    }
+
+    // ---------- ORDER FORM ----------
+
+    // Product catalogue. Kept in sync with the cards on products.html.
+    const PRODUCTS = {
+      'beard-oil': {
+        name: 'Beard Oil',
+        desc: 'A lightweight, fast-absorbing oil that softens and conditions facial hair while keeping the skin underneath calm and moisturised.',
+        price: 12.00,
+        stock: 34,
+        img: 'beard_oil.jpg'
+      },
+      'beard-balm': {
+        name: 'Beard Balm',
+        desc: 'A light-hold balm that tames flyaways and shapes your beard, made with natural ingredients that soften and moisturise.',
+        price: 14.00,
+        stock: 21,
+        img: 'beardbalm.jpg'
+      },
+      'sea-salt-spray': {
+        name: 'Sea Salt Spray',
+        desc: 'A texturising spray that builds effortless, matte, beach-style volume without weighing hair down.',
+        price: 16.00,
+        stock: 0,
+        img: 'seasaltspray.jpg'
+      },
+      'clipper-set': {
+        name: 'Full Clipper Set',
+        desc: 'A complete cordless clipper kit with guide combs, thinning and cutting scissors, and a comb for sharp cuts at home.',
+        price: 45.00,
+        stock: 12,
+        img: 'fullcutset.jpg'
+      },
+      'hair-clay': {
+        name: 'Hair Clay',
+        desc: 'A strong-hold, matte clay that builds natural texture and keeps styles in place all day without shine.',
+        price: 13.00,
+        stock: 3,
+        img: 'clay.jpg'
+      },
+      'premium-pomade': {
+        name: 'Premium Pomade',
+        desc: 'A classic, high-shine pomade with firm, long-lasting hold for sharp, styled looks that stay put.',
+        price: 15.00,
+        stock: 27,
+        img: 'premiumpomade.jpg'
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const productSlug = params.get('product');
+    const product = productSlug ? PRODUCTS[productSlug] : null;
+
+    const orderCardEl = document.getElementById('orderCard');
+    const orderNotFound = document.getElementById('orderNotFound');
+    const orderContent = document.getElementById('orderContent');
+    const orderEyebrow = document.getElementById('orderEyebrow');
+    const orderIntroText = document.getElementById('orderIntroText');
+
+    if (!product) {
+      // No product found for the given (or missing) slug.
+      orderContent.style.display = 'none';
+      orderNotFound.style.display = 'block';
+      orderEyebrow.textContent = 'Product Not Found';
+      orderIntroText.textContent = "The item you're looking for isn't available right now.";
+    } else {
+      document.title = `Order ${product.name} | FAD3D Barbers`;
+      orderEyebrow.textContent = 'Take The Shop Home';
+
+      document.getElementById('orderProductImg').src = product.img;
+      document.getElementById('orderProductImg').alt = product.name;
+      document.getElementById('orderProductTitle').textContent = product.name;
+      document.getElementById('orderProductDesc').textContent = product.desc;
+      document.getElementById('orderProductPrice').textContent = `\u00A3${product.price.toFixed(2)}`;
+
+      const stockTextEl = document.getElementById('orderStockText');
+      const qtyMaxNote = document.getElementById('qtyMaxNote');
+      const qtyInput = document.getElementById('qtyInput');
+      const qtyMinus = document.getElementById('qtyMinus');
+      const qtyPlus = document.getElementById('qtyPlus');
+      const totalPriceEl = document.getElementById('totalPrice');
+      const orderSubmitBtn = document.getElementById('orderSubmitBtn');
+      const custName = document.getElementById('custName');
+      const custPhone = document.getElementById('custPhone');
+      const orderForm = document.getElementById('orderForm');
+
+      if (product.stock <= 0) {
+        // Sold out: show the message, hide the form fields entirely.
+        orderCardEl.classList.add('is-sold-out');
+        stockTextEl.textContent = 'Sold Out';
+        stockTextEl.classList.add('out');
+      } else {
+        if (product.stock <= 5) {
+          stockTextEl.textContent = `Only ${product.stock} Left`;
+          stockTextEl.classList.add('low');
+        } else {
+          stockTextEl.textContent = `${product.stock} In Stock`;
+        }
+
+        qtyInput.max = String(product.stock);
+        qtyMaxNote.textContent = `${product.stock} available \u2014 you can order up to ${product.stock}.`;
+
+        function clampQty(value) {
+          let n = parseInt(value, 10);
+          if (isNaN(n) || n < 1) n = 1;
+          if (n > product.stock) n = product.stock;
+          return n;
+        }
+
+        function updateTotal() {
+          const qty = clampQty(qtyInput.value);
+          const total = product.price * qty;
+          totalPriceEl.textContent = `\u00A3${total.toFixed(2)}`;
+          qtyMinus.disabled = qty <= 1;
+          qtyPlus.disabled = qty >= product.stock;
+        }
+
+        function updateSubmitState() {
+          const qty = clampQty(qtyInput.value);
+          const nameOk = custName.value.trim().length > 0;
+          const phoneOk = custPhone.value.trim().length > 0;
+          orderSubmitBtn.disabled = !(nameOk && phoneOk && qty >= 1 && qty <= product.stock);
+        }
+
+        qtyInput.addEventListener('input', () => {
+          updateTotal();
+          updateSubmitState();
+        });
+
+        qtyInput.addEventListener('blur', () => {
+          qtyInput.value = clampQty(qtyInput.value);
+          updateTotal();
+          updateSubmitState();
+        });
+
+        qtyMinus.addEventListener('click', () => {
+          qtyInput.value = clampQty(qtyInput.value) - 1;
+          updateTotal();
+          updateSubmitState();
+        });
+
+        qtyPlus.addEventListener('click', () => {
+          qtyInput.value = clampQty(qtyInput.value) + 1;
+          updateTotal();
+          updateSubmitState();
+        });
+
+        custName.addEventListener('input', updateSubmitState);
+        custPhone.addEventListener('input', updateSubmitState);
+
+        updateTotal();
+        updateSubmitState();
+
+        orderForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const qty = clampQty(qtyInput.value);
+          const name = custName.value.trim();
+          const phone = custPhone.value.trim();
+
+          if (!name || !phone || qty < 1 || qty > product.stock) {
+            return;
+          }
+
+          const total = (product.price * qty).toFixed(2);
+          alert(`Thanks, ${name}! Taking you to payment for ${qty} x ${product.name} (\u00A3${total}). We'll text order updates to ${phone}.`);
+          // In production this is where a real payment redirect would happen.
+        });
+      }
     }
   </script>
 
