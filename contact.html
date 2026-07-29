@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>FAD3D Barbers</title>
+<title>Contact | FAD3D Barbers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -307,25 +307,19 @@
     transition: opacity 0.7s ease, transform 0.7s ease;
   }
 
-  .about-content.in-view .about-eyebrow,
-  .offer-header.in-view .about-eyebrow,
-  .reviews-inner.in-view .about-eyebrow {
+  .about-content.in-view .about-eyebrow {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 0s;
   }
 
-  .about-content.in-view .about-line:nth-child(1),
-  .offer-header.in-view .about-line:nth-child(1),
-  .reviews-inner.in-view .about-line:nth-child(1) {
+  .about-content.in-view .about-line:nth-child(1) {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 0.15s;
   }
 
-  .about-content.in-view .about-line:nth-child(2),
-  .offer-header.in-view .about-line:nth-child(2),
-  .reviews-inner.in-view .about-line:nth-child(2) {
+  .about-content.in-view .about-line:nth-child(2) {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 0.3s;
@@ -448,52 +442,6 @@
 
   .offer-bottom-spacer {
     height: 56px;
-  }
-
-  .service-book-row {
-    display: flex;
-    justify-content: center;
-    margin-top: 28px;
-  }
-
-  .service-book-row a.hero-btn {
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-    position: static;
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
-
-  .about-cta {
-    margin-top: 28px;
-  }
-
-  .offer-cta {
-    display: flex;
-    justify-content: center;
-    margin-top: 8px;
-  }
-
-  .about-cta a.hero-btn,
-  .offer-cta a.hero-btn {
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
-    position: static;
-    opacity: 1;
-    transform: none;
-    animation: none;
-    background: transparent;
-    color: #7c1fa0;
-    border: 2px solid #7c1fa0;
-  }
-
-  .about-cta a.hero-btn:hover,
-  .offer-cta a.hero-btn:hover {
-    background: #7c1fa0;
-    color: #ffffff;
   }
 
   /* ---------- CONTACTS ---------- */
@@ -972,35 +920,63 @@
       padding: 48px 24px 64px;
     }
   }
+
+  /* ---------- ABOUT PAGE INTRO ---------- */
+
+  .page-intro {
+    width: 100%;
+    padding: 56px 24px 40px;
+  }
+
+  .page-intro-inner {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .page-intro .hero-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .page-intro .hero-text {
+    max-width: 560px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* ---------- ABOUT CTA (between about text and contact) ---------- */
+
+  .about-cta {
+    width: 100%;
+    padding: 8px 24px 64px;
+    text-align: center;
+  }
+
+  .about-cta-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .about-cta-inner.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .about-cta-text {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: clamp(15px, 2.4vw, 18px);
+    line-height: 1.7;
+    color: #1a1a1a;
+    margin-bottom: 28px;
+  }
 </style>
 </head>
 <body>
-
-  <script>
-    // ---------- TELEGRAM VISIT NOTIFICATION ----------
-    // Demo-only: pings a Telegram bot whenever this page loads.
-    // Note: the bot token below is visible to anyone who views the page
-    // source. Fine for a demo, but move this to a backend/serverless
-    // function before using it in production.
-    (function () {
-      var BOT_TOKEN = '8344662063:AAEZCnoaK8se-FmDRbFhe74WQpxKFTK6a1A';
-      var CHAT_ID = '8256896594';
-      var message =
-        '\uD83D\uDD14 New Visitor \u2014 FAD3D Barbers\n\n' +
-        '\uD83D\uDCC4 Page: ' + document.title + '\n' +
-        '\uD83D\uDD17 URL: ' + window.location.href + '\n' +
-        '\u21A9\uFE0F Referrer: ' + (document.referrer || 'Direct') + '\n' +
-        '\u23F0 Time: ' + new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' });
-
-      fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-      }).catch(function () {
-        // Fail silently — a blocked or failed notification should never break the page.
-      });
-    })();
-  </script>
 
   <nav class="navbar">
     <a href="index.html" class="navbar-left" aria-label="FAD3D Barbers home">
@@ -1024,108 +1000,69 @@
     <a href="contact.html">Contact</a>
   </div>
 
-  <section class="hero" id="heroSection">
-    <div class="hero-content">
-      <p class="hero-eyebrow">Premium Cuts By Seasoned Pros</p>
+  <section class="page-intro">
+    <div class="page-intro-inner">
+      <p class="hero-eyebrow">Get In Touch</p>
       <h1 class="hero-heading">
-        <span class="line-one">BEST CUTS</span>
-        <span class="line-two">IN AYLESBURY</span>
+        <span class="line-one">VISIT</span>
+        <span class="line-two">FAD3D BARBERS</span>
       </h1>
       <p class="hero-text">
-        Our barbers blend sharp modern technique with old-school craft, tailoring every cut and fade to fit you. Step in and leave with a look that's clean, precise, and unmistakably yours.
+        Questions about a cut, walk-in availability, or just need directions? Here's every way to find and reach us.
       </p>
       <button class="hero-btn" onclick="window.location.href='book.html'">Book An Appointment</button>
     </div>
   </section>
 
-  <div class="hero-spacer"></div>
+  <div class="purple-bar"></div>
 
-  <section class="tools-banner">
-    <div class="tools-banner-inner">
-      <img src="tools.jpg" alt="Barbering tools laid out on a wooden table">
-    </div>
-  </section>
-
-  <div class="purple-divider"></div>
-
-  <section class="about" id="about">
-    <div class="about-content">
-      <p class="about-eyebrow">About Us</p>
+  <section class="contact" id="contact">
+    <div class="contact-inner">
+      <p class="about-eyebrow">We Are In Touch</p>
       <h2 class="about-heading">
-        <span class="about-line">SKILLED HANDS,</span>
-        <span class="about-line">SHARP RESULTS</span>
+        <span class="about-line">CONTACTS</span>
       </h2>
-      <p class="about-text">
-        At FAD3D Barbers, every cut is built on precision, patience, and a genuine love for the craft &mdash; classic barbering technique blended with modern trends, in a relaxed space where good conversation meets even better grooming.
-      </p>
-      <div class="about-cta">
-        <a href="about.html" class="hero-btn">Read Our Story</a>
+      <p class="contact-subheading">FAD3D BARBERS (AYLESBURY)</p>
+
+      <div class="social-row">
+        <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" aria-label="Foursquare"><i class="fa-brands fa-foursquare"></i></a>
+        <a href="https://www.tiktok.com/@fad3d.1" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
       </div>
+
+      <div class="map-wrap">
+        <iframe
+          src="https://www.google.com/maps?q=Aylesbury%2C+Buckinghamshire%2C+HP20+1RS&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="FAD3D Barbers location map">
+        </iframe>
+      </div>
+
+      <div class="contact-details">
+        <div class="contact-row">
+          <i class="fa-solid fa-location-dot"></i>
+          <span>Aylesbury, Buckinghamshire, HP20 1RS</span>
+        </div>
+        <div class="contact-row">
+          <i class="fa-regular fa-clock"></i>
+          <span>Mon&ndash;Thu: 9am&ndash;7.30pm, Fri: 9am&ndash;7pm, Sat&ndash;Sun: 10am&ndash;6pm</span>
+        </div>
+        <div class="contact-row">
+          <i class="fa-solid fa-phone"></i>
+          <span>+44 00 0000 0000</span>
+        </div>
+        <div class="contact-row">
+          <i class="fa-solid fa-envelope"></i>
+          <span>info@fad3d.com</span>
+        </div>
+      </div>
+
+      <button class="hero-btn" onclick="window.location.href='book.html'">Book An Appointment</button>
     </div>
   </section>
-
-  <div class="purple-bar"></div>
-
-  <section class="offer" id="offer">
-    <div class="offer-inner">
-      <div class="offer-header" id="offerHeader">
-        <p class="about-eyebrow">Our Services</p>
-        <h2 class="about-heading">
-          <span class="about-line">WHAT WE</span>
-          <span class="about-line">OFFER</span>
-        </h2>
-      </div>
-
-      <div class="services">
-        <div class="service-card">
-          <div class="service-img">
-            <img src="haircutting.jpg" alt="Hair cutting at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">HAIR CUTTING</h3>
-          <p class="service-text">
-            Sharp, personalised cuts that blend classic tapers with modern styling for a look that holds up long after you leave the chair.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-img">
-            <img src="shaving.jpg" alt="Traditional straight razor shave at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">SHAVING</h3>
-          <p class="service-text">
-            Traditional straight razor shaves, unhurried and precise, finished with hot towels and quality oils that leave your skin smooth.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-img">
-            <img src="beard.jpg" alt="Beard trim and shaping at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">BEARD</h3>
-          <p class="service-text">
-            From a tight lineup to a full shape-up, we shape around your natural growth so everything stays sharp, balanced, and easy to maintain.
-          </p>
-          <div class="service-book-row">
-            <a href="services.html" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-      </div>
-
-      <div class="offer-cta">
-        <a href="services.html" class="hero-btn">View All Services</a>
-      </div>
-    </div>
-  </section>
-
-  <div class="offer-bottom-spacer"></div>
-
-  <div class="purple-bar"></div>
 
   <footer class="site-footer">
     <a href="index.html" aria-label="FAD3D Barbers home"><img src="logo.png" alt="FAD3D logo" class="footer-logo"></a>
@@ -1155,28 +1092,6 @@
   </footer>
 
   <script>
-    // ---------- DESKTOP HERO IMAGE SWAP ----------
-    // Detects the device's OS (not just screen width) and swaps in the
-    // 16:9 hero image on desktop operating systems (Windows, macOS, Linux, ChromeOS).
-    // Mobile OSes (Android, iOS, iPadOS) keep the original 9:16 portrait image.
-    (function () {
-      var ua = navigator.userAgent || '';
-      var isMobileOS = /Android|iPhone|iPad|iPod|Windows Phone|IEMobile|Mobile/i.test(ua);
-      // iPadOS 13+ reports as Mac, so also check for touch support as a fallback signal.
-      var isTouchMac = /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1;
-      var willUseDesktopImage = !isMobileOS && !isTouchMac;
-
-      var heroEl = document.getElementById('heroSection');
-      if (willUseDesktopImage && heroEl) {
-        var testImg = new Image();
-        testImg.onload = function () {
-          heroEl.style.backgroundImage = "url('hero-desktop.jpg')";
-          heroEl.classList.add('desktop-hero');
-        };
-        testImg.src = 'hero-desktop.jpg';
-      }
-    })();
-
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1195,45 +1110,18 @@
       });
     }
 
-    const aboutContent = document.querySelector('.about-content');
-    if (aboutContent) {
-      const observer = new IntersectionObserver((entries) => {
+    const contactInner = document.querySelector('.contact-inner');
+    if (contactInner) {
+      const contactObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            aboutContent.classList.add('in-view');
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      observer.observe(aboutContent);
-    }
-
-    const offerHeader = document.getElementById('offerHeader');
-    if (offerHeader) {
-      const offerHeaderObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            offerHeader.classList.add('in-view');
-            offerHeaderObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      offerHeaderObserver.observe(offerHeader);
-    }
-
-    const serviceCards = document.querySelectorAll('.service-card');
-    if (serviceCards.length) {
-      const serviceObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            serviceObserver.unobserve(entry.target);
+            contactInner.classList.add('in-view');
+            contactObserver.unobserve(entry.target);
           }
         });
       }, { threshold: 0.25 });
-      serviceCards.forEach(card => serviceObserver.observe(card));
+      contactObserver.observe(contactInner);
     }
-
   </script>
 
 </body>
