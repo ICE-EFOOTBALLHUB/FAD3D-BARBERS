@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>About Us | FAD3D Barbers</title>
+<title>Services & Prices | FAD3D Barbers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -918,58 +918,42 @@
     }
   }
 
-  /* ---------- ABOUT PAGE INTRO ---------- */
+  /* ---------- SERVICES PAGE ---------- */
 
-  .page-intro {
-    width: 100%;
-    padding: 56px 24px 40px;
-  }
-
-  .page-intro-inner {
-    max-width: 720px;
-    margin: 0 auto;
+  .service-price {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #7c1fa0;
+    font-size: clamp(22px, 4vw, 30px);
     text-align: center;
+    margin: 8px 0 24px;
   }
 
-  .page-intro .hero-heading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .page-intro .hero-text {
-    max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* ---------- ABOUT CTA (between about text and contact) ---------- */
-
-  .about-cta {
-    width: 100%;
-    padding: 8px 24px 64px;
-    text-align: center;
-  }
-
-  .about-cta-inner {
-    max-width: 640px;
-    margin: 0 auto;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .about-cta-inner.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .about-cta-text {
+  .service-price span {
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(15px, 2.4vw, 18px);
-    line-height: 1.7;
-    color: #1a1a1a;
-    margin-bottom: 28px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #777777;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .service-book-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  .service-book-row a.hero-btn {
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    position: static;
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 </style>
 </head>
@@ -989,8 +973,8 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">Home</a>
-    <a href="#about">About</a>
-    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="#offer">Services</a>
     <a href="#">Products</a>
     <a href="index.html#reviews">Reviews</a>
     <a href="#contact">Location</a>
@@ -999,13 +983,13 @@
 
   <section class="page-intro">
     <div class="page-intro-inner">
-      <p class="hero-eyebrow">The FAD3D Story</p>
+      <p class="hero-eyebrow">What We're Offering</p>
       <h1 class="hero-heading">
-        <span class="line-one">MEET</span>
-        <span class="line-two">FAD3D BARBERS</span>
+        <span class="line-one">SERVICES</span>
+        <span class="line-two">& PRICES</span>
       </h1>
       <p class="hero-text">
-        More than a barbershop &mdash; a small team of Aylesbury craftsmen dedicated to precision cuts, honest service, and a chair you'll actually look forward to sitting in.
+        Straightforward pricing for every cut, shave, and shape-up we offer. No hidden extras &mdash; just skilled barbers and honest rates.
       </p>
       <button class="hero-btn" onclick="window.location.href='#contact'">Book An Appointment</button>
     </div>
@@ -1013,37 +997,57 @@
 
   <div class="purple-bar"></div>
 
-  <section class="about" id="about">
-    <div class="about-content">
-      <p class="about-eyebrow">Who We Are</p>
-      <h2 class="about-heading">
-        <span class="about-line">BUILT ON CRAFT,</span>
-        <span class="about-line">RUN ON TRUST</span>
-      </h2>
-      <p class="about-text">
-        FAD3D Barbers started with a simple idea: Aylesbury deserved a barbershop that took the craft as seriously as the client sitting in the chair. What began as one barber with a steady hand and a loyal handful of regulars has grown into a full team, but the standard hasn't moved an inch &mdash; every fade, every line, every shave is treated like it's the only one that matters that day.
-      </p>
-      <p class="about-text">
-        We're not chasing trends for the sake of it. Our barbers train constantly, keep their tools sharp, and take the time to actually listen before they pick up the clippers. Whether you're after a sharp skin fade, a classic scissor cut, or a traditional hot towel shave, the conversation always starts with what works for your hair, your face shape, and your lifestyle &mdash; not just what's popular on social media that week.
-      </p>
-      <p class="about-text">
-        The shop itself is built to feel like a proper barbershop should: warm, unhurried, and a little old-school. Leather chairs, sharp tools laid out with care, good music, and better conversation. We want regulars who come in not just for the cut, but for the twenty minutes of normal, unbothered downtime that comes with it.
-      </p>
-      <p class="about-text">
-        Since opening our doors, we've become part of the fabric of Aylesbury &mdash; cutting hair for dads and their sons, groomsmen before the big day, and clients who've followed us from our very first week. That kind of trust isn't something we take lightly, and it's the reason we still greet every new face the same way we did on day one: like someone who's about to become a regular.
-      </p>
-      <p class="about-text">
-        Step in, get comfortable, and see what everyone's been talking about.
-      </p>
+  <section class="offer" id="offer">
+    <div class="offer-inner">
+      <div class="services">
+
+        <div class="service-card">
+          <div class="service-img">
+            <img src="haircutting.jpg" alt="Hair cutting at FAD3D Barbers">
+          </div>
+          <h3 class="service-title">HAIR CUTTING</h3>
+          <p class="service-text">
+            Every cut starts with a conversation about what actually works for you, not just what's trending. Our barbers combine sharp technique with a real eye for detail, blending classic tapers with modern styling for a look that holds up long after you leave the chair.
+          </p>
+          <p class="service-price">&pound;25<span>Per Cut</span></p>
+          <div class="service-book-row">
+            <a href="#contact" class="hero-btn">Book Now</a>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-img">
+            <img src="shaving.jpg" alt="Traditional straight razor shave at FAD3D Barbers">
+          </div>
+          <h3 class="service-title">SHAVING</h3>
+          <p class="service-text">
+            Sit back and let us take it from here. Our traditional straight razor shaves are unhurried and precise, finished with hot towels and quality oils that leave your skin smooth. It's less of a quick service and more of a proper reset.
+          </p>
+          <p class="service-price">&pound;20<span>Per Shave</span></p>
+          <div class="service-book-row">
+            <a href="#contact" class="hero-btn">Book Now</a>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-img">
+            <img src="beard.jpg" alt="Beard trim and shaping at FAD3D Barbers">
+          </div>
+          <h3 class="service-title">BEARD</h3>
+          <p class="service-text">
+            From a tight lineup to a full shape-up, we treat beard work as its own craft. We shape around your natural growth and facial structure so everything stays sharp, balanced, and simple to maintain between visits.
+          </p>
+          <p class="service-price">&pound;15<span>Per Shape-Up</span></p>
+          <div class="service-book-row">
+            <a href="#contact" class="hero-btn">Book Now</a>
+          </div>
+        </div>
+
+      </div>
     </div>
   </section>
 
-  <section class="about-cta">
-    <div class="about-cta-inner">
-      <p class="about-cta-text">Ready to see the difference for yourself?</p>
-      <button class="hero-btn" onclick="window.location.href='#contact'">Book An Appointment</button>
-    </div>
-  </section>
+  <div class="offer-bottom-spacer"></div>
 
   <div class="purple-bar"></div>
 
@@ -1101,8 +1105,8 @@
 
     <nav class="footer-nav">
       <a href="index.html">Home</a>
-      <a href="#about">About</a>
-      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="#offer">Services</a>
       <a href="#">Products</a>
       <a href="index.html#reviews">Reviews</a>
       <a href="#contact">Location</a>
@@ -1141,30 +1145,17 @@
       });
     }
 
-    const aboutContent = document.querySelector('.about-content');
-    if (aboutContent) {
-      const observer = new IntersectionObserver((entries) => {
+    const serviceCards = document.querySelectorAll('.service-card');
+    if (serviceCards.length) {
+      const serviceObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            aboutContent.classList.add('in-view');
-            observer.unobserve(entry.target);
+            entry.target.classList.add('in-view');
+            serviceObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.2 });
-      observer.observe(aboutContent);
-    }
-
-    const aboutCtaInner = document.querySelector('.about-cta-inner');
-    if (aboutCtaInner) {
-      const ctaObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            aboutCtaInner.classList.add('in-view');
-            ctaObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      ctaObserver.observe(aboutCtaInner);
+      }, { threshold: 0.25 });
+      serviceCards.forEach(card => serviceObserver.observe(card));
     }
 
     const contactInner = document.querySelector('.contact-inner');
