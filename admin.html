@@ -531,6 +531,56 @@
     font-size: 14px;
   }
 
+  /* ---------- AVAILABILITY GRID ---------- */
+
+  .availability-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .avail-slot {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 12px 6px;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+    color: #000000;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .avail-slot.open {
+    background: #7c1fa0;
+    border-color: #7c1fa0;
+    color: #ffffff;
+  }
+
+  .avail-slot.closed {
+    background: #f4f2f0;
+    color: #999999;
+    text-decoration: line-through;
+  }
+
+  .avail-slot:disabled {
+    cursor: wait;
+    opacity: 0.6;
+  }
+
+  @media (min-width: 600px) {
+    .availability-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  @media (min-width: 900px) {
+    .availability-grid {
+      grid-template-columns: repeat(6, 1fr);
+    }
+  }
+
   /* ---------- FOOTER ---------- */
 
   .admin-footer {
@@ -602,7 +652,6 @@
         <table class="admin-table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Customer</th>
               <th>Service(s)</th>
               <th>Date &amp; Time</th>
@@ -617,6 +666,17 @@
     </div>
   </section>
 
+  <!-- ---------- AVAILABILITY ---------- -->
+  <section class="admin-section alt">
+    <div class="admin-section-inner">
+      <p class="section-eyebrow">Booking Hours</p>
+      <h2 class="section-heading">Manage Availability</h2>
+      <p class="section-count">Tap a time slot to open or close it for bookings, 8am&ndash;8pm in 30-minute intervals. This is the window customers see on the Book page. Changes save instantly.</p>
+      <p class="form-feedback" id="availabilityFeedback"></p>
+      <div class="availability-grid" id="availabilityGrid"></div>
+    </div>
+  </section>
+
   <!-- ---------- ORDERS ---------- -->
   <section class="admin-section alt">
     <div class="admin-section-inner">
@@ -628,7 +688,6 @@
         <table class="admin-table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Customer</th>
               <th>Item(s)</th>
               <th>Qty</th>
@@ -746,6 +805,11 @@
               </div>
             </div>
             <div class="form-group">
+              <label for="serviceDuration">Duration (minutes)</label>
+              <input type="number" id="serviceDuration" min="30" step="30" value="30" required>
+              <p class="admin-form-hint" style="margin-top:6px; margin-bottom:0;">In 30-minute steps. This sets how the time slots are spaced on the Book page when a customer picks this service.</p>
+            </div>
+            <div class="form-group">
               <label for="serviceImage">Photo</label>
               <input type="file" id="serviceImage" accept="image/*">
               <div class="image-preview-wrap"><img id="serviceImagePreview" alt="Preview"></div>
@@ -765,6 +829,7 @@
               <th>Photo</th>
               <th>Service</th>
               <th>Price</th>
+              <th>Duration</th>
               <th></th>
             </tr>
           </thead>
@@ -780,7 +845,7 @@
 
   <script type="module">
     import {
-      db, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy,
+      db, collection, addDoc, updateDoc, deleteDoc, doc, getDoc, setDoc, onSnapshot, query, orderBy,
       serverTimestamp, uploadToCloudinary
     } from './js/firebase-init.js';
 
@@ -804,48 +869,46 @@
 
     // ---------- DEMO DATA (in-memory only, resets on reload) ----------
 
-    let reservations = [
-      { id: 'R-1001', name: 'James Carter', phone: '07700 900123', services: 'Hair Cutting, Beard', datetime: '30 Jul, 2:00 PM', total: 40, status: 'confirmed' },
-      { id: 'R-1002', name: 'Aisha Bello', phone: '07700 900456', services: 'Shaving', datetime: '30 Jul, 4:30 PM', total: 20, status: 'pending' },
-      { id: 'R-1003', name: 'Tom Richards', phone: '07700 900789', services: 'Hair Cutting', datetime: '31 Jul, 12:30 PM', total: 25, status: 'confirmed' },
-      { id: 'R-1004', name: 'Michael Osei', phone: '07700 900321', services: 'Beard, Shaving', datetime: '1 Aug, 3:00 PM', total: 35, status: 'completed' },
-      { id: 'R-1005', name: 'Daniel Hughes', phone: '07700 900654', services: 'Hair Cutting, Shaving, Beard', datetime: '1 Aug, 6:00 PM', total: 60, status: 'cancelled' }
-    ];
+    // ---------- RESERVATIONS (bookings collection) ----------
 
-    let orders = [
-      { id: 'O-2001', name: 'Sophie Clarke', phone: '07700 900111', items: 'Beard Oil x2', qty: 2, total: 24.00, status: 'pending' },
-      { id: 'O-2002', name: 'Ryan Walsh', phone: '07700 900222', items: 'Full Clipper Set x1', qty: 1, total: 45.00, status: 'processing' },
-      { id: 'O-2003', name: 'Emma Novak', phone: '07700 900333', items: 'Premium Pomade x3', qty: 3, total: 45.00, status: 'completed' },
-      { id: 'O-2004', name: 'Liam Foster', phone: '07700 900444', items: 'Hair Clay x1, Beard Balm x1', qty: 2, total: 27.00, status: 'pending' },
-      { id: 'O-2005', name: 'Grace Adeyemi', phone: '07700 900555', items: 'Sea Salt Spray x2', qty: 2, total: 32.00, status: 'cancelled' }
-    ];
-
-    // ---------- RESERVATIONS ----------
-
+    const bookingsCol = collection(db, 'bookings');
     const reservationsBody = document.getElementById('reservationsBody');
     const reservationsCount = document.getElementById('reservationsCount');
     const RES_STATUSES = ['pending', 'confirmed', 'completed', 'cancelled'];
 
+    let reservationsCache = [];
+
+    function formatBookingDateTime(b) {
+      if (!b.date || !b.time) return '';
+      const [y, m, d] = b.date.split('-').map(Number);
+      const [h, min] = b.time.split(':').map(Number);
+      const dt = new Date(y, (m || 1) - 1, d || 1, h || 0, min || 0);
+      const dateLabel = dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      const timeLabel = dt.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' });
+      return `${dateLabel}, ${timeLabel}`;
+    }
+
     function renderReservations() {
-      reservationsCount.textContent = `${reservations.length} reservation${reservations.length === 1 ? '' : 's'}`;
+      reservationsCount.textContent = `${reservationsCache.length} reservation${reservationsCache.length === 1 ? '' : 's'}`;
       reservationsBody.innerHTML = '';
 
-      if (reservations.length === 0) {
-        reservationsBody.innerHTML = '<tr class="empty-row"><td colspan="7">No reservations yet.</td></tr>';
+      if (reservationsCache.length === 0) {
+        reservationsBody.innerHTML = '<tr class="empty-row"><td colspan="6">No reservations yet.</td></tr>';
         return;
       }
 
-      reservations.forEach(r => {
+      reservationsCache.forEach(r => {
+        const status = r.status || 'pending';
+        const serviceNames = Array.isArray(r.services) ? r.services.map(s => s.name).join(', ') : (r.services || '');
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td class="cell-strong">${r.id}</td>
-          <td>${r.name}<span class="cell-sub">${r.phone}</span></td>
-          <td>${r.services}</td>
-          <td>${r.datetime}</td>
-          <td class="cell-strong">&pound;${r.total.toFixed(2)}</td>
+          <td>${r.customerName || ''}<span class="cell-sub">${r.customerPhone || ''}</span></td>
+          <td>${serviceNames}</td>
+          <td>${formatBookingDateTime(r)}</td>
+          <td class="cell-strong">&pound;${Number(r.totalPrice || 0).toFixed(2)}</td>
           <td>
-            <select class="status-select st-${r.status}" data-id="${r.id}" data-type="reservation">
-              ${RES_STATUSES.map(s => `<option value="${s}" ${s === r.status ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}
+            <select class="status-select st-${status}" data-id="${r.id}" data-type="reservation">
+              ${RES_STATUSES.map(s => `<option value="${s}" ${s === status ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}
             </select>
           </td>
           <td><button type="button" class="row-delete-btn" data-id="${r.id}" data-type="reservation">Remove</button></td>
@@ -854,32 +917,43 @@
       });
     }
 
-    // ---------- ORDERS ----------
+    onSnapshot(query(bookingsCol, orderBy('createdAt', 'desc')), (snap) => {
+      reservationsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderReservations();
+    }, (err) => {
+      reservationsBody.innerHTML = `<tr class="empty-row"><td colspan="6">Couldn't load reservations: ${err.message}</td></tr>`;
+    });
 
+    // ---------- ORDERS (orders collection) ----------
+
+    const ordersCol = collection(db, 'orders');
     const ordersBody = document.getElementById('ordersBody');
     const ordersCount = document.getElementById('ordersCount');
-    const ORDER_STATUSES = ['pending', 'processing', 'completed', 'cancelled'];
+    const ORDER_STATUSES = ['pending', 'in-progress', 'completed', 'rejected', 'cancelled'];
+
+    let ordersCache = [];
 
     function renderOrders() {
-      ordersCount.textContent = `${orders.length} order${orders.length === 1 ? '' : 's'}`;
+      ordersCount.textContent = `${ordersCache.length} order${ordersCache.length === 1 ? '' : 's'}`;
       ordersBody.innerHTML = '';
 
-      if (orders.length === 0) {
-        ordersBody.innerHTML = '<tr class="empty-row"><td colspan="7">No orders yet.</td></tr>';
+      if (ordersCache.length === 0) {
+        ordersBody.innerHTML = '<tr class="empty-row"><td colspan="6">No orders yet.</td></tr>';
         return;
       }
 
-      orders.forEach(o => {
+      ordersCache.forEach(o => {
+        const status = o.status || 'pending';
+        const statusLabel = status.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td class="cell-strong">${o.id}</td>
-          <td>${o.name}<span class="cell-sub">${o.phone}</span></td>
-          <td>${o.items}</td>
-          <td>${o.qty}</td>
-          <td class="cell-strong">&pound;${o.total.toFixed(2)}</td>
+          <td>${o.customerName || ''}<span class="cell-sub">${o.customerPhone || ''}</span></td>
+          <td>${o.productName || ''}</td>
+          <td>${o.qty || ''}</td>
+          <td class="cell-strong">&pound;${Number(o.total || 0).toFixed(2)}</td>
           <td>
-            <select class="status-select st-${o.status}" data-id="${o.id}" data-type="order">
-              ${ORDER_STATUSES.map(s => `<option value="${s}" ${s === o.status ? 'selected' : ''}>${s.charAt(0).toUpperCase() + s.slice(1)}</option>`).join('')}
+            <select class="status-select st-${status}" data-id="${o.id}" data-type="order">
+              ${ORDER_STATUSES.map(s => `<option value="${s}" ${s === status ? 'selected' : ''}>${s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}</option>`).join('')}
             </select>
           </td>
           <td><button type="button" class="row-delete-btn" data-id="${o.id}" data-type="order">Remove</button></td>
@@ -888,32 +962,39 @@
       });
     }
 
+    onSnapshot(query(ordersCol, orderBy('createdAt', 'desc')), (snap) => {
+      ordersCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderOrders();
+    }, (err) => {
+      ordersBody.innerHTML = `<tr class="empty-row"><td colspan="6">Couldn't load orders: ${err.message}</td></tr>`;
+    });
+
     // ---------- STATUS + DELETE (event delegation) ----------
 
-    document.addEventListener('change', (e) => {
+    document.addEventListener('change', async (e) => {
       if (!e.target.classList.contains('status-select')) return;
       const { id, type } = e.target.dataset;
       const newStatus = e.target.value;
-      if (type === 'reservation') {
-        const item = reservations.find(r => r.id === id);
-        if (item) item.status = newStatus;
-        renderReservations();
-      } else if (type === 'order') {
-        const item = orders.find(o => o.id === id);
-        if (item) item.status = newStatus;
-        renderOrders();
+      try {
+        if (type === 'reservation') {
+          await updateDoc(doc(db, 'bookings', id), { status: newStatus });
+        } else if (type === 'order') {
+          await updateDoc(doc(db, 'orders', id), { status: newStatus });
+        }
+      } catch (err) {
+        alert(`Couldn't update status: ${err.message}`);
       }
     });
 
-    document.addEventListener('click', (e) => {
+    document.addEventListener('click', async (e) => {
       if (!e.target.classList.contains('row-delete-btn')) return;
       const { id, type } = e.target.dataset;
       if (type === 'reservation') {
-        reservations = reservations.filter(r => r.id !== id);
-        renderReservations();
+        if (!confirm('Remove this reservation?')) return;
+        try { await deleteDoc(doc(db, 'bookings', id)); } catch (err) { alert(`Couldn't delete: ${err.message}`); }
       } else if (type === 'order') {
-        orders = orders.filter(o => o.id !== id);
-        renderOrders();
+        if (!confirm('Remove this order?')) return;
+        try { await deleteDoc(doc(db, 'orders', id)); } catch (err) { alert(`Couldn't delete: ${err.message}`); }
       }
     });
 
@@ -1121,6 +1202,7 @@
     const serviceDescInput = document.getElementById('serviceDesc');
     const servicePriceInput = document.getElementById('servicePrice');
     const servicePriceUnitInput = document.getElementById('servicePriceUnit');
+    const serviceDurationInput = document.getElementById('serviceDuration');
     const serviceImageInput = document.getElementById('serviceImage');
     const serviceImagePreview = document.getElementById('serviceImagePreview');
 
@@ -1133,7 +1215,7 @@
       servicesBody.innerHTML = '';
 
       if (servicesCache.length === 0) {
-        servicesBody.innerHTML = '<tr class="empty-row"><td colspan="4">No services yet. Add one above.</td></tr>';
+        servicesBody.innerHTML = '<tr class="empty-row"><td colspan="5">No services yet. Add one above.</td></tr>';
         return;
       }
 
@@ -1143,6 +1225,7 @@
           <td>${s.imageUrl ? `<img class="table-thumb" src="${s.imageUrl}" alt="${s.name}">` : ''}</td>
           <td class="cell-strong">${s.name}</td>
           <td>&pound;${Number(s.price).toFixed(2)} <span class="cell-sub">${s.priceUnit || ''}</span></td>
+          <td>${s.duration || 30} min</td>
           <td class="cell-actions">
             <button type="button" class="row-edit-btn" data-id="${s.id}">Edit</button>
             <button type="button" class="row-delete-btn" data-id="${s.id}" data-type="service">Remove</button>
@@ -1166,6 +1249,7 @@
       serviceSubmitBtn.textContent = 'Add Service';
       serviceCancelBtn.style.display = 'none';
       serviceImagePreview.style.display = 'none';
+      serviceDurationInput.value = 30;
     }
 
     serviceCancelBtn.addEventListener('click', resetServiceForm);
@@ -1176,10 +1260,13 @@
       const description = serviceDescInput.value.trim();
       const price = parseFloat(servicePriceInput.value);
       const priceUnit = servicePriceUnitInput.value.trim() || 'Per Service';
+      let duration = parseInt(serviceDurationInput.value, 10);
       const editingId = serviceIdInput.value;
       const file = serviceImageInput.files[0];
 
       if (!name || !description || isNaN(price) || price < 0) return;
+      if (isNaN(duration) || duration < 30) duration = 30;
+      duration = Math.round(duration / 30) * 30;
       if (!editingId && !file) {
         showFeedback(serviceFeedback, 'Please choose a photo for the service.', true);
         return;
@@ -1195,13 +1282,13 @@
         }
 
         if (editingId) {
-          const updateData = { name, description, price, priceUnit };
+          const updateData = { name, description, price, priceUnit, duration };
           if (imageUrl) updateData.imageUrl = imageUrl;
           await updateDoc(doc(db, 'services', editingId), updateData);
           showFeedback(serviceFeedback, `${name} updated.`);
         } else {
           await addDoc(servicesCol, {
-            name, description, price, priceUnit, imageUrl,
+            name, description, price, priceUnit, duration, imageUrl,
             createdAt: serverTimestamp()
           });
           showFeedback(serviceFeedback, `${name} added to services.`);
@@ -1226,6 +1313,7 @@
         serviceDescInput.value = s.description || '';
         servicePriceInput.value = s.price;
         servicePriceUnitInput.value = s.priceUnit || '';
+        serviceDurationInput.value = s.duration || 30;
         serviceImagePreview.src = s.imageUrl || '';
         serviceImagePreview.style.display = s.imageUrl ? 'block' : 'none';
 
@@ -1245,9 +1333,74 @@
       }
     });
 
-    // ---------- INITIAL RENDER ----------
-    renderReservations();
-    renderOrders();
+    // ---------- AVAILABILITY ----------
+
+    const availabilityRef = doc(db, 'settings', 'availability');
+    const availabilityGrid = document.getElementById('availabilityGrid');
+    const availabilityFeedback = document.getElementById('availabilityFeedback');
+
+    // Full 8am-8pm grid in 30-minute steps, e.g. "08:00", "08:30", ... "19:30"
+    const ALL_SLOTS = [];
+    for (let m = 8 * 60; m < 20 * 60; m += 30) {
+      const h = Math.floor(m / 60);
+      const mm = m % 60;
+      ALL_SLOTS.push(`${String(h).padStart(2, '0')}:${String(mm).padStart(2, '0')}`);
+    }
+
+    function slotLabel(key) {
+      const [h, m] = key.split(':').map(Number);
+      const period = h >= 12 ? 'PM' : 'AM';
+      let displayHour = h % 12;
+      if (displayHour === 0) displayHour = 12;
+      return `${displayHour}:${String(m).padStart(2, '0')} ${period}`;
+    }
+
+    let openSlotsCache = new Set(ALL_SLOTS); // default: everything open until we hear otherwise
+
+    function renderAvailabilityGrid() {
+      availabilityGrid.innerHTML = '';
+      ALL_SLOTS.forEach(key => {
+        const isOpen = openSlotsCache.has(key);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `avail-slot ${isOpen ? 'open' : 'closed'}`;
+        btn.dataset.slot = key;
+        btn.textContent = slotLabel(key);
+        availabilityGrid.appendChild(btn);
+      });
+    }
+
+    onSnapshot(availabilityRef, (snap) => {
+      if (snap.exists() && Array.isArray(snap.data().openSlots)) {
+        openSlotsCache = new Set(snap.data().openSlots);
+      } else {
+        openSlotsCache = new Set(ALL_SLOTS);
+      }
+      renderAvailabilityGrid();
+    }, (err) => {
+      availabilityFeedback.textContent = `Couldn't load availability: ${err.message}`;
+      availabilityFeedback.classList.add('error');
+    });
+
+    availabilityGrid.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.avail-slot');
+      if (!btn) return;
+      const key = btn.dataset.slot;
+      const nextOpen = new Set(openSlotsCache);
+      if (nextOpen.has(key)) {
+        nextOpen.delete(key);
+      } else {
+        nextOpen.add(key);
+      }
+      btn.disabled = true;
+      try {
+        await setDoc(availabilityRef, { openSlots: Array.from(nextOpen) }, { merge: true });
+      } catch (err) {
+        showFeedback(availabilityFeedback, `Couldn't save: ${err.message}`, true);
+      } finally {
+        btn.disabled = false;
+      }
+    });
   </script>
 
 </body>

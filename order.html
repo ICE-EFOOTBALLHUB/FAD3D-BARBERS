@@ -1142,6 +1142,19 @@
     outline-offset: -2px;
   }
 
+  .form-feedback {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    color: #7c1fa0;
+    min-height: 16px;
+  }
+
+  .form-feedback.error {
+    color: #c0392b;
+  }
+
   .qty-max-note {
     font-family: 'Helvetica Neue', Arial, sans-serif;
     font-size: 12px;
@@ -1334,6 +1347,7 @@
               </div>
 
               <button type="submit" class="hero-btn booking-submit-btn" id="orderSubmitBtn" disabled>Proceed To Pay</button>
+              <p class="form-feedback" id="orderFeedback" style="text-align:center; margin-top:14px;"></p>
             </div>
           </form>
         </div>
@@ -1421,7 +1435,9 @@
     <p class="footer-copy">&copy; 2026 FAD3D Barbers. All rights reserved.</p>
   </footer>
 
-  <script>
+  <script type="module">
+    import { db, collection, addDoc, serverTimestamp } from './js/firebase-init.js';
+
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1618,7 +1634,9 @@
         updateTotal();
         updateSubmitState();
 
-        orderForm.addEventListener('submit', (e) => {
+        const orderFeedback = document.getElementById('orderFeedback');
+
+        orderForm.addEventListener('submit', async (e) => {
           e.preventDefault();
           const qty = clampQty(qtyInput.value);
           const name = custName.value.trim();
@@ -1628,9 +1646,37 @@
             return;
           }
 
-          const total = (product.price * qty).toFixed(2);
-          alert(`Thanks, ${name}! Taking you to payment for ${qty} x ${product.name} (\u00A3${total}). We'll text order updates to ${phone}.`);
-          // In production this is where a real payment redirect would happen.
+          const total = product.price * qty;
+
+          orderSubmitBtn.disabled = true;
+          orderSubmitBtn.textContent = 'Placing order...';
+
+          try {
+            await addDoc(collection(db, 'orders'), {
+              customerName: name,
+              customerPhone: phone,
+              productId: productSlug,
+              productName: product.name,
+              qty,
+              unitPrice: product.price,
+              total,
+              status: 'pending',
+              createdAt: serverTimestamp()
+            });
+
+            orderFeedback.classList.remove('error');
+            orderFeedback.textContent = `Thanks, ${name}! Your order for ${qty} x ${product.name} (\u00A3${total.toFixed(2)}) has been placed. We'll text updates to ${phone}.`;
+            orderForm.reset();
+            qtyInput.value = 1;
+            updateTotal();
+            updateSubmitState();
+          } catch (err) {
+            orderFeedback.classList.add('error');
+            orderFeedback.textContent = `Couldn't place order: ${err.message}`;
+          } finally {
+            orderSubmitBtn.textContent = 'Proceed To Pay';
+            updateSubmitState();
+          }
         });
       }
     }

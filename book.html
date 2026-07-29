@@ -989,7 +989,8 @@
   }
 
   .form-group input[type="text"],
-  .form-group input[type="tel"] {
+  .form-group input[type="tel"],
+  .form-group input[type="date"] {
     width: 100%;
     border: 1px solid #cccccc;
     background: #ffffff;
@@ -1117,6 +1118,19 @@
     font-size: 14px;
     color: #777777;
     margin-bottom: 14px;
+  }
+
+  .form-feedback {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    color: #7c1fa0;
+    min-height: 16px;
+  }
+
+  .form-feedback.error {
+    color: #c0392b;
   }
 
   .time-grid {
@@ -1249,21 +1263,7 @@
                 <i class="fa-solid fa-chevron-down"></i>
               </button>
               <div class="service-select-panel" id="serviceSelectPanel" role="listbox">
-                <label class="service-option">
-                  <input type="checkbox" value="haircutting" data-price="25" data-name="Hair Cutting">
-                  <span>Hair Cutting</span>
-                  <span class="service-option-price">&pound;25</span>
-                </label>
-                <label class="service-option">
-                  <input type="checkbox" value="shaving" data-price="20" data-name="Shaving">
-                  <span>Shaving</span>
-                  <span class="service-option-price">&pound;20</span>
-                </label>
-                <label class="service-option">
-                  <input type="checkbox" value="beard" data-price="15" data-name="Beard">
-                  <span>Beard</span>
-                  <span class="service-option-price">&pound;15</span>
-                </label>
+                <p class="empty-row" id="serviceSelectEmpty" style="padding:14px; margin:0; color:#888; font-style:italic; font-size:13px;">Loading services&hellip;</p>
               </div>
             </div>
           </div>
@@ -1274,12 +1274,18 @@
           </div>
 
           <div class="form-group">
+            <label for="bookingDate">Date</label>
+            <input type="date" id="bookingDate" name="bookingDate" required>
+          </div>
+
+          <div class="form-group">
             <label>Available Times</label>
             <p class="time-hint" id="timeHint">Select a service above to see available times.</p>
             <div class="time-grid" id="timeGrid"></div>
           </div>
 
           <button type="submit" class="hero-btn booking-submit-btn" id="bookSubmitBtn" disabled>Book Reservation</button>
+          <p class="form-feedback" id="bookingFeedback" style="text-align:center; margin-top:14px;"></p>
         </form>
       </div>
     </div>
@@ -1364,7 +1370,11 @@
     <p class="footer-copy">&copy; 2026 FAD3D Barbers. All rights reserved.</p>
   </footer>
 
-  <script>
+  <script type="module">
+    import {
+      db, collection, addDoc, doc, onSnapshot, query, orderBy, where, getDocs, serverTimestamp
+    } from './js/firebase-init.js';
+
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1414,17 +1424,21 @@
     const serviceSelect = document.getElementById('serviceSelect');
     const serviceSelectToggle = document.getElementById('serviceSelectToggle');
     const serviceSelectLabel = document.getElementById('serviceSelectLabel');
-    const serviceCheckboxes = Array.from(document.querySelectorAll('.service-option input[type="checkbox"]'));
+    const serviceSelectPanel = document.getElementById('serviceSelectPanel');
     const totalPriceEl = document.getElementById('totalPrice');
+    const dateInput = document.getElementById('bookingDate');
     const timeGrid = document.getElementById('timeGrid');
     const timeHint = document.getElementById('timeHint');
     const bookSubmitBtn = document.getElementById('bookSubmitBtn');
     const bookingForm = document.getElementById('bookingForm');
+    const bookingFeedback = document.getElementById('bookingFeedback');
 
-    // Demo-only: a fixed set of slots that already have a client booked in.
-    const occupiedTimes = ['12:30', '13:00', '14:30', '15:00', '16:30', '18:00', '19:00'];
-
-    let selectedTime = null;
+    // Full 8am-8pm grid in 30-minute steps, matching the admin availability grid.
+    const ALL_SLOTS = [];
+    for (let m = 8 * 60; m < 20 * 60; m += 30) {
+      ALL_SLOTS.push(minutesToKey(m));
+    }
+    const CLOSE_MINUTES = 20 * 60;
 
     function minutesToLabel(totalMinutes) {
       let h = Math.floor(totalMinutes / 60);
@@ -1442,23 +1456,136 @@
       return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
     }
 
+    function keyToMinutes(key) {
+      const [h, m] = key.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function todayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+
+    dateInput.min = todayKey();
+    dateInput.value = todayKey();
+
+    let servicesCache = [];
+    let openSlots = new Set(ALL_SLOTS); // admin-managed hours, from settings/availability
+    let occupiedBlocks = new Set(); // 30-min blocks already booked on the selected date
+    let selectedTime = null;
+
     function getSelectedServices() {
-      return serviceCheckboxes.filter(cb => cb.checked);
+      return servicesCache.filter(s => s._checked);
+    }
+
+    function renderServiceOptions() {
+      serviceSelectPanel.innerHTML = '';
+      if (servicesCache.length === 0) {
+        serviceSelectPanel.innerHTML = '<p style="padding:14px; margin:0; color:#888; font-style:italic; font-size:13px;">No services available right now.</p>';
+        return;
+      }
+      servicesCache.forEach(s => {
+        const label = document.createElement('label');
+        label.className = 'service-option';
+        label.innerHTML = `
+          <input type="checkbox" value="${s.id}" ${s._checked ? 'checked' : ''}>
+          <span>${s.name}</span>
+          <span class="service-option-price">&pound;${Number(s.price).toFixed(2)}</span>
+        `;
+        const checkbox = label.querySelector('input');
+        checkbox.addEventListener('change', () => {
+          s._checked = checkbox.checked;
+          updateServiceLabel();
+          updateTotal();
+          renderTimeGrid();
+        });
+        serviceSelectPanel.appendChild(label);
+      });
     }
 
     function updateServiceLabel() {
       const selected = getSelectedServices();
-      if (selected.length === 0) {
-        serviceSelectLabel.textContent = 'Select services';
-      } else {
-        serviceSelectLabel.textContent = selected.map(cb => cb.dataset.name).join(', ');
-      }
+      serviceSelectLabel.textContent = selected.length === 0
+        ? 'Select services'
+        : selected.map(s => s.name).join(', ');
     }
 
     function updateTotal() {
       const selected = getSelectedServices();
-      const total = selected.reduce((sum, cb) => sum + parseFloat(cb.dataset.price), 0);
+      const total = selected.reduce((sum, s) => sum + Number(s.price), 0);
       totalPriceEl.textContent = `\u00A3${total}`;
+    }
+
+    // ---------- SERVICES (live) ----------
+    onSnapshot(query(collection(db, 'services'), orderBy('createdAt', 'asc')), (snap) => {
+      const prevChecked = new Set(servicesCache.filter(s => s._checked).map(s => s.id));
+      servicesCache = snap.docs.map(d => ({ id: d.id, ...d.data(), _checked: prevChecked.has(d.id) }));
+
+      // Pre-select a service if the visitor arrived via a "Book Now" link,
+      // e.g. book.html?service=<serviceId>
+      if (prevChecked.size === 0) {
+        const params = new URLSearchParams(window.location.search);
+        const preselect = params.get('service');
+        if (preselect) {
+          const match = servicesCache.find(s => s.id === preselect || s.name.toLowerCase() === preselect.toLowerCase());
+          if (match) match._checked = true;
+        }
+      }
+
+      renderServiceOptions();
+      updateServiceLabel();
+      updateTotal();
+      renderTimeGrid();
+    });
+
+    // ---------- AVAILABILITY (live, admin-managed hours) ----------
+    onSnapshot(doc(db, 'settings', 'availability'), (snap) => {
+      if (snap.exists() && Array.isArray(snap.data().openSlots)) {
+        openSlots = new Set(snap.data().openSlots);
+      } else {
+        openSlots = new Set(ALL_SLOTS);
+      }
+      renderTimeGrid();
+    });
+
+    // ---------- EXISTING BOOKINGS for the selected date ----------
+    async function loadOccupiedBlocksForDate(dateStr) {
+      occupiedBlocks = new Set();
+      try {
+        const snap = await getDocs(query(collection(db, 'bookings'), where('date', '==', dateStr)));
+        snap.forEach(d => {
+          const b = d.data();
+          if (b.status === 'cancelled') return; // freed up
+          if (!b.time || !b.duration) return;
+          const start = keyToMinutes(b.time);
+          for (let m = start; m < start + b.duration; m += 30) {
+            occupiedBlocks.add(minutesToKey(m));
+          }
+        });
+      } catch (err) {
+        console.error('Could not load existing bookings:', err);
+      }
+      renderTimeGrid();
+    }
+
+    dateInput.addEventListener('change', () => {
+      selectedTime = null;
+      loadOccupiedBlocksForDate(dateInput.value);
+    });
+
+    function isRangeAvailable(startKey, durationMinutes) {
+      const startMin = keyToMinutes(startKey);
+      if (startMin + durationMinutes > CLOSE_MINUTES) return false;
+      const isToday = dateInput.value === todayKey();
+      if (isToday) {
+        const now = new Date();
+        if (startMin <= now.getHours() * 60 + now.getMinutes()) return false;
+      }
+      for (let m = startMin; m < startMin + durationMinutes; m += 30) {
+        const key = minutesToKey(m);
+        if (!openSlots.has(key) || occupiedBlocks.has(key)) return false;
+      }
+      return true;
     }
 
     function renderTimeGrid() {
@@ -1472,21 +1599,17 @@
         return;
       }
 
-      const interval = selected.length > 1 ? 60 : 30;
+      const totalDuration = selected.reduce((sum, s) => sum + Number(s.duration || 30), 0);
       timeHint.textContent = selected.length > 1
-        ? 'Multiple services selected \u2014 showing hourly slots.'
-        : '30-minute slots, 12pm \u2013 8pm.';
+        ? `Multiple services selected \u2014 showing ${totalDuration}-minute slots.`
+        : `${totalDuration}-minute slots, 8am \u2013 8pm.`;
 
-      const startMinutes = 12 * 60;
-      const endMinutes = 20 * 60;
-      const slots = [];
-      for (let t = startMinutes; t < endMinutes; t += interval) {
-        slots.push(t);
+      const slotsStarts = [];
+      for (let t = 8 * 60; t < CLOSE_MINUTES; t += totalDuration) {
+        slotsStarts.push(t);
       }
 
-      let stillAvailable = false;
-
-      slots.forEach(t => {
+      slotsStarts.forEach(t => {
         const key = minutesToKey(t);
         const btn = document.createElement('button');
         btn.type = 'button';
@@ -1494,15 +1617,11 @@
         btn.textContent = minutesToLabel(t);
         btn.dataset.time = key;
 
-        const isOccupied = occupiedTimes.includes(key);
-        if (isOccupied) {
+        if (!isRangeAvailable(key, totalDuration)) {
           btn.classList.add('occupied');
           btn.disabled = true;
         } else {
-          stillAvailable = true;
-          if (selectedTime === key) {
-            btn.classList.add('selected');
-          }
+          if (selectedTime === key) btn.classList.add('selected');
           btn.addEventListener('click', () => {
             selectedTime = key;
             timeGrid.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
@@ -1514,9 +1633,7 @@
         timeGrid.appendChild(btn);
       });
 
-      if (selectedTime && !occupiedTimes.includes(selectedTime) && slots.some(t => minutesToKey(t) === selectedTime)) {
-        // keep current selection if still valid
-      } else {
+      if (!(selectedTime && slotsStarts.some(t => minutesToKey(t) === selectedTime) && isRangeAvailable(selectedTime, totalDuration))) {
         selectedTime = null;
       }
 
@@ -1525,7 +1642,7 @@
 
     function updateSubmitState() {
       const selected = getSelectedServices();
-      bookSubmitBtn.disabled = !(selected.length > 0 && selectedTime);
+      bookSubmitBtn.disabled = !(selected.length > 0 && selectedTime && dateInput.value);
     }
 
     serviceSelectToggle.addEventListener('click', () => {
@@ -1540,43 +1657,59 @@
       }
     });
 
-    serviceCheckboxes.forEach(cb => {
-      cb.addEventListener('change', () => {
-        updateServiceLabel();
-        updateTotal();
-        renderTimeGrid();
-      });
-    });
+    loadOccupiedBlocksForDate(dateInput.value);
 
-    // Pre-select a service if the visitor arrived via a "Book Now" link,
-    // e.g. book.html?service=haircutting
-    const params = new URLSearchParams(window.location.search);
-    const preselect = params.get('service');
-    if (preselect) {
-      const match = serviceCheckboxes.find(cb => cb.value === preselect);
-      if (match) match.checked = true;
-    }
-
-    updateServiceLabel();
-    updateTotal();
-    renderTimeGrid();
-
-    bookingForm.addEventListener('submit', (e) => {
+    bookingForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const selected = getSelectedServices();
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
+      const dateStr = dateInput.value;
 
-      if (!name || !phone || selected.length === 0 || !selectedTime) {
+      if (!name || !phone || selected.length === 0 || !selectedTime || !dateStr) return;
+      if (!isRangeAvailable(selectedTime, selected.reduce((sum, s) => sum + Number(s.duration || 30), 0))) {
+        bookingFeedback.textContent = 'Sorry, that time was just taken. Please pick another slot.';
+        bookingFeedback.classList.add('error');
+        await loadOccupiedBlocksForDate(dateStr);
         return;
       }
 
-      alert('Reservation booked successfully!');
-      bookingForm.reset();
-      selectedTime = null;
-      updateServiceLabel();
-      updateTotal();
-      renderTimeGrid();
+      const totalDuration = selected.reduce((sum, s) => sum + Number(s.duration || 30), 0);
+      const totalPrice = selected.reduce((sum, s) => sum + Number(s.price), 0);
+
+      bookSubmitBtn.disabled = true;
+      bookSubmitBtn.textContent = 'Booking...';
+
+      try {
+        await addDoc(collection(db, 'bookings'), {
+          customerName: name,
+          customerPhone: phone,
+          services: selected.map(s => ({ id: s.id, name: s.name, price: Number(s.price), duration: Number(s.duration || 30) })),
+          totalPrice,
+          date: dateStr,
+          time: selectedTime,
+          duration: totalDuration,
+          status: 'pending',
+          createdAt: serverTimestamp()
+        });
+
+        bookingFeedback.classList.remove('error');
+        bookingFeedback.textContent = 'Reservation booked successfully! We\u2019ll see you then.';
+        bookingForm.reset();
+        servicesCache.forEach(s => { s._checked = false; });
+        selectedTime = null;
+        dateInput.value = todayKey();
+        renderServiceOptions();
+        updateServiceLabel();
+        updateTotal();
+        await loadOccupiedBlocksForDate(dateInput.value);
+      } catch (err) {
+        bookingFeedback.classList.add('error');
+        bookingFeedback.textContent = `Couldn't book: ${err.message}`;
+      } finally {
+        bookSubmitBtn.textContent = 'Book Reservation';
+        updateSubmitState();
+      }
     });
   </script>
 
