@@ -1116,6 +1116,114 @@
     height: 56px;
   }
 
+  /* ---------- PRODUCT QUICK VIEW ---------- */
+
+  .product-card {
+    cursor: pointer;
+  }
+
+  .quickview-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+  }
+
+  .quickview-overlay.open {
+    display: flex;
+  }
+
+  .quickview-modal {
+    background: #ffffff;
+    width: 100%;
+    max-width: 480px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    border-top: 6px solid #7c1fa0;
+    cursor: default;
+  }
+
+  .quickview-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+    z-index: 3;
+  }
+
+  .quickview-img {
+    width: 100%;
+    height: clamp(220px, 42vw, 300px);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .quickview-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .quickview-img .product-badge {
+    left: 16px;
+    right: auto;
+  }
+
+  .quickview-body {
+    padding: 28px;
+  }
+
+  .quickview-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #000000;
+    font-size: clamp(22px, 4.5vw, 28px);
+    letter-spacing: 0.5px;
+    margin-bottom: 14px;
+  }
+
+  .quickview-text {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    color: #1a1a1a;
+    margin-bottom: 24px;
+  }
+
+  .quickview-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 12px;
+  }
+
+  .quickview-price {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #7c1fa0;
+    font-size: clamp(22px, 4.5vw, 28px);
+  }
+
   @media (min-width: 1024px) {
     .products-section {
       padding: 40px 24px 0;
@@ -1183,7 +1291,12 @@
 
       <div class="products-grid">
 
-        <div class="product-card">
+        <div class="product-card" tabindex="0" role="button" aria-label="View Beard Oil details"
+          data-name="Beard Oil" data-price="&pound;12.00"
+          data-desc="A lightweight, fast-absorbing oil that softens and conditions facial hair while keeping the skin underneath calm and moisturised."
+          data-img="beard_oil.jpg" data-badge-label="In Stock" data-badge-class="in-stock"
+          data-stock-label="34 In Stock" data-stock-class=""
+          data-order-href="order.html?product=beard-oil">
           <span class="product-badge in-stock">In Stock</span>
           <div class="product-img">
             <img src="beard_oil.jpg" alt="Beard Oil">
@@ -1201,7 +1314,12 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" tabindex="0" role="button" aria-label="View Beard Balm details"
+          data-name="Beard Balm" data-price="&pound;14.00"
+          data-desc="A light-hold balm that tames flyaways and shapes your beard, made with natural ingredients that soften and moisturise."
+          data-img="beardbalm.jpg" data-badge-label="In Stock" data-badge-class="in-stock"
+          data-stock-label="21 In Stock" data-stock-class=""
+          data-order-href="order.html?product=beard-balm">
           <span class="product-badge in-stock">In Stock</span>
           <div class="product-img">
             <img src="beardbalm.jpg" alt="Beard Balm">
@@ -1219,7 +1337,12 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" tabindex="0" role="button" aria-label="View Sea Salt Spray details"
+          data-name="Sea Salt Spray" data-price="&pound;16.00"
+          data-desc="A texturising spray that builds effortless, matte, beach-style volume without weighing hair down."
+          data-img="seasaltspray.jpg" data-badge-label="Sold Out" data-badge-class="sold-out"
+          data-stock-label="Sold Out" data-stock-class="out"
+          data-order-href="">
           <span class="product-badge sold-out">Sold Out</span>
           <div class="product-img">
             <img src="seasaltspray.jpg" alt="Sea Salt Spray">
@@ -1237,7 +1360,12 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" tabindex="0" role="button" aria-label="View Full Clipper Set details"
+          data-name="Full Clipper Set" data-price="&pound;45.00"
+          data-desc="A complete cordless clipper kit with guide combs, thinning and cutting scissors, and a comb for sharp cuts at home."
+          data-img="fullcutset.jpg" data-badge-label="In Stock" data-badge-class="in-stock"
+          data-stock-label="12 In Stock" data-stock-class=""
+          data-order-href="order.html?product=clipper-set">
           <span class="product-badge in-stock">In Stock</span>
           <div class="product-img">
             <img src="fullcutset.jpg" alt="Full Clipper Set">
@@ -1255,7 +1383,12 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" tabindex="0" role="button" aria-label="View Hair Clay details"
+          data-name="Hair Clay" data-price="&pound;13.00"
+          data-desc="A strong-hold, matte clay that builds natural texture and keeps styles in place all day without shine."
+          data-img="clay.jpg" data-badge-label="Selling Fast" data-badge-class="low-stock"
+          data-stock-label="Only 3 Left" data-stock-class="low"
+          data-order-href="order.html?product=hair-clay">
           <span class="product-badge low-stock">Selling Fast</span>
           <div class="product-img">
             <img src="clay.jpg" alt="Hair Clay">
@@ -1273,7 +1406,12 @@
           </div>
         </div>
 
-        <div class="product-card">
+        <div class="product-card" tabindex="0" role="button" aria-label="View Premium Pomade details"
+          data-name="Premium Pomade" data-price="&pound;15.00"
+          data-desc="A classic, high-shine pomade with firm, long-lasting hold for sharp, styled looks that stay put."
+          data-img="premiumpomade.jpg" data-badge-label="In Stock" data-badge-class="in-stock"
+          data-stock-label="27 In Stock" data-stock-class=""
+          data-order-href="order.html?product=premium-pomade">
           <span class="product-badge in-stock">In Stock</span>
           <div class="product-img">
             <img src="premiumpomade.jpg" alt="Premium Pomade">
@@ -1374,6 +1512,25 @@
     <p class="footer-copy">&copy; 2026 FAD3D Barbers. All rights reserved.</p>
   </footer>
 
+  <div class="quickview-overlay" id="quickviewOverlay">
+    <div class="quickview-modal">
+      <button class="quickview-close" id="quickviewClose" aria-label="Close quick view">&times;</button>
+      <div class="quickview-img">
+        <img id="qvImage" src="" alt="">
+        <span class="product-badge" id="qvBadge"></span>
+      </div>
+      <div class="quickview-body">
+        <h3 class="quickview-title" id="qvTitle"></h3>
+        <p class="quickview-text" id="qvText"></p>
+        <div class="quickview-meta">
+          <span class="quickview-price" id="qvPrice"></span>
+          <span class="product-stock-text" id="qvStock"></span>
+        </div>
+        <a href="#" class="product-btn" id="qvBtn">Order Now</a>
+      </div>
+    </div>
+  </div>
+
   <script>
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -1418,6 +1575,68 @@
       }, { threshold: 0.25 });
       contactObserver.observe(contactInner);
     }
+
+    // ---------- PRODUCT QUICK VIEW ----------
+    const quickviewOverlay = document.getElementById('quickviewOverlay');
+    const quickviewClose = document.getElementById('quickviewClose');
+    const qvImage = document.getElementById('qvImage');
+    const qvBadge = document.getElementById('qvBadge');
+    const qvTitle = document.getElementById('qvTitle');
+    const qvText = document.getElementById('qvText');
+    const qvPrice = document.getElementById('qvPrice');
+    const qvStock = document.getElementById('qvStock');
+    const qvBtn = document.getElementById('qvBtn');
+
+    function openQuickView(card) {
+      const data = card.dataset;
+      qvImage.src = data.img;
+      qvImage.alt = data.name;
+      qvBadge.textContent = data.badgeLabel;
+      qvBadge.className = 'product-badge ' + data.badgeClass;
+      qvTitle.textContent = data.name;
+      qvText.textContent = data.desc;
+      qvPrice.textContent = data.price;
+      qvStock.textContent = data.stockLabel;
+      qvStock.className = 'product-stock-text ' + data.stockClass;
+
+      if (data.orderHref) {
+        qvBtn.href = data.orderHref;
+        qvBtn.textContent = 'Order Now';
+        qvBtn.classList.remove('disabled');
+      } else {
+        qvBtn.removeAttribute('href');
+        qvBtn.textContent = 'Sold Out';
+        qvBtn.classList.add('disabled');
+      }
+
+      quickviewOverlay.classList.add('open');
+    }
+
+    function closeQuickView() {
+      quickviewOverlay.classList.remove('open');
+    }
+
+    productCards.forEach(card => {
+      card.addEventListener('click', () => openQuickView(card));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openQuickView(card);
+        }
+      });
+    });
+
+    document.querySelectorAll('.product-card a.product-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => e.stopPropagation());
+    });
+
+    quickviewClose.addEventListener('click', closeQuickView);
+    quickviewOverlay.addEventListener('click', (e) => {
+      if (e.target === quickviewOverlay) closeQuickView();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && quickviewOverlay.classList.contains('open')) closeQuickView();
+    });
   </script>
 
 </body>
