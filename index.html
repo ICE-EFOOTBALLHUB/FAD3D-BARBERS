@@ -872,10 +872,13 @@
   /* ---------- DESKTOP-ONLY FIXES ---------- */
 
   @media (min-width: 1024px) {
-    .hero {
+    .hero.desktop-hero {
       min-height: 640px;
       max-height: 760px;
+      background-size: contain;
+      background-repeat: no-repeat;
       background-position: center center;
+      background-color: #2b1d12;
     }
 
     .hero-spacer {
@@ -1163,39 +1166,13 @@
       var willUseDesktopImage = !isMobileOS && !isTouchMac;
 
       var heroEl = document.getElementById('heroSection');
-
       if (willUseDesktopImage && heroEl) {
         var testImg = new Image();
         testImg.onload = function () {
           heroEl.style.backgroundImage = "url('hero-desktop.jpg')";
-          showHeroDebugBadge(true, ua, 'loaded ok');
-        };
-        testImg.onerror = function () {
-          showHeroDebugBadge(true, ua, 'FAILED TO LOAD hero-desktop.jpg (check file is deployed)');
+          heroEl.classList.add('desktop-hero');
         };
         testImg.src = 'hero-desktop.jpg';
-      } else {
-        showHeroDebugBadge(false, ua, 'kept original hero.jpg');
-      }
-
-      // Temporary visible badge so this can be verified on-device without devtools.
-      // Remove this block once confirmed working.
-      function showHeroDebugBadge(isDesktop, uaString, status) {
-        var badge = document.createElement('div');
-        badge.style.cssText = 'position:fixed;bottom:0;left:0;right:0;z-index:9999;' +
-          'background:#000;color:#0f0;font:11px monospace;padding:8px;' +
-          'max-height:35vh;overflow:auto;white-space:pre-wrap;';
-        badge.textContent =
-          'HERO DEBUG\n' +
-          'Detected as desktop: ' + isDesktop + '\n' +
-          'Status: ' + status + '\n' +
-          'UA: ' + uaString;
-        var closeBtn = document.createElement('button');
-        closeBtn.textContent = 'Close';
-        closeBtn.style.cssText = 'display:block;margin-top:6px;padding:4px 10px;';
-        closeBtn.onclick = function () { badge.remove(); };
-        badge.appendChild(closeBtn);
-        document.body.appendChild(badge);
       }
     })();
 
