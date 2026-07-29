@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>About Us | FAD3D Barbers</title>
+<title>Book An Appointment | FAD3D Barbers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -853,6 +853,7 @@
     .about-line,
     .about-text,
     .service-card,
+    .booking-card,
     .contact-inner,
     .review-card {
       animation: none !important;
@@ -918,7 +919,7 @@
     }
   }
 
-  /* ---------- ABOUT PAGE INTRO ---------- */
+  /* ---------- PRODUCTS PAGE INTRO ---------- */
 
   .page-intro {
     width: 100%;
@@ -943,33 +944,243 @@
     margin-right: auto;
   }
 
-  /* ---------- ABOUT CTA (between about text and contact) ---------- */
+  /* ---------- BOOKING FORM ---------- */
 
-  .about-cta {
+  .booking-section {
     width: 100%;
-    padding: 8px 24px 64px;
-    text-align: center;
+    padding: 40px 24px 0;
   }
 
-  .about-cta-inner {
+  .booking-inner {
     max-width: 640px;
     margin: 0 auto;
+  }
+
+  .booking-card {
+    background: #f4f2f0;
+    border-top: 4px solid #7c1fa0;
+    padding: clamp(24px, 5vw, 48px);
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px);
     transition: opacity 0.7s ease, transform 0.7s ease;
   }
 
-  .about-cta-inner.in-view {
+  .booking-card.in-view {
     opacity: 1;
     transform: translateY(0);
   }
 
-  .about-cta-text {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(15px, 2.4vw, 18px);
-    line-height: 1.7;
-    color: #1a1a1a;
+  .form-group {
     margin-bottom: 28px;
+  }
+
+  .form-group label {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #000000;
+    margin-bottom: 10px;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="tel"] {
+    width: 100%;
+    border: 1px solid #cccccc;
+    background: #ffffff;
+    padding: 14px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #000000;
+  }
+
+  .form-group input:focus {
+    outline: 2px solid #7c1fa0;
+    outline-offset: -2px;
+  }
+
+  /* Service multi-select dropdown */
+
+  .service-select {
+    position: relative;
+  }
+
+  .service-select-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 14px 16px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #000000;
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .service-select-toggle i {
+    color: #7c1fa0;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .service-select.open .service-select-toggle i {
+    transform: rotate(180deg);
+  }
+
+  .service-select-panel {
+    display: none;
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    border-top: none;
+  }
+
+  .service-select.open .service-select-panel {
+    display: block;
+  }
+
+  .service-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid #eeeeee;
+    cursor: pointer;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #000000;
+  }
+
+  .service-option:last-child {
+    border-bottom: none;
+  }
+
+  .service-option:hover {
+    background: #f4f2f0;
+  }
+
+  .service-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #7c1fa0;
+    flex-shrink: 0;
+  }
+
+  .service-option span:nth-child(2) {
+    flex: 1;
+  }
+
+  .service-option-price {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #7c1fa0;
+    font-size: 14px;
+  }
+
+  .booking-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+  }
+
+  .booking-total-row span:first-child {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #000000;
+  }
+
+  .booking-total-row span:last-child {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #7c1fa0;
+    font-size: 22px;
+  }
+
+  .time-hint {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    color: #777777;
+    margin-bottom: 14px;
+  }
+
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    gap: 10px;
+  }
+
+  .time-slot {
+    background: #ffffff;
+    border: 1px solid #cccccc;
+    padding: 12px 6px;
+    text-align: center;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #000000;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .time-slot:hover {
+    border-color: #7c1fa0;
+  }
+
+  .time-slot.selected {
+    background: #7c1fa0;
+    border-color: #7c1fa0;
+    color: #ffffff;
+  }
+
+  .time-slot.occupied {
+    background: #e6e4e2;
+    border-color: #e6e4e2;
+    color: #999999;
+    text-decoration: line-through;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .booking-submit-btn {
+    width: 100%;
+    margin-top: 8px;
+    border: none;
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .booking-submit-btn:disabled {
+    background: #cccccc;
+    color: #777777;
+    cursor: not-allowed;
+  }
+
+  .booking-bottom-spacer {
+    height: 56px;
+  }
+
+  @media (min-width: 1024px) {
+    .booking-section {
+      padding: 32px 24px 0;
+    }
+
+    .booking-bottom-spacer {
+      height: 40px;
+    }
   }
 </style>
 </head>
@@ -989,8 +1200,8 @@
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="index.html">Home</a>
-    <a href="#about">About</a>
-    <a href="services.html">Services</a>
+    <a href="about.html">About</a>
+    <a href="services.html#offer">Services</a>
     <a href="products.html">Products</a>
     <a href="index.html#reviews">Reviews</a>
     <a href="#contact">Location</a>
@@ -999,51 +1210,79 @@
 
   <section class="page-intro">
     <div class="page-intro-inner">
-      <p class="hero-eyebrow">The FAD3D Story</p>
+      <p class="hero-eyebrow">Reserve Your Slot</p>
       <h1 class="hero-heading">
-        <span class="line-one">MEET</span>
-        <span class="line-two">FAD3D BARBERS</span>
+        <span class="line-one">BOOK AN</span>
+        <span class="line-two">APPOINTMENT</span>
       </h1>
       <p class="hero-text">
-        More than a barbershop &mdash; a small team of Aylesbury craftsmen dedicated to precision cuts, honest service, and a chair you'll actually look forward to sitting in.
+        Pick your service, choose a time that suits you, and we'll have the chair ready.
       </p>
-      <button class="hero-btn" onclick="window.location.href='book.html'">Book An Appointment</button>
     </div>
   </section>
 
   <div class="purple-bar"></div>
 
-  <section class="about" id="about">
-    <div class="about-content">
-      <p class="about-eyebrow">Who We Are</p>
-      <h2 class="about-heading">
-        <span class="about-line">BUILT ON CRAFT,</span>
-        <span class="about-line">RUN ON TRUST</span>
-      </h2>
-      <p class="about-text">
-        FAD3D Barbers started with a simple idea: Aylesbury deserved a barbershop that took the craft as seriously as the client sitting in the chair. What began as one barber with a steady hand and a loyal handful of regulars has grown into a full team, but the standard hasn't moved an inch &mdash; every fade, every line, every shave is treated like it's the only one that matters that day.
-      </p>
-      <p class="about-text">
-        We're not chasing trends for the sake of it. Our barbers train constantly, keep their tools sharp, and take the time to actually listen before they pick up the clippers. Whether you're after a sharp skin fade, a classic scissor cut, or a traditional hot towel shave, the conversation always starts with what works for your hair, your face shape, and your lifestyle &mdash; not just what's popular on social media that week.
-      </p>
-      <p class="about-text">
-        The shop itself is built to feel like a proper barbershop should: warm, unhurried, and a little old-school. Leather chairs, sharp tools laid out with care, good music, and better conversation. We want regulars who come in not just for the cut, but for the twenty minutes of normal, unbothered downtime that comes with it.
-      </p>
-      <p class="about-text">
-        Since opening our doors, we've become part of the fabric of Aylesbury &mdash; cutting hair for dads and their sons, groomsmen before the big day, and clients who've followed us from our very first week. That kind of trust isn't something we take lightly, and it's the reason we still greet every new face the same way we did on day one: like someone who's about to become a regular.
-      </p>
-      <p class="about-text">
-        Step in, get comfortable, and see what everyone's been talking about.
-      </p>
+  <section class="booking-section" id="booking">
+    <div class="booking-inner">
+      <div class="booking-card">
+        <form id="bookingForm" novalidate>
+
+          <div class="form-group">
+            <label for="custName">Full Name</label>
+            <input type="text" id="custName" name="custName" required maxlength="60">
+          </div>
+
+          <div class="form-group">
+            <label for="custPhone">Phone Number</label>
+            <input type="tel" id="custPhone" name="custPhone" required maxlength="20">
+          </div>
+
+          <div class="form-group">
+            <label>Choose Service(s)</label>
+            <div class="service-select" id="serviceSelect">
+              <button type="button" class="service-select-toggle" id="serviceSelectToggle" aria-haspopup="listbox" aria-expanded="false">
+                <span id="serviceSelectLabel">Select services</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="service-select-panel" id="serviceSelectPanel" role="listbox">
+                <label class="service-option">
+                  <input type="checkbox" value="haircutting" data-price="25" data-name="Hair Cutting">
+                  <span>Hair Cutting</span>
+                  <span class="service-option-price">&pound;25</span>
+                </label>
+                <label class="service-option">
+                  <input type="checkbox" value="shaving" data-price="20" data-name="Shaving">
+                  <span>Shaving</span>
+                  <span class="service-option-price">&pound;20</span>
+                </label>
+                <label class="service-option">
+                  <input type="checkbox" value="beard" data-price="15" data-name="Beard">
+                  <span>Beard</span>
+                  <span class="service-option-price">&pound;15</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="booking-total-row">
+            <span>Estimated Total</span>
+            <span id="totalPrice">&pound;0</span>
+          </div>
+
+          <div class="form-group">
+            <label>Available Times</label>
+            <p class="time-hint" id="timeHint">Select a service above to see available times.</p>
+            <div class="time-grid" id="timeGrid"></div>
+          </div>
+
+          <button type="submit" class="hero-btn booking-submit-btn" id="bookSubmitBtn" disabled>Book Reservation</button>
+        </form>
+      </div>
     </div>
   </section>
 
-  <section class="about-cta">
-    <div class="about-cta-inner">
-      <p class="about-cta-text">Ready to see the difference for yourself?</p>
-      <button class="hero-btn" onclick="window.location.href='book.html'">Book An Appointment</button>
-    </div>
-  </section>
+  <div class="booking-bottom-spacer"></div>
 
   <div class="purple-bar"></div>
 
@@ -1101,8 +1340,8 @@
 
     <nav class="footer-nav">
       <a href="index.html">Home</a>
-      <a href="#about">About</a>
-      <a href="services.html">Services</a>
+      <a href="about.html">About</a>
+      <a href="services.html#offer">Services</a>
       <a href="products.html">Products</a>
       <a href="index.html#reviews">Reviews</a>
       <a href="#contact">Location</a>
@@ -1141,30 +1380,17 @@
       });
     }
 
-    const aboutContent = document.querySelector('.about-content');
-    if (aboutContent) {
-      const observer = new IntersectionObserver((entries) => {
+    const bookingCard = document.querySelector('.booking-card');
+    if (bookingCard) {
+      const bookingObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            aboutContent.classList.add('in-view');
-            observer.unobserve(entry.target);
+            entry.target.classList.add('in-view');
+            bookingObserver.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.2 });
-      observer.observe(aboutContent);
-    }
-
-    const aboutCtaInner = document.querySelector('.about-cta-inner');
-    if (aboutCtaInner) {
-      const ctaObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            aboutCtaInner.classList.add('in-view');
-            ctaObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-      ctaObserver.observe(aboutCtaInner);
+      }, { threshold: 0.15 });
+      bookingObserver.observe(bookingCard);
     }
 
     const contactInner = document.querySelector('.contact-inner');
@@ -1179,6 +1405,176 @@
       }, { threshold: 0.25 });
       contactObserver.observe(contactInner);
     }
+
+    // ---------- BOOKING FORM ----------
+
+    const serviceSelect = document.getElementById('serviceSelect');
+    const serviceSelectToggle = document.getElementById('serviceSelectToggle');
+    const serviceSelectLabel = document.getElementById('serviceSelectLabel');
+    const serviceCheckboxes = Array.from(document.querySelectorAll('.service-option input[type="checkbox"]'));
+    const totalPriceEl = document.getElementById('totalPrice');
+    const timeGrid = document.getElementById('timeGrid');
+    const timeHint = document.getElementById('timeHint');
+    const bookSubmitBtn = document.getElementById('bookSubmitBtn');
+    const bookingForm = document.getElementById('bookingForm');
+
+    // Demo-only: a fixed set of slots that already have a client booked in.
+    const occupiedTimes = ['12:30', '13:00', '14:30', '15:00', '16:30', '18:00', '19:00'];
+
+    let selectedTime = null;
+
+    function minutesToLabel(totalMinutes) {
+      let h = Math.floor(totalMinutes / 60);
+      const m = totalMinutes % 60;
+      const period = h >= 12 ? 'PM' : 'AM';
+      let displayHour = h % 12;
+      if (displayHour === 0) displayHour = 12;
+      const mm = m === 0 ? '00' : String(m).padStart(2, '0');
+      return `${displayHour}:${mm} ${period}`;
+    }
+
+    function minutesToKey(totalMinutes) {
+      const h = Math.floor(totalMinutes / 60);
+      const m = totalMinutes % 60;
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+
+    function getSelectedServices() {
+      return serviceCheckboxes.filter(cb => cb.checked);
+    }
+
+    function updateServiceLabel() {
+      const selected = getSelectedServices();
+      if (selected.length === 0) {
+        serviceSelectLabel.textContent = 'Select services';
+      } else {
+        serviceSelectLabel.textContent = selected.map(cb => cb.dataset.name).join(', ');
+      }
+    }
+
+    function updateTotal() {
+      const selected = getSelectedServices();
+      const total = selected.reduce((sum, cb) => sum + parseFloat(cb.dataset.price), 0);
+      totalPriceEl.textContent = `\u00A3${total}`;
+    }
+
+    function renderTimeGrid() {
+      const selected = getSelectedServices();
+      timeGrid.innerHTML = '';
+
+      if (selected.length === 0) {
+        timeHint.textContent = 'Select a service above to see available times.';
+        selectedTime = null;
+        updateSubmitState();
+        return;
+      }
+
+      const interval = selected.length > 1 ? 60 : 30;
+      timeHint.textContent = selected.length > 1
+        ? 'Multiple services selected \u2014 showing hourly slots.'
+        : '30-minute slots, 12pm \u2013 8pm.';
+
+      const startMinutes = 12 * 60;
+      const endMinutes = 20 * 60;
+      const slots = [];
+      for (let t = startMinutes; t < endMinutes; t += interval) {
+        slots.push(t);
+      }
+
+      let stillAvailable = false;
+
+      slots.forEach(t => {
+        const key = minutesToKey(t);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'time-slot';
+        btn.textContent = minutesToLabel(t);
+        btn.dataset.time = key;
+
+        const isOccupied = occupiedTimes.includes(key);
+        if (isOccupied) {
+          btn.classList.add('occupied');
+          btn.disabled = true;
+        } else {
+          stillAvailable = true;
+          if (selectedTime === key) {
+            btn.classList.add('selected');
+          }
+          btn.addEventListener('click', () => {
+            selectedTime = key;
+            timeGrid.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+            btn.classList.add('selected');
+            updateSubmitState();
+          });
+        }
+
+        timeGrid.appendChild(btn);
+      });
+
+      if (selectedTime && !occupiedTimes.includes(selectedTime) && slots.some(t => minutesToKey(t) === selectedTime)) {
+        // keep current selection if still valid
+      } else {
+        selectedTime = null;
+      }
+
+      updateSubmitState();
+    }
+
+    function updateSubmitState() {
+      const selected = getSelectedServices();
+      bookSubmitBtn.disabled = !(selected.length > 0 && selectedTime);
+    }
+
+    serviceSelectToggle.addEventListener('click', () => {
+      const isOpen = serviceSelect.classList.toggle('open');
+      serviceSelectToggle.setAttribute('aria-expanded', isOpen);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!serviceSelect.contains(e.target)) {
+        serviceSelect.classList.remove('open');
+        serviceSelectToggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    serviceCheckboxes.forEach(cb => {
+      cb.addEventListener('change', () => {
+        updateServiceLabel();
+        updateTotal();
+        renderTimeGrid();
+      });
+    });
+
+    // Pre-select a service if the visitor arrived via a "Book Now" link,
+    // e.g. book.html?service=haircutting
+    const params = new URLSearchParams(window.location.search);
+    const preselect = params.get('service');
+    if (preselect) {
+      const match = serviceCheckboxes.find(cb => cb.value === preselect);
+      if (match) match.checked = true;
+    }
+
+    updateServiceLabel();
+    updateTotal();
+    renderTimeGrid();
+
+    bookingForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const selected = getSelectedServices();
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+
+      if (!name || !phone || selected.length === 0 || !selectedTime) {
+        return;
+      }
+
+      alert('Reservation booked successfully!');
+      bookingForm.reset();
+      selectedTime = null;
+      updateServiceLabel();
+      updateTotal();
+      renderTimeGrid();
+    });
   </script>
 
 </body>
