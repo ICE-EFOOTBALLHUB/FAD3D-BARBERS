@@ -8,7 +8,7 @@
 <title>Admin | FAD3D Barbers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
   * {
@@ -56,10 +56,11 @@
   }
 
   .navbar-brand {
-    font-family: 'Ultra', 'Helvetica Neue', serif;
+    font-family: 'Cinzel', 'Ultra', 'Helvetica Neue', serif;
+    font-weight: 700;
     color: #ffffff;
     font-size: clamp(14px, 4.5vw, 28px);
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -610,6 +611,21 @@
 </style>
 </head>
 <body>
+<div id="debugBanner" style="display:none; position:sticky; top:0; z-index:9999; background:#c0392b; color:#fff; font-family:monospace; font-size:12px; padding:10px; white-space:pre-wrap; word-break:break-word;"></div>
+<script>
+  function showDebugError(msg) {
+    var b = document.getElementById('debugBanner');
+    if (!b) return;
+    b.style.display = 'block';
+    b.textContent += (b.textContent ? '\n\n' : '') + msg;
+  }
+  window.addEventListener('error', function (e) {
+    showDebugError('JS ERROR: ' + (e.message || 'unknown') + (e.filename ? ' (' + e.filename + ':' + e.lineno + ')' : ''));
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    showDebugError('PROMISE ERROR: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
+  });
+</script>
 
   <nav class="navbar">
     <a href="index.html" class="navbar-left" aria-label="FAD3D Barbers home">
