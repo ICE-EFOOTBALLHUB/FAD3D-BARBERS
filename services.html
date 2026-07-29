@@ -390,6 +390,14 @@
     margin: 0 auto;
   }
 
+  .services-loading {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #888888;
+    text-align: center;
+    padding: 40px 0;
+  }
+
   .service-card {
     margin-bottom: 72px;
     opacity: 0;
@@ -1002,50 +1010,8 @@
 
   <section class="offer" id="offer">
     <div class="offer-inner">
-      <div class="services">
-
-        <div class="service-card">
-          <div class="service-img">
-            <img src="haircutting.jpg" alt="Hair cutting at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">HAIR CUTTING</h3>
-          <p class="service-text">
-            Every cut starts with a conversation about what actually works for you, not just what's trending. Our barbers combine sharp technique with a real eye for detail, blending classic tapers with modern styling for a look that holds up long after you leave the chair.
-          </p>
-          <p class="service-price">&pound;25<span>Per Cut</span></p>
-          <div class="service-book-row">
-            <a href="book.html?service=haircutting" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-img">
-            <img src="shaving.jpg" alt="Traditional straight razor shave at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">SHAVING</h3>
-          <p class="service-text">
-            Sit back and let us take it from here. Our traditional straight razor shaves are unhurried and precise, finished with hot towels and quality oils that leave your skin smooth. It's less of a quick service and more of a proper reset.
-          </p>
-          <p class="service-price">&pound;20<span>Per Shave</span></p>
-          <div class="service-book-row">
-            <a href="book.html?service=shaving" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-
-        <div class="service-card">
-          <div class="service-img">
-            <img src="beard.jpg" alt="Beard trim and shaping at FAD3D Barbers">
-          </div>
-          <h3 class="service-title">BEARD</h3>
-          <p class="service-text">
-            From a tight lineup to a full shape-up, we treat beard work as its own craft. We shape around your natural growth and facial structure so everything stays sharp, balanced, and simple to maintain between visits.
-          </p>
-          <p class="service-price">&pound;15<span>Per Shape-Up</span></p>
-          <div class="service-book-row">
-            <a href="book.html?service=beard" class="hero-btn">Book Now</a>
-          </div>
-        </div>
-
+      <div class="services" id="servicesGrid">
+        <p class="services-loading" id="servicesLoading">Loading services&hellip;</p>
       </div>
     </div>
   </section>
@@ -1129,7 +1095,9 @@
     <p class="footer-copy">&copy; 2026 FAD3D Barbers. All rights reserved.</p>
   </footer>
 
-  <script>
+  <script type="module">
+    import { db, collection, onSnapshot, query, orderBy } from './js/firebase-init.js';
+
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1148,17 +1116,16 @@
       });
     }
 
-    const serviceCards = document.querySelectorAll('.service-card');
-    if (serviceCards.length) {
-      const serviceObserver = new IntersectionObserver((entries) => {
+    function observeInView(cards, threshold) {
+      const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add('in-view');
-            serviceObserver.unobserve(entry.target);
+            observer.unobserve(entry.target);
           }
         });
-      }, { threshold: 0.25 });
-      serviceCards.forEach(card => serviceObserver.observe(card));
+      }, { threshold });
+      cards.forEach(card => observer.observe(card));
     }
 
     const contactInner = document.querySelector('.contact-inner');
@@ -1173,6 +1140,41 @@
       }, { threshold: 0.25 });
       contactObserver.observe(contactInner);
     }
+
+    // ---------- LIVE SERVICES FROM FIRESTORE ----------
+
+    const servicesGrid = document.getElementById('servicesGrid');
+    const servicesCol = collection(db, 'services');
+
+    onSnapshot(query(servicesCol, orderBy('createdAt', 'asc')), (snap) => {
+      if (snap.empty) {
+        servicesGrid.innerHTML = '<p class="services-loading">No services listed yet &mdash; check back soon.</p>';
+        return;
+      }
+
+      servicesGrid.innerHTML = '';
+      snap.forEach(docSnap => {
+        const s = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'service-card';
+        card.innerHTML = `
+          <div class="service-img">
+            <img src="${s.imageUrl || ''}" alt="${s.name || 'Service'} at FAD3D Barbers">
+          </div>
+          <h3 class="service-title">${(s.name || '').toUpperCase()}</h3>
+          <p class="service-text">${s.description || ''}</p>
+          <p class="service-price">&pound;${Number(s.price || 0).toFixed(2)}<span>${s.priceUnit || 'Per Service'}</span></p>
+          <div class="service-book-row">
+            <a href="book.html?service=${docSnap.id}" class="hero-btn">Book Now</a>
+          </div>
+        `;
+        servicesGrid.appendChild(card);
+      });
+
+      observeInView(document.querySelectorAll('.service-card'), 0.25);
+    }, (err) => {
+      servicesGrid.innerHTML = `<p class="services-loading">Couldn't load services: ${err.message}</p>`;
+    });
   </script>
 
 </body>

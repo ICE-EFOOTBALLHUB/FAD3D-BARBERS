@@ -454,6 +454,83 @@
     min-height: 16px;
   }
 
+  .form-feedback.error {
+    color: #c0392b;
+  }
+
+  .image-preview-wrap {
+    margin-top: 10px;
+  }
+
+  .image-preview-wrap img {
+    width: 100%;
+    max-width: 220px;
+    max-height: 150px;
+    object-fit: cover;
+    border: 1px solid #cccccc;
+    display: none;
+  }
+
+  .form-cancel-btn {
+    width: 100%;
+    margin-top: 10px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #7c1fa0;
+    background: #ffffff;
+    border: 1px solid #7c1fa0;
+    padding: 12px 20px;
+    cursor: pointer;
+    display: none;
+  }
+
+  .admin-submit-btn:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .table-thumb {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border: 1px solid #dddddd;
+    display: block;
+  }
+
+  .cell-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .row-edit-btn {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #7c1fa0;
+    background: #ffffff;
+    border: 1px solid #7c1fa0;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  .row-edit-btn:hover {
+    background: #f4e9fa;
+  }
+
+  .stock-input {
+    width: 70px;
+    border: 1px solid #cccccc;
+    padding: 8px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+  }
+
   /* ---------- FOOTER ---------- */
 
   .admin-footer {
@@ -566,82 +643,132 @@
     </div>
   </section>
 
-  <!-- ---------- STOCK ---------- -->
+  <!-- ---------- PRODUCTS ---------- -->
   <section class="admin-section">
     <div class="admin-section-inner">
       <p class="section-eyebrow">Inventory</p>
-      <h2 class="section-heading">Stock Management</h2>
-      <p class="section-count">Add stock to existing products or list a brand new product.</p>
+      <h2 class="section-heading">Manage Products</h2>
+      <p class="section-count">Upload a photo, description, price and stock count. Changes appear on the Products page instantly.</p>
 
       <div class="admin-forms-grid">
-
         <div class="admin-form-card">
-          <h3>Add Stock</h3>
-          <p class="admin-form-hint">Top up quantity for a product already listed.</p>
-          <form id="addStockForm" novalidate>
+          <h3 id="productFormTitle">Add New Product</h3>
+          <p class="admin-form-hint">Photo, name, description, price and stock.</p>
+          <form id="productForm" novalidate>
+            <input type="hidden" id="productId" value="">
             <div class="form-group">
-              <label for="stockProductSelect">Product</label>
-              <select id="stockProductSelect" required></select>
+              <label for="productName">Product Name</label>
+              <input type="text" id="productName" maxlength="60" required>
             </div>
             <div class="form-group">
-              <label for="stockQtyInput">Quantity To Add</label>
-              <input type="number" id="stockQtyInput" min="1" step="1" value="10" required>
-            </div>
-            <button type="submit" class="admin-submit-btn">Add Stock</button>
-            <p class="form-feedback" id="addStockFeedback"></p>
-          </form>
-        </div>
-
-        <div class="admin-form-card">
-          <h3>Add New Product</h3>
-          <p class="admin-form-hint">List an item that isn't in stock yet.</p>
-          <form id="newProductForm" novalidate>
-            <div class="form-group">
-              <label for="newProductName">Product Name</label>
-              <input type="text" id="newProductName" maxlength="60" required>
-            </div>
-            <div class="form-group">
-              <label for="newProductDesc">Description</label>
-              <textarea id="newProductDesc" maxlength="220" required></textarea>
+              <label for="productDesc">Description</label>
+              <textarea id="productDesc" maxlength="300" required></textarea>
             </div>
             <div class="form-row-2">
               <div class="form-group">
-                <label for="newProductCategory">Category</label>
-                <select id="newProductCategory">
+                <label for="productCategory">Category</label>
+                <select id="productCategory">
                   <option value="Grooming">Grooming</option>
                   <option value="Styling">Styling</option>
                   <option value="Tools">Tools</option>
                 </select>
               </div>
               <div class="form-group">
-                <label for="newProductPrice">Price (&pound;)</label>
-                <input type="number" id="newProductPrice" min="0" step="0.01" required>
+                <label for="productPrice">Price (&pound;)</label>
+                <input type="number" id="productPrice" min="0" step="0.01" required>
               </div>
             </div>
             <div class="form-group">
-              <label for="newProductStock">Initial Stock</label>
-              <input type="number" id="newProductStock" min="0" step="1" value="0" required>
+              <label for="productStock">Stock Quantity</label>
+              <input type="number" id="productStock" min="0" step="1" value="0" required>
             </div>
-            <button type="submit" class="admin-submit-btn">Add Product</button>
-            <p class="form-feedback" id="newProductFeedback"></p>
+            <div class="form-group">
+              <label for="productImage">Photo</label>
+              <input type="file" id="productImage" accept="image/*">
+              <div class="image-preview-wrap"><img id="productImagePreview" alt="Preview"></div>
+            </div>
+            <button type="submit" class="admin-submit-btn" id="productSubmitBtn">Add Product</button>
+            <button type="button" class="form-cancel-btn" id="productCancelBtn">Cancel Edit</button>
+            <p class="form-feedback" id="productFeedback"></p>
           </form>
         </div>
-
       </div>
 
-      <p class="section-count" id="inventoryCount"></p>
+      <p class="section-count" id="productsCount"></p>
       <div class="table-wrap">
         <table class="admin-table">
           <thead>
             <tr>
+              <th>Photo</th>
               <th>Product</th>
               <th>Category</th>
               <th>Price</th>
               <th>Stock</th>
               <th>Status</th>
+              <th></th>
             </tr>
           </thead>
-          <tbody id="inventoryBody"></tbody>
+          <tbody id="productsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- SERVICES ---------- -->
+  <section class="admin-section alt">
+    <div class="admin-section-inner">
+      <p class="section-eyebrow">Barbering</p>
+      <h2 class="section-heading">Manage Services</h2>
+      <p class="section-count">Upload a photo, description and price for each service. Changes appear on the Services page instantly.</p>
+
+      <div class="admin-forms-grid">
+        <div class="admin-form-card">
+          <h3 id="serviceFormTitle">Add New Service</h3>
+          <p class="admin-form-hint">Photo, name, description and price.</p>
+          <form id="serviceForm" novalidate>
+            <input type="hidden" id="serviceId" value="">
+            <div class="form-group">
+              <label for="serviceName">Service Name</label>
+              <input type="text" id="serviceName" maxlength="60" required>
+            </div>
+            <div class="form-group">
+              <label for="serviceDesc">Description</label>
+              <textarea id="serviceDesc" maxlength="300" required></textarea>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group">
+                <label for="servicePrice">Price (&pound;)</label>
+                <input type="number" id="servicePrice" min="0" step="0.01" required>
+              </div>
+              <div class="form-group">
+                <label for="servicePriceUnit">Price Label</label>
+                <input type="text" id="servicePriceUnit" maxlength="30" placeholder="e.g. Per Cut">
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="serviceImage">Photo</label>
+              <input type="file" id="serviceImage" accept="image/*">
+              <div class="image-preview-wrap"><img id="serviceImagePreview" alt="Preview"></div>
+            </div>
+            <button type="submit" class="admin-submit-btn" id="serviceSubmitBtn">Add Service</button>
+            <button type="button" class="form-cancel-btn" id="serviceCancelBtn">Cancel Edit</button>
+            <p class="form-feedback" id="serviceFeedback"></p>
+          </form>
+        </div>
+      </div>
+
+      <p class="section-count" id="servicesCount"></p>
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Photo</th>
+              <th>Service</th>
+              <th>Price</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="servicesBody"></tbody>
         </table>
       </div>
     </div>
@@ -651,7 +778,12 @@
     <p>&copy; 2026 FAD3D Barbers &mdash; Admin Panel. Internal use only.</p>
   </footer>
 
-  <script>
+  <script type="module">
+    import {
+      db, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, query, orderBy,
+      serverTimestamp, uploadToCloudinary
+    } from './js/firebase-init.js';
+
     // ---------- MOBILE MENU ----------
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -686,15 +818,6 @@
       { id: 'O-2003', name: 'Emma Novak', phone: '07700 900333', items: 'Premium Pomade x3', qty: 3, total: 45.00, status: 'completed' },
       { id: 'O-2004', name: 'Liam Foster', phone: '07700 900444', items: 'Hair Clay x1, Beard Balm x1', qty: 2, total: 27.00, status: 'pending' },
       { id: 'O-2005', name: 'Grace Adeyemi', phone: '07700 900555', items: 'Sea Salt Spray x2', qty: 2, total: 32.00, status: 'cancelled' }
-    ];
-
-    let products = [
-      { name: 'Beard Oil', category: 'Grooming', price: 12.00, stock: 34 },
-      { name: 'Beard Balm', category: 'Grooming', price: 14.00, stock: 21 },
-      { name: 'Sea Salt Spray', category: 'Styling', price: 16.00, stock: 0 },
-      { name: 'Full Clipper Set', category: 'Tools', price: 45.00, stock: 12 },
-      { name: 'Hair Clay', category: 'Styling', price: 13.00, stock: 3 },
-      { name: 'Premium Pomade', category: 'Styling', price: 15.00, stock: 27 }
     ];
 
     // ---------- RESERVATIONS ----------
@@ -794,11 +917,7 @@
       }
     });
 
-    // ---------- INVENTORY ----------
-
-    const inventoryBody = document.getElementById('inventoryBody');
-    const inventoryCount = document.getElementById('inventoryCount');
-    const stockProductSelect = document.getElementById('stockProductSelect');
+    // ---------- SHARED HELPERS ----------
 
     function stockStatus(stock) {
       if (stock <= 0) return { cls: 'sold-out', label: 'Sold Out' };
@@ -806,78 +925,329 @@
       return { cls: 'in-stock', label: 'In Stock' };
     }
 
-    function renderInventory() {
-      inventoryCount.textContent = `${products.length} product${products.length === 1 ? '' : 's'} listed`;
-      inventoryBody.innerHTML = '';
+    function showFeedback(el, message, isError = false) {
+      el.textContent = message;
+      el.classList.toggle('error', isError);
+      setTimeout(() => { el.textContent = ''; el.classList.remove('error'); }, 4000);
+    }
 
-      products.forEach((p, idx) => {
+    function wireImagePreview(inputEl, previewEl) {
+      inputEl.addEventListener('change', () => {
+        const file = inputEl.files[0];
+        if (!file) { previewEl.style.display = 'none'; return; }
+        previewEl.src = URL.createObjectURL(file);
+        previewEl.style.display = 'block';
+      });
+    }
+
+    // ---------- PRODUCTS ----------
+
+    const productsCol = collection(db, 'products');
+    const productsBody = document.getElementById('productsBody');
+    const productsCount = document.getElementById('productsCount');
+
+    const productForm = document.getElementById('productForm');
+    const productIdInput = document.getElementById('productId');
+    const productFormTitle = document.getElementById('productFormTitle');
+    const productSubmitBtn = document.getElementById('productSubmitBtn');
+    const productCancelBtn = document.getElementById('productCancelBtn');
+    const productFeedback = document.getElementById('productFeedback');
+    const productNameInput = document.getElementById('productName');
+    const productDescInput = document.getElementById('productDesc');
+    const productCategoryInput = document.getElementById('productCategory');
+    const productPriceInput = document.getElementById('productPrice');
+    const productStockInput = document.getElementById('productStock');
+    const productImageInput = document.getElementById('productImage');
+    const productImagePreview = document.getElementById('productImagePreview');
+
+    wireImagePreview(productImageInput, productImagePreview);
+
+    let productsCache = [];
+
+    function renderProducts() {
+      productsCount.textContent = `${productsCache.length} product${productsCache.length === 1 ? '' : 's'} listed`;
+      productsBody.innerHTML = '';
+
+      if (productsCache.length === 0) {
+        productsBody.innerHTML = '<tr class="empty-row"><td colspan="7">No products yet. Add one above.</td></tr>';
+        return;
+      }
+
+      productsCache.forEach(p => {
         const st = stockStatus(p.stock);
         const tr = document.createElement('tr');
         tr.innerHTML = `
+          <td>${p.imageUrl ? `<img class="table-thumb" src="${p.imageUrl}" alt="${p.name}">` : ''}</td>
           <td class="cell-strong">${p.name}</td>
-          <td>${p.category}</td>
-          <td>&pound;${p.price.toFixed(2)}</td>
-          <td>${p.stock}</td>
+          <td>${p.category || ''}</td>
+          <td>&pound;${Number(p.price).toFixed(2)}</td>
+          <td><input type="number" class="stock-input" min="0" step="1" value="${p.stock}" data-id="${p.id}"></td>
           <td><span class="stock-badge ${st.cls}">${st.label}</span></td>
+          <td class="cell-actions">
+            <button type="button" class="row-edit-btn" data-id="${p.id}">Edit</button>
+            <button type="button" class="row-delete-btn" data-id="${p.id}" data-type="product">Remove</button>
+          </td>
         `;
-        inventoryBody.appendChild(tr);
+        productsBody.appendChild(tr);
       });
-
-      const currentSelection = stockProductSelect.value;
-      stockProductSelect.innerHTML = products.map((p, idx) => `<option value="${idx}">${p.name}</option>`).join('');
-      if (currentSelection && products[currentSelection]) {
-        stockProductSelect.value = currentSelection;
-      }
     }
 
-    // ---------- ADD STOCK FORM ----------
-
-    const addStockForm = document.getElementById('addStockForm');
-    const stockQtyInput = document.getElementById('stockQtyInput');
-    const addStockFeedback = document.getElementById('addStockFeedback');
-
-    addStockForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const idx = parseInt(stockProductSelect.value, 10);
-      const qty = parseInt(stockQtyInput.value, 10);
-      if (isNaN(idx) || !products[idx] || isNaN(qty) || qty < 1) return;
-
-      products[idx].stock += qty;
-      renderInventory();
-
-      addStockFeedback.textContent = `Added ${qty} to ${products[idx].name}. New stock: ${products[idx].stock}.`;
-      stockQtyInput.value = 10;
-      setTimeout(() => { addStockFeedback.textContent = ''; }, 4000);
+    onSnapshot(query(productsCol, orderBy('createdAt', 'desc')), (snap) => {
+      productsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderProducts();
+    }, (err) => {
+      productsBody.innerHTML = `<tr class="empty-row"><td colspan="7">Couldn't load products: ${err.message}</td></tr>`;
     });
 
-    // ---------- ADD NEW PRODUCT FORM ----------
+    function resetProductForm() {
+      productForm.reset();
+      productIdInput.value = '';
+      productFormTitle.textContent = 'Add New Product';
+      productSubmitBtn.textContent = 'Add Product';
+      productCancelBtn.style.display = 'none';
+      productImagePreview.style.display = 'none';
+      productStockInput.value = 0;
+    }
 
-    const newProductForm = document.getElementById('newProductForm');
-    const newProductFeedback = document.getElementById('newProductFeedback');
+    productCancelBtn.addEventListener('click', resetProductForm);
 
-    newProductForm.addEventListener('submit', (e) => {
+    productForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name = document.getElementById('newProductName').value.trim();
-      const desc = document.getElementById('newProductDesc').value.trim();
-      const category = document.getElementById('newProductCategory').value;
-      const price = parseFloat(document.getElementById('newProductPrice').value);
-      const stock = parseInt(document.getElementById('newProductStock').value, 10);
+      const name = productNameInput.value.trim();
+      const description = productDescInput.value.trim();
+      const category = productCategoryInput.value;
+      const price = parseFloat(productPriceInput.value);
+      const stock = parseInt(productStockInput.value, 10);
+      const editingId = productIdInput.value;
+      const file = productImageInput.files[0];
 
-      if (!name || !desc || isNaN(price) || price < 0 || isNaN(stock) || stock < 0) return;
+      if (!name || !description || isNaN(price) || price < 0 || isNaN(stock) || stock < 0) return;
+      if (!editingId && !file) {
+        showFeedback(productFeedback, 'Please choose a photo for the product.', true);
+        return;
+      }
 
-      products.push({ name, category, price, stock });
-      renderInventory();
+      productSubmitBtn.disabled = true;
+      productSubmitBtn.textContent = file ? 'Uploading photo...' : 'Saving...';
 
-      newProductFeedback.textContent = `${name} added to inventory.`;
-      newProductForm.reset();
-      document.getElementById('newProductStock').value = 0;
-      setTimeout(() => { newProductFeedback.textContent = ''; }, 4000);
+      try {
+        let imageUrl = null;
+        if (file) {
+          imageUrl = await uploadToCloudinary(file);
+        }
+
+        if (editingId) {
+          const updateData = { name, description, category, price, stock };
+          if (imageUrl) updateData.imageUrl = imageUrl;
+          await updateDoc(doc(db, 'products', editingId), updateData);
+          showFeedback(productFeedback, `${name} updated.`);
+        } else {
+          await addDoc(productsCol, {
+            name, description, category, price, stock, imageUrl,
+            createdAt: serverTimestamp()
+          });
+          showFeedback(productFeedback, `${name} added to the shop.`);
+        }
+        resetProductForm();
+      } catch (err) {
+        showFeedback(productFeedback, err.message || 'Something went wrong.', true);
+      } finally {
+        productSubmitBtn.disabled = false;
+        productSubmitBtn.textContent = editingId ? 'Update Product' : 'Add Product';
+      }
+    });
+
+    // Edit button -> load product into form
+    productsBody.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('row-edit-btn')) return;
+      const id = e.target.dataset.id;
+      const p = productsCache.find(x => x.id === id);
+      if (!p) return;
+
+      productIdInput.value = p.id;
+      productNameInput.value = p.name;
+      productDescInput.value = p.description || '';
+      productCategoryInput.value = p.category || 'Grooming';
+      productPriceInput.value = p.price;
+      productStockInput.value = p.stock;
+      productImagePreview.src = p.imageUrl || '';
+      productImagePreview.style.display = p.imageUrl ? 'block' : 'none';
+
+      productFormTitle.textContent = `Editing: ${p.name}`;
+      productSubmitBtn.textContent = 'Update Product';
+      productCancelBtn.style.display = 'block';
+      productForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Inline stock quantity edit -> saves on change
+    productsBody.addEventListener('change', async (e) => {
+      if (!e.target.classList.contains('stock-input')) return;
+      const id = e.target.dataset.id;
+      const newStock = parseInt(e.target.value, 10);
+      if (isNaN(newStock) || newStock < 0) return;
+      try {
+        await updateDoc(doc(db, 'products', id), { stock: newStock });
+      } catch (err) {
+        showFeedback(productFeedback, `Couldn't update stock: ${err.message}`, true);
+      }
+    });
+
+    // Delete product
+    productsBody.addEventListener('click', async (e) => {
+      if (!e.target.classList.contains('row-delete-btn')) return;
+      const { id, type } = e.target.dataset;
+      if (type !== 'product') return;
+      if (!confirm('Remove this product?')) return;
+      try {
+        await deleteDoc(doc(db, 'products', id));
+      } catch (err) {
+        showFeedback(productFeedback, `Couldn't delete: ${err.message}`, true);
+      }
+    });
+
+    // ---------- SERVICES ----------
+
+    const servicesCol = collection(db, 'services');
+    const servicesBody = document.getElementById('servicesBody');
+    const servicesCount = document.getElementById('servicesCount');
+
+    const serviceForm = document.getElementById('serviceForm');
+    const serviceIdInput = document.getElementById('serviceId');
+    const serviceFormTitle = document.getElementById('serviceFormTitle');
+    const serviceSubmitBtn = document.getElementById('serviceSubmitBtn');
+    const serviceCancelBtn = document.getElementById('serviceCancelBtn');
+    const serviceFeedback = document.getElementById('serviceFeedback');
+    const serviceNameInput = document.getElementById('serviceName');
+    const serviceDescInput = document.getElementById('serviceDesc');
+    const servicePriceInput = document.getElementById('servicePrice');
+    const servicePriceUnitInput = document.getElementById('servicePriceUnit');
+    const serviceImageInput = document.getElementById('serviceImage');
+    const serviceImagePreview = document.getElementById('serviceImagePreview');
+
+    wireImagePreview(serviceImageInput, serviceImagePreview);
+
+    let servicesCache = [];
+
+    function renderServices() {
+      servicesCount.textContent = `${servicesCache.length} service${servicesCache.length === 1 ? '' : 's'} listed`;
+      servicesBody.innerHTML = '';
+
+      if (servicesCache.length === 0) {
+        servicesBody.innerHTML = '<tr class="empty-row"><td colspan="4">No services yet. Add one above.</td></tr>';
+        return;
+      }
+
+      servicesCache.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${s.imageUrl ? `<img class="table-thumb" src="${s.imageUrl}" alt="${s.name}">` : ''}</td>
+          <td class="cell-strong">${s.name}</td>
+          <td>&pound;${Number(s.price).toFixed(2)} <span class="cell-sub">${s.priceUnit || ''}</span></td>
+          <td class="cell-actions">
+            <button type="button" class="row-edit-btn" data-id="${s.id}">Edit</button>
+            <button type="button" class="row-delete-btn" data-id="${s.id}" data-type="service">Remove</button>
+          </td>
+        `;
+        servicesBody.appendChild(tr);
+      });
+    }
+
+    onSnapshot(query(servicesCol, orderBy('createdAt', 'desc')), (snap) => {
+      servicesCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+      renderServices();
+    }, (err) => {
+      servicesBody.innerHTML = `<tr class="empty-row"><td colspan="4">Couldn't load services: ${err.message}</td></tr>`;
+    });
+
+    function resetServiceForm() {
+      serviceForm.reset();
+      serviceIdInput.value = '';
+      serviceFormTitle.textContent = 'Add New Service';
+      serviceSubmitBtn.textContent = 'Add Service';
+      serviceCancelBtn.style.display = 'none';
+      serviceImagePreview.style.display = 'none';
+    }
+
+    serviceCancelBtn.addEventListener('click', resetServiceForm);
+
+    serviceForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = serviceNameInput.value.trim();
+      const description = serviceDescInput.value.trim();
+      const price = parseFloat(servicePriceInput.value);
+      const priceUnit = servicePriceUnitInput.value.trim() || 'Per Service';
+      const editingId = serviceIdInput.value;
+      const file = serviceImageInput.files[0];
+
+      if (!name || !description || isNaN(price) || price < 0) return;
+      if (!editingId && !file) {
+        showFeedback(serviceFeedback, 'Please choose a photo for the service.', true);
+        return;
+      }
+
+      serviceSubmitBtn.disabled = true;
+      serviceSubmitBtn.textContent = file ? 'Uploading photo...' : 'Saving...';
+
+      try {
+        let imageUrl = null;
+        if (file) {
+          imageUrl = await uploadToCloudinary(file);
+        }
+
+        if (editingId) {
+          const updateData = { name, description, price, priceUnit };
+          if (imageUrl) updateData.imageUrl = imageUrl;
+          await updateDoc(doc(db, 'services', editingId), updateData);
+          showFeedback(serviceFeedback, `${name} updated.`);
+        } else {
+          await addDoc(servicesCol, {
+            name, description, price, priceUnit, imageUrl,
+            createdAt: serverTimestamp()
+          });
+          showFeedback(serviceFeedback, `${name} added to services.`);
+        }
+        resetServiceForm();
+      } catch (err) {
+        showFeedback(serviceFeedback, err.message || 'Something went wrong.', true);
+      } finally {
+        serviceSubmitBtn.disabled = false;
+        serviceSubmitBtn.textContent = editingId ? 'Update Service' : 'Add Service';
+      }
+    });
+
+    servicesBody.addEventListener('click', (e) => {
+      if (e.target.classList.contains('row-edit-btn')) {
+        const id = e.target.dataset.id;
+        const s = servicesCache.find(x => x.id === id);
+        if (!s) return;
+
+        serviceIdInput.value = s.id;
+        serviceNameInput.value = s.name;
+        serviceDescInput.value = s.description || '';
+        servicePriceInput.value = s.price;
+        servicePriceUnitInput.value = s.priceUnit || '';
+        serviceImagePreview.src = s.imageUrl || '';
+        serviceImagePreview.style.display = s.imageUrl ? 'block' : 'none';
+
+        serviceFormTitle.textContent = `Editing: ${s.name}`;
+        serviceSubmitBtn.textContent = 'Update Service';
+        serviceCancelBtn.style.display = 'block';
+        serviceForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+
+      if (e.target.classList.contains('row-delete-btn') && e.target.dataset.type === 'service') {
+        const id = e.target.dataset.id;
+        if (!confirm('Remove this service?')) return;
+        deleteDoc(doc(db, 'services', id)).catch(err => {
+          showFeedback(serviceFeedback, `Couldn't delete: ${err.message}`, true);
+        });
+      }
     });
 
     // ---------- INITIAL RENDER ----------
     renderReservations();
     renderOrders();
-    renderInventory();
   </script>
 
 </body>

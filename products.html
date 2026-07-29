@@ -969,6 +969,15 @@
     gap: 32px;
   }
 
+  .products-loading {
+    grid-column: 1 / -1;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #888888;
+    text-align: center;
+    padding: 40px 0;
+  }
+
   .product-card {
     background: #f4f2f0;
     border-top: 4px solid #7c1fa0;
@@ -1289,146 +1298,8 @@
         </h2>
       </div>
 
-      <div class="products-grid">
-
-        <div class="product-card" tabindex="0" role="button" aria-label="View Beard Oil details"
-          data-name="Beard Oil" data-price="&pound;12.00"
-          data-desc="A lightweight, fast-absorbing oil that softens and conditions facial hair while keeping the skin underneath calm and moisturised."
-          data-img="beard_oil.jpg" data-badge-label="In Stock" data-badge-class="in-stock"
-          data-stock-label="34 In Stock" data-stock-class=""
-          data-order-href="order.html?product=beard-oil">
-          <span class="product-badge in-stock">In Stock</span>
-          <div class="product-img">
-            <img src="beard_oil.jpg" alt="Beard Oil">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Beard Oil</h3>
-            <p class="product-text">
-              A lightweight, fast-absorbing oil that softens and conditions facial hair while keeping the skin underneath calm and moisturised.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;12.00</span>
-              <span class="product-stock-text">34 In Stock</span>
-            </div>
-            <a href="order.html?product=beard-oil" class="product-btn">Order Now</a>
-          </div>
-        </div>
-
-        <div class="product-card" tabindex="0" role="button" aria-label="View Beard Balm details"
-          data-name="Beard Balm" data-price="&pound;14.00"
-          data-desc="A light-hold balm that tames flyaways and shapes your beard, made with natural ingredients that soften and moisturise."
-          data-img="beardbalm.jpg" data-badge-label="In Stock" data-badge-class="in-stock"
-          data-stock-label="21 In Stock" data-stock-class=""
-          data-order-href="order.html?product=beard-balm">
-          <span class="product-badge in-stock">In Stock</span>
-          <div class="product-img">
-            <img src="beardbalm.jpg" alt="Beard Balm">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Beard Balm</h3>
-            <p class="product-text">
-              A light-hold balm that tames flyaways and shapes your beard, made with natural ingredients that soften and moisturise.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;14.00</span>
-              <span class="product-stock-text">21 In Stock</span>
-            </div>
-            <a href="order.html?product=beard-balm" class="product-btn">Order Now</a>
-          </div>
-        </div>
-
-        <div class="product-card" tabindex="0" role="button" aria-label="View Sea Salt Spray details"
-          data-name="Sea Salt Spray" data-price="&pound;16.00"
-          data-desc="A texturising spray that builds effortless, matte, beach-style volume without weighing hair down."
-          data-img="seasaltspray.jpg" data-badge-label="Sold Out" data-badge-class="sold-out"
-          data-stock-label="Sold Out" data-stock-class="out"
-          data-order-href="">
-          <span class="product-badge sold-out">Sold Out</span>
-          <div class="product-img">
-            <img src="seasaltspray.jpg" alt="Sea Salt Spray">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Sea Salt Spray</h3>
-            <p class="product-text">
-              A texturising spray that builds effortless, matte, beach-style volume without weighing hair down.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;16.00</span>
-              <span class="product-stock-text out">Sold Out</span>
-            </div>
-            <span class="product-btn disabled">Sold Out</span>
-          </div>
-        </div>
-
-        <div class="product-card" tabindex="0" role="button" aria-label="View Full Clipper Set details"
-          data-name="Full Clipper Set" data-price="&pound;45.00"
-          data-desc="A complete cordless clipper kit with guide combs, thinning and cutting scissors, and a comb for sharp cuts at home."
-          data-img="fullcutset.jpg" data-badge-label="In Stock" data-badge-class="in-stock"
-          data-stock-label="12 In Stock" data-stock-class=""
-          data-order-href="order.html?product=clipper-set">
-          <span class="product-badge in-stock">In Stock</span>
-          <div class="product-img">
-            <img src="fullcutset.jpg" alt="Full Clipper Set">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Full Clipper Set</h3>
-            <p class="product-text">
-              A complete cordless clipper kit with guide combs, thinning and cutting scissors, and a comb for sharp cuts at home.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;45.00</span>
-              <span class="product-stock-text">12 In Stock</span>
-            </div>
-            <a href="order.html?product=clipper-set" class="product-btn">Order Now</a>
-          </div>
-        </div>
-
-        <div class="product-card" tabindex="0" role="button" aria-label="View Hair Clay details"
-          data-name="Hair Clay" data-price="&pound;13.00"
-          data-desc="A strong-hold, matte clay that builds natural texture and keeps styles in place all day without shine."
-          data-img="clay.jpg" data-badge-label="Selling Fast" data-badge-class="low-stock"
-          data-stock-label="Only 3 Left" data-stock-class="low"
-          data-order-href="order.html?product=hair-clay">
-          <span class="product-badge low-stock">Selling Fast</span>
-          <div class="product-img">
-            <img src="clay.jpg" alt="Hair Clay">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Hair Clay</h3>
-            <p class="product-text">
-              A strong-hold, matte clay that builds natural texture and keeps styles in place all day without shine.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;13.00</span>
-              <span class="product-stock-text low">Only 3 Left</span>
-            </div>
-            <a href="order.html?product=hair-clay" class="product-btn">Order Now</a>
-          </div>
-        </div>
-
-        <div class="product-card" tabindex="0" role="button" aria-label="View Premium Pomade details"
-          data-name="Premium Pomade" data-price="&pound;15.00"
-          data-desc="A classic, high-shine pomade with firm, long-lasting hold for sharp, styled looks that stay put."
-          data-img="premiumpomade.jpg" data-badge-label="In Stock" data-badge-class="in-stock"
-          data-stock-label="27 In Stock" data-stock-class=""
-          data-order-href="order.html?product=premium-pomade">
-          <span class="product-badge in-stock">In Stock</span>
-          <div class="product-img">
-            <img src="premiumpomade.jpg" alt="Premium Pomade">
-          </div>
-          <div class="product-body">
-            <h3 class="product-title">Premium Pomade</h3>
-            <p class="product-text">
-              A classic, high-shine pomade with firm, long-lasting hold for sharp, styled looks that stay put.
-            </p>
-            <div class="product-meta">
-              <span class="product-price">&pound;15.00</span>
-              <span class="product-stock-text">27 In Stock</span>
-            </div>
-            <a href="order.html?product=premium-pomade" class="product-btn">Order Now</a>
-          </div>
-        </div>
-
+      <div class="products-grid" id="productsGrid">
+        <p class="products-loading" id="productsLoading">Loading products&hellip;</p>
       </div>
     </div>
   </section>
@@ -1531,7 +1402,9 @@
     </div>
   </div>
 
-  <script>
+  <script type="module">
+    import { db, collection, onSnapshot, query, orderBy } from './js/firebase-init.js';
+
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1548,19 +1421,6 @@
           menuBtn.setAttribute('aria-expanded', 'false');
         });
       });
-    }
-
-    const productCards = document.querySelectorAll('.product-card');
-    if (productCards.length) {
-      const productObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('in-view');
-            productObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.2 });
-      productCards.forEach(card => productObserver.observe(card));
     }
 
     const contactInner = document.querySelector('.contact-inner');
@@ -1616,26 +1476,97 @@
       quickviewOverlay.classList.remove('open');
     }
 
-    productCards.forEach(card => {
-      card.addEventListener('click', () => openQuickView(card));
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          openQuickView(card);
-        }
-      });
-    });
-
-    document.querySelectorAll('.product-card a.product-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => e.stopPropagation());
-    });
-
     quickviewClose.addEventListener('click', closeQuickView);
     quickviewOverlay.addEventListener('click', (e) => {
       if (e.target === quickviewOverlay) closeQuickView();
     });
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && quickviewOverlay.classList.contains('open')) closeQuickView();
+    });
+
+    // ---------- LIVE PRODUCTS FROM FIRESTORE ----------
+
+    const productsGrid = document.getElementById('productsGrid');
+    const productsCol = collection(db, 'products');
+
+    function stockInfo(stock) {
+      if (stock <= 0) return { badgeLabel: 'Sold Out', badgeClass: 'sold-out', stockLabel: 'Sold Out', stockClass: 'out', orderable: false };
+      if (stock <= 5) return { badgeLabel: 'Selling Fast', badgeClass: 'low-stock', stockLabel: `Only ${stock} Left`, stockClass: 'low', orderable: true };
+      return { badgeLabel: 'In Stock', badgeClass: 'in-stock', stockLabel: `${stock} In Stock`, stockClass: '', orderable: true };
+    }
+
+    onSnapshot(query(productsCol, orderBy('createdAt', 'desc')), (snap) => {
+      if (snap.empty) {
+        productsGrid.innerHTML = '<p class="products-loading">No products listed yet &mdash; check back soon.</p>';
+        return;
+      }
+
+      productsGrid.innerHTML = '';
+      snap.forEach(docSnap => {
+        const p = docSnap.data();
+        const stock = Number(p.stock || 0);
+        const info = stockInfo(stock);
+        const priceLabel = `&pound;${Number(p.price || 0).toFixed(2)}`;
+        const orderHref = info.orderable ? `order.html?product=${docSnap.id}` : '';
+
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.tabIndex = 0;
+        card.setAttribute('role', 'button');
+        card.setAttribute('aria-label', `View ${p.name} details`);
+        card.dataset.name = p.name || '';
+        card.dataset.price = priceLabel;
+        card.dataset.desc = p.description || '';
+        card.dataset.img = p.imageUrl || '';
+        card.dataset.badgeLabel = info.badgeLabel;
+        card.dataset.badgeClass = info.badgeClass;
+        card.dataset.stockLabel = info.stockLabel;
+        card.dataset.stockClass = info.stockClass;
+        card.dataset.orderHref = orderHref;
+
+        card.innerHTML = `
+          <span class="product-badge ${info.badgeClass}">${info.badgeLabel}</span>
+          <div class="product-img">
+            <img src="${p.imageUrl || ''}" alt="${p.name || 'Product'}">
+          </div>
+          <div class="product-body">
+            <h3 class="product-title">${p.name || ''}</h3>
+            <p class="product-text">${p.description || ''}</p>
+            <div class="product-meta">
+              <span class="product-price">${priceLabel}</span>
+              <span class="product-stock-text ${info.stockClass}">${info.stockLabel}</span>
+            </div>
+            ${info.orderable
+              ? `<a href="${orderHref}" class="product-btn">Order Now</a>`
+              : `<span class="product-btn disabled">Sold Out</span>`}
+          </div>
+        `;
+
+        card.addEventListener('click', () => openQuickView(card));
+        card.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openQuickView(card);
+          }
+        });
+
+        const btn = card.querySelector('a.product-btn');
+        if (btn) btn.addEventListener('click', (e) => e.stopPropagation());
+
+        productsGrid.appendChild(card);
+      });
+
+      const productObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            productObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      document.querySelectorAll('.product-card').forEach(card => productObserver.observe(card));
+    }, (err) => {
+      productsGrid.innerHTML = `<p class="products-loading">Couldn't load products: ${err.message}</p>`;
     });
   </script>
 
