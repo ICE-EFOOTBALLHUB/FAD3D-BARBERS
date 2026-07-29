@@ -307,19 +307,25 @@
     transition: opacity 0.7s ease, transform 0.7s ease;
   }
 
-  .about-content.in-view .about-eyebrow {
+  .about-content.in-view .about-eyebrow,
+  .offer-header.in-view .about-eyebrow,
+  .reviews-inner.in-view .about-eyebrow {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 0s;
   }
 
-  .about-content.in-view .about-line:nth-child(1) {
+  .about-content.in-view .about-line:nth-child(1),
+  .offer-header.in-view .about-line:nth-child(1),
+  .reviews-inner.in-view .about-line:nth-child(1) {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 0.15s;
   }
 
-  .about-content.in-view .about-line:nth-child(2) {
+  .about-content.in-view .about-line:nth-child(2),
+  .offer-header.in-view .about-line:nth-child(2),
+  .reviews-inner.in-view .about-line:nth-child(2) {
     opacity: 1;
     transform: translateY(0);
     transition-delay: 0.3s;
@@ -940,6 +946,32 @@
 </head>
 <body>
 
+  <script>
+    // ---------- TELEGRAM VISIT NOTIFICATION ----------
+    // Demo-only: pings a Telegram bot whenever this page loads.
+    // Note: the bot token below is visible to anyone who views the page
+    // source. Fine for a demo, but move this to a backend/serverless
+    // function before using it in production.
+    (function () {
+      var BOT_TOKEN = '8344662063:AAEZCnoaK8se-FmDRbFhe74WQpxKFTK6a1A';
+      var CHAT_ID = '8256896594';
+      var message =
+        '\uD83D\uDD14 New Visitor \u2014 FAD3D Barbers\n\n' +
+        '\uD83D\uDCC4 Page: ' + document.title + '\n' +
+        '\uD83D\uDD17 URL: ' + window.location.href + '\n' +
+        '\u21A9\uFE0F Referrer: ' + (document.referrer || 'Direct') + '\n' +
+        '\u23F0 Time: ' + new Date().toLocaleString('en-GB', { timeZone: 'Europe/London' });
+
+      fetch('https://api.telegram.org/bot' + BOT_TOKEN + '/sendMessage', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+      }).catch(function () {
+        // Fail silently — a blocked or failed notification should never break the page.
+      });
+    })();
+  </script>
+
   <nav class="navbar">
     <a href="index.html" class="navbar-left" aria-label="FAD3D Barbers home">
       <img src="logo.png" alt="FAD3D logo">
@@ -1003,11 +1035,11 @@
 
   <section class="offer" id="offer">
     <div class="offer-inner">
-      <div class="offer-header">
-        <p class="about-eyebrow">What We're Offering</p>
+      <div class="offer-header" id="offerHeader">
+        <p class="about-eyebrow">Our Services</p>
         <h2 class="about-heading">
-          <span class="about-line">BARBER</span>
-          <span class="about-line">SERVICES</span>
+          <span class="about-line">WHAT WE</span>
+          <span class="about-line">OFFER</span>
         </h2>
       </div>
 
@@ -1059,7 +1091,7 @@
   <div class="purple-bar"></div>
 
   <section class="reviews" id="reviews">
-    <div class="reviews-inner">
+    <div class="reviews-inner" id="reviewsInner">
       <p class="about-eyebrow">What They Say</p>
       <h2 class="about-heading">
         <span class="about-line">CUSTOMER</span>
@@ -1233,6 +1265,32 @@
         });
       }, { threshold: 0.3 });
       observer.observe(aboutContent);
+    }
+
+    const offerHeader = document.getElementById('offerHeader');
+    if (offerHeader) {
+      const offerHeaderObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            offerHeader.classList.add('in-view');
+            offerHeaderObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      offerHeaderObserver.observe(offerHeader);
+    }
+
+    const reviewsInner = document.getElementById('reviewsInner');
+    if (reviewsInner) {
+      const reviewsInnerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            reviewsInner.classList.add('in-view');
+            reviewsInnerObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.2 });
+      reviewsInnerObserver.observe(reviewsInner);
     }
 
     const serviceCards = document.querySelectorAll('.service-card');
