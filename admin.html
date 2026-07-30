@@ -671,6 +671,42 @@
     }
   }
 
+  .availability-legend {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .legend-swatch {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #cccccc;
+    flex-shrink: 0;
+  }
+
+  .legend-swatch-open {
+    background: #7c1fa0;
+    border-color: #7c1fa0;
+  }
+
+  .legend-swatch-closed {
+    background: #f4f2f0;
+  }
+
+  .legend-label {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    color: #000000;
+  }
+
   /* ---------- FOOTER ---------- */
 
   .admin-footer {
@@ -797,6 +833,16 @@
       <p class="section-count">Tap a time slot to open or close it for bookings, 8am&ndash;8pm in 30-minute intervals. This is the window customers see on the Book page. Changes save instantly.</p>
       <p class="form-feedback" id="availabilityFeedback"></p>
       <div class="availability-grid" id="availabilityGrid"></div>
+      <div class="availability-legend">
+        <div class="legend-item">
+          <span class="legend-swatch legend-swatch-open"></span>
+          <span class="legend-label">Available</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-swatch legend-swatch-closed"></span>
+          <span class="legend-label">Unavailable</span>
+        </div>
+      </div>
     </div>
   </section>
 
