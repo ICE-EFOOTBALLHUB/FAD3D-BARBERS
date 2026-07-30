@@ -463,6 +463,94 @@
     margin-top: 10px;
   }
 
+  /* ---------- ADMIN LOCK SCREEN ---------- */
+  .admin-lock-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: #0d0d0d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  .admin-lock-card {
+    width: 100%;
+    max-width: 340px;
+    text-align: center;
+  }
+
+  .admin-lock-card img {
+    width: 56px;
+    height: 56px;
+    margin-bottom: 18px;
+  }
+
+  .admin-lock-card h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+
+  .admin-lock-card p {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    color: #a0a0a0;
+    margin-bottom: 22px;
+  }
+
+  .admin-lock-input {
+    width: 100%;
+    text-align: center;
+    letter-spacing: 10px;
+    font-size: 22px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    padding: 14px 10px;
+    border: 1px solid #333;
+    background: #1a1a1a;
+    color: #ffffff;
+    border-radius: 2px;
+  }
+
+  .admin-lock-input:focus {
+    outline: 2px solid #b34fe0;
+    outline-offset: -2px;
+  }
+
+  .admin-lock-remember {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    color: #cccccc;
+  }
+
+  .admin-lock-remember input {
+    width: 16px;
+    height: 16px;
+  }
+
+  .admin-lock-card .admin-submit-btn {
+    margin-top: 18px;
+  }
+
+  .admin-lock-feedback {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    color: #ff6b6b;
+    margin-top: 14px;
+    min-height: 16px;
+  }
+
   .image-preview-wrap img {
     width: 100%;
     max-width: 220px;
@@ -611,6 +699,24 @@
 </style>
 </head>
 <body>
+
+<div class="admin-lock-overlay" id="adminLockOverlay">
+  <div class="admin-lock-card">
+    <img src="logo.png" alt="FAD3D logo">
+    <h1>Admin Access</h1>
+    <p>Enter the 6-digit access code to continue.</p>
+    <form id="adminLockForm">
+      <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="off" class="admin-lock-input" id="adminLockInput" placeholder="&middot;&middot;&middot;&middot;&middot;&middot;">
+      <label class="admin-lock-remember">
+        <input type="checkbox" id="adminLockRemember">
+        Remember this device
+      </label>
+      <button type="submit" class="admin-submit-btn" id="adminLockSubmit">Unlock</button>
+      <p class="admin-lock-feedback" id="adminLockFeedback"></p>
+    </form>
+  </div>
+</div>
+
 <div id="debugBanner" style="display:none; position:sticky; top:0; z-index:9999; background:#c0392b; color:#fff; font-family:monospace; font-size:12px; padding:10px; white-space:pre-wrap; word-break:break-word;"></div>
 <script>
   function showDebugError(msg) {
@@ -855,6 +961,40 @@
     </div>
   </section>
 
+  <!-- ---------- ADMIN ACCESS CODE ---------- -->
+  <section class="admin-section alt">
+    <div class="admin-section-inner">
+      <p class="section-eyebrow">Security</p>
+      <h2 class="section-heading">Admin Access Code</h2>
+      <p class="section-count">Change the code used to unlock this page. Anyone with the code can access everything above, so keep it private.</p>
+
+      <div class="admin-form-card">
+        <form id="changeCodeForm">
+          <div class="form-group">
+            <label for="currentCodeInput">Current Code</label>
+            <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="currentCodeInput" required>
+          </div>
+          <div class="form-row-2">
+            <div class="form-group">
+              <label for="newCodeInput">New Code (6 digits)</label>
+              <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="newCodeInput" required>
+            </div>
+            <div class="form-group">
+              <label for="confirmCodeInput">Confirm New Code</label>
+              <input type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" id="confirmCodeInput" required>
+            </div>
+          </div>
+          <button type="submit" class="admin-submit-btn" id="changeCodeBtn">Update Code</button>
+          <p class="form-feedback" id="changeCodeFeedback"></p>
+        </form>
+
+        <p class="admin-form-hint" style="margin-top:16px;">Forgotten the code? Contact your developer &mdash; it can only be reset from the Firebase project console, which your developer manages, not from this page.</p>
+
+        <button type="button" class="form-cancel-btn" id="adminSignOutBtn" style="margin-top:16px;">Sign Out of Admin</button>
+      </div>
+    </div>
+  </section>
+
   <footer class="admin-footer">
     <p>&copy; 2026 FAD3D Barbers &mdash; Admin Panel. Internal use only.</p>
   </footer>
@@ -862,8 +1002,124 @@
   <script type="module">
     import {
       db, collection, addDoc, updateDoc, deleteDoc, doc, getDoc, setDoc, onSnapshot, query, orderBy,
-      serverTimestamp, uploadToCloudinary
+      serverTimestamp, uploadToCloudinary,
+      auth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword,
+      reauthenticateWithCredential, EmailAuthProvider, setPersistence,
+      browserLocalPersistence, browserSessionPersistence
     } from './js/firebase-init.js';
+
+    // ---------- ADMIN ACCESS CODE (backed by Firebase Auth) ----------
+    // The "code" the client types IS the password for a single fixed internal
+    // Auth account. That email never appears in the UI. Firestore rules check
+    // request.auth != null, so this is enforced server-side, not just in JS.
+    const ADMIN_EMAIL = 'internal@faded.co.uk';
+
+    const lockOverlay = document.getElementById('adminLockOverlay');
+    const lockForm = document.getElementById('adminLockForm');
+    const lockInput = document.getElementById('adminLockInput');
+    const lockRemember = document.getElementById('adminLockRemember');
+    const lockFeedback = document.getElementById('adminLockFeedback');
+    const lockSubmit = document.getElementById('adminLockSubmit');
+
+    function unlockAdmin() {
+      lockOverlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    function lockAdmin() {
+      lockOverlay.style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+
+    // Firebase keeps you signed in across reloads on its own (that's what
+    // "Remember this device" controls, via persistence mode below), so this
+    // replaces the old localStorage-based remembered-device check.
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        unlockAdmin();
+      } else {
+        lockAdmin();
+      }
+    });
+
+    lockForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const entered = lockInput.value.trim();
+      if (!/^\d{6}$/.test(entered)) {
+        lockFeedback.textContent = 'Enter the 6-digit code.';
+        return;
+      }
+      lockSubmit.disabled = true;
+      lockSubmit.textContent = 'Checking...';
+      try {
+        // Checked = stay signed in after the browser closes. Unchecked = only
+        // for this tab session. Set before signing in so it applies right away.
+        await setPersistence(auth, lockRemember.checked ? browserLocalPersistence : browserSessionPersistence);
+        await signInWithEmailAndPassword(auth, ADMIN_EMAIL, entered);
+        lockFeedback.textContent = '';
+        lockForm.reset();
+      } catch (err) {
+        lockFeedback.textContent = 'Incorrect code. Try again.';
+        lockInput.value = '';
+        lockInput.focus();
+      } finally {
+        lockSubmit.disabled = false;
+        lockSubmit.textContent = 'Unlock';
+      }
+    });
+
+    // ---------- CHANGE ACCESS CODE ----------
+    const changeCodeForm = document.getElementById('changeCodeForm');
+    const currentCodeInput = document.getElementById('currentCodeInput');
+    const newCodeInput = document.getElementById('newCodeInput');
+    const confirmCodeInput = document.getElementById('confirmCodeInput');
+    const changeCodeFeedback = document.getElementById('changeCodeFeedback');
+    const changeCodeBtn = document.getElementById('changeCodeBtn');
+
+    changeCodeForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const current = currentCodeInput.value.trim();
+      const a = newCodeInput.value.trim();
+      const b = confirmCodeInput.value.trim();
+      changeCodeFeedback.classList.remove('error');
+      if (!/^\d{6}$/.test(current) || !/^\d{6}$/.test(a)) {
+        changeCodeFeedback.classList.add('error');
+        changeCodeFeedback.textContent = 'Codes must be exactly 6 digits.';
+        return;
+      }
+      if (a !== b) {
+        changeCodeFeedback.classList.add('error');
+        changeCodeFeedback.textContent = "New codes don't match.";
+        return;
+      }
+      changeCodeBtn.disabled = true;
+      changeCodeBtn.textContent = 'Updating...';
+      try {
+        // Firebase requires a recent sign-in before allowing a password change,
+        // so we re-confirm the current code first.
+        const credential = EmailAuthProvider.credential(ADMIN_EMAIL, current);
+        await reauthenticateWithCredential(auth.currentUser, credential);
+        await updatePassword(auth.currentUser, a);
+        changeCodeFeedback.textContent = 'Access code updated.';
+        changeCodeForm.reset();
+      } catch (err) {
+        changeCodeFeedback.classList.add('error');
+        if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+          changeCodeFeedback.textContent = 'Current code is incorrect.';
+        } else {
+          changeCodeFeedback.textContent = `Couldn't update code: ${err.message}`;
+        }
+      } finally {
+        changeCodeBtn.disabled = false;
+        changeCodeBtn.textContent = 'Update Code';
+      }
+    });
+
+    // ---------- SIGN OUT ----------
+    const adminSignOutBtn = document.getElementById('adminSignOutBtn');
+    if (adminSignOutBtn) {
+      adminSignOutBtn.addEventListener('click', () => signOut(auth));
+    }
 
     // ---------- MOBILE MENU ----------
     const menuBtn = document.getElementById('menuBtn');
