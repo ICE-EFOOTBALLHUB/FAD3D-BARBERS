@@ -397,6 +397,7 @@
 
   .form-group input[type="text"],
   .form-group input[type="number"],
+  .form-group input[type="password"],
   .form-group select,
   .form-group textarea {
     width: 100%;
@@ -988,7 +989,7 @@
           <p class="form-feedback" id="changeCodeFeedback"></p>
         </form>
 
-        <p class="admin-form-hint" style="margin-top:16px;">Forgotten the code? Contact your developer &mdash; it can only be reset from the Firebase project console, which your developer manages, not from this page.</p>
+        <p class="admin-form-hint" style="margin-top:16px;">Forgotten the code entirely? That has to be reset from the Firebase Console (Authentication &rarr; Users &rarr; the internal admin account &rarr; Reset password) rather than from this page, since resetting a password without knowing the old one can't be done safely from client-side code.</p>
 
         <button type="button" class="form-cancel-btn" id="adminSignOutBtn" style="margin-top:16px;">Sign Out of Admin</button>
       </div>
