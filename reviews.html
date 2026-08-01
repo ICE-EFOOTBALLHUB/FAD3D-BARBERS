@@ -546,6 +546,15 @@
     margin-top: 8px;
   }
 
+  .reviews-loading {
+    grid-column: 1 / -1;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #888888;
+    text-align: center;
+    padding: 40px 0;
+  }
+
   .review-card {
     background: #f4f2f0;
     border-top: 4px solid #7c1fa0;
@@ -716,6 +725,20 @@
     padding: 14px 28px;
     cursor: pointer;
     width: 100%;
+  }
+
+  .form-feedback {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    color: #7c1fa0;
+    min-height: 16px;
+    margin-top: 4px;
+  }
+
+  .form-feedback.error {
+    color: #c0392b;
   }
 
   .review-submit-btn:hover {
@@ -1024,7 +1047,9 @@
         <span class="about-line">REVIEWS</span>
       </h2>
 
-      <div class="reviews-grid" id="reviewsGrid"></div>
+      <div class="reviews-grid" id="reviewsGrid">
+        <p class="reviews-loading" id="reviewsLoading">Loading reviews&hellip;</p>
+      </div>
 
       <div class="reviews-actions">
         <button class="hero-btn" id="leaveReviewBtn">Leave A Review</button>
@@ -1055,7 +1080,8 @@
           <label for="reviewTextInput">Your Review</label>
           <textarea id="reviewTextInput" required maxlength="400"></textarea>
         </div>
-        <button type="submit" class="review-submit-btn">Submit Review</button>
+        <button type="submit" class="review-submit-btn" id="reviewSubmitBtn">Submit Review</button>
+        <p class="form-feedback" id="reviewFeedback"></p>
       </form>
     </div>
   </div>
@@ -1140,7 +1166,9 @@
     <p class="footer-copy">&copy; 2026 FAD3D Barbers. All rights reserved.</p>
   </footer>
 
-  <script>
+  <script type="module">
+    import { db, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, escapeHtml } from './js/firebase-init.js';
+
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1172,14 +1200,9 @@
       reviewsInnerObserver.observe(reviewsInner);
     }
 
-    // ---------- REVIEWS ----------
-    let reviews = [
-      { name: 'James Carter', stars: 5, text: "Been coming here for over a year now, always a clean fade and the lads are sound. Best barbers in Aylesbury by far.", date: '2026-06-14' },
-      { name: 'Michael Osei', stars: 5, text: 'Booked a beard trim and haircut, walked out looking like a new man. Great attention to detail and good banter too.', date: '2026-05-30' },
-      { name: 'Daniel Hughes', stars: 4, text: 'Solid haircut and friendly service. Gets busy on weekends so worth booking ahead, but always worth the wait.', date: '2026-05-09' }
-    ];
-
+    // ---------- LIVE REVIEWS FROM FIRESTORE ----------
     const reviewsGrid = document.getElementById('reviewsGrid');
+    const reviewsCol = collection(db, 'reviews');
 
     function starString(count) {
       return '&#9733;'.repeat(count) + '&#9734;'.repeat(5 - count);
@@ -1189,21 +1212,32 @@
       return name.trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
     }
 
-    function renderReviews() {
+    function formatDate(timestamp) {
+      if (!timestamp || typeof timestamp.toDate !== 'function') return 'Just now';
+      return timestamp.toDate().toISOString().slice(0, 10);
+    }
+
+    function renderReviews(docs) {
+      if (docs.length === 0) {
+        reviewsGrid.innerHTML = '<p class="reviews-loading">No reviews yet &mdash; be the first to leave one!</p>';
+        return;
+      }
+
       reviewsGrid.innerHTML = '';
-      reviews.forEach(r => {
+      docs.forEach(docSnap => {
+        const r = docSnap.data();
         const card = document.createElement('div');
         card.className = 'review-card';
         card.innerHTML = `
           <div class="review-top">
-            <div class="review-avatar">${initials(r.name)}</div>
+            <div class="review-avatar">${escapeHtml(initials(r.name || '?'))}</div>
             <div>
-              <div class="review-name">${r.name}</div>
-              <div class="review-date">${r.date}</div>
+              <div class="review-name">${escapeHtml(r.name || 'Anonymous')}</div>
+              <div class="review-date">${escapeHtml(formatDate(r.createdAt))}</div>
             </div>
           </div>
-          <div class="review-stars">${starString(r.stars)}</div>
-          <p class="review-text">${r.text}</p>
+          <div class="review-stars">${starString(Number(r.stars) || 0)}</div>
+          <p class="review-text">${escapeHtml(r.text || '')}</p>
         `;
         reviewsGrid.appendChild(card);
       });
@@ -1220,7 +1254,11 @@
       cards.forEach(c => cardObserver.observe(c));
     }
 
-    renderReviews();
+    onSnapshot(query(reviewsCol, orderBy('createdAt', 'desc')), (snap) => {
+      renderReviews(snap.docs);
+    }, (err) => {
+      reviewsGrid.innerHTML = `<p class="reviews-loading">Couldn't load reviews: ${err.message}</p>`;
+    });
 
     // ---------- REVIEW MODAL ----------
     const reviewModalOverlay = document.getElementById('reviewModalOverlay');
@@ -1229,6 +1267,8 @@
     const reviewForm = document.getElementById('reviewForm');
     const starPicker = document.getElementById('starPicker');
     const starSpans = starPicker.querySelectorAll('span');
+    const reviewSubmitBtn = document.getElementById('reviewSubmitBtn');
+    const reviewFeedback = document.getElementById('reviewFeedback');
     let selectedStars = 0;
 
     function openReviewModal() {
@@ -1240,6 +1280,8 @@
       reviewForm.reset();
       selectedStars = 0;
       starSpans.forEach(s => s.classList.remove('active'));
+      reviewFeedback.classList.remove('error');
+      reviewFeedback.textContent = '';
     }
 
     leaveReviewBtn.addEventListener('click', openReviewModal);
@@ -1257,18 +1299,40 @@
       });
     });
 
-    reviewForm.addEventListener('submit', (e) => {
+    reviewForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const name = document.getElementById('reviewNameInput').value.trim();
       const text = document.getElementById('reviewTextInput').value.trim();
+
+      reviewFeedback.classList.remove('error');
+      reviewFeedback.textContent = '';
+
       if (!name || !text || selectedStars === 0) {
-        if (selectedStars === 0) alert('Please select a star rating.');
+        reviewFeedback.classList.add('error');
+        reviewFeedback.textContent = selectedStars === 0
+          ? 'Please select a star rating.'
+          : 'Please fill in your name and review.';
         return;
       }
-      const today = new Date().toISOString().slice(0, 10);
-      reviews.unshift({ name, stars: selectedStars, text, date: today });
-      renderReviews();
-      closeReviewModal();
+
+      reviewSubmitBtn.disabled = true;
+      reviewSubmitBtn.textContent = 'Submitting...';
+
+      try {
+        await addDoc(collection(db, 'reviews'), {
+          name,
+          stars: selectedStars,
+          text,
+          createdAt: serverTimestamp()
+        });
+        closeReviewModal();
+      } catch (err) {
+        reviewFeedback.classList.add('error');
+        reviewFeedback.textContent = `Couldn't submit review: ${err.message}`;
+      } finally {
+        reviewSubmitBtn.disabled = false;
+        reviewSubmitBtn.textContent = 'Submit Review';
+      }
     });
 
     const contactInner = document.querySelector('.contact-inner');

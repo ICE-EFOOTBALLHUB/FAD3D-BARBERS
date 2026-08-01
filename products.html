@@ -1404,7 +1404,7 @@
   </div>
 
   <script type="module">
-    import { db, collection, onSnapshot, query, orderBy } from './js/firebase-init.js';
+    import { db, collection, onSnapshot, query, orderBy, escapeHtml } from './js/firebase-init.js';
 
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -1528,11 +1528,11 @@
         card.innerHTML = `
           <span class="product-badge ${info.badgeClass}">${info.badgeLabel}</span>
           <div class="product-img">
-            <img src="${p.imageUrl || ''}" alt="${p.name || 'Product'}">
+            <img src="${escapeHtml(p.imageUrl || '')}" alt="${escapeHtml(p.name || 'Product')}">
           </div>
           <div class="product-body">
-            <h3 class="product-title">${p.name || ''}</h3>
-            <p class="product-text">${p.description || ''}</p>
+            <h3 class="product-title">${escapeHtml(p.name || '')}</h3>
+            <p class="product-text">${escapeHtml(p.description || '')}</p>
             <div class="product-meta">
               <span class="product-price">${priceLabel}</span>
               <span class="product-stock-text ${info.stockClass}">${info.stockLabel}</span>

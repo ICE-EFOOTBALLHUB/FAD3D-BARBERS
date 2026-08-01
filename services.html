@@ -1097,7 +1097,7 @@
   </footer>
 
   <script type="module">
-    import { db, collection, onSnapshot, query, orderBy } from './js/firebase-init.js';
+    import { db, collection, onSnapshot, query, orderBy, escapeHtml } from './js/firebase-init.js';
 
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -1160,11 +1160,11 @@
         card.className = 'service-card';
         card.innerHTML = `
           <div class="service-img">
-            <img src="${s.imageUrl || ''}" alt="${s.name || 'Service'} at FAD3D Barbers">
+            <img src="${escapeHtml(s.imageUrl || '')}" alt="${escapeHtml(s.name || 'Service')} at FAD3D Barbers">
           </div>
-          <h3 class="service-title">${(s.name || '').toUpperCase()}</h3>
-          <p class="service-text">${s.description || ''}</p>
-          <p class="service-price">&pound;${Number(s.price || 0).toFixed(2)}<span>${s.priceUnit || 'Per Service'}</span></p>
+          <h3 class="service-title">${escapeHtml((s.name || '').toUpperCase())}</h3>
+          <p class="service-text">${escapeHtml(s.description || '')}</p>
+          <p class="service-price">&pound;${Number(s.price || 0).toFixed(2)}<span>${escapeHtml(s.priceUnit || 'Per Service')}</span></p>
           <div class="service-book-row">
             <a href="book.html?service=${docSnap.id}" class="hero-btn">Book Now</a>
           </div>

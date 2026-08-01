@@ -1008,6 +1008,30 @@
     </div>
   </section>
 
+  <!-- ---------- REVIEWS ---------- -->
+  <section class="admin-section">
+    <div class="admin-section-inner">
+      <p class="section-eyebrow">Feedback</p>
+      <h2 class="section-heading">Customer Reviews</h2>
+      <p class="section-count" id="reviewsCount"></p>
+
+      <div class="table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Rating</th>
+              <th>Review</th>
+              <th>Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="reviewsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
   <!-- ---------- ADMIN ACCESS CODE ---------- -->
   <section class="admin-section alt">
     <div class="admin-section-inner">
@@ -1049,7 +1073,7 @@
   <script type="module">
     import {
       db, collection, addDoc, updateDoc, deleteDoc, doc, getDoc, setDoc, onSnapshot, query, orderBy,
-      serverTimestamp, uploadToCloudinary,
+      serverTimestamp, uploadToCloudinary, escapeHtml,
       auth, onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword,
       reauthenticateWithCredential, EmailAuthProvider, setPersistence,
       browserLocalPersistence, browserSessionPersistence
@@ -1221,8 +1245,8 @@
         const serviceNames = Array.isArray(r.services) ? r.services.map(s => s.name).join(', ') : (r.services || '');
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${r.customerName || ''}<span class="cell-sub">${r.customerPhone || ''}</span></td>
-          <td>${serviceNames}</td>
+          <td>${escapeHtml(r.customerName || '')}<span class="cell-sub">${escapeHtml(r.customerPhone || '')}</span></td>
+          <td>${escapeHtml(serviceNames)}</td>
           <td>${formatBookingDateTime(r)}</td>
           <td class="cell-strong">&pound;${Number(r.totalPrice || 0).toFixed(2)}</td>
           <td>
@@ -1266,9 +1290,9 @@
         const statusLabel = status.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${o.customerName || ''}<span class="cell-sub">${o.customerPhone || ''}</span></td>
-          <td>${o.productName || ''}</td>
-          <td>${o.qty || ''}</td>
+          <td>${escapeHtml(o.customerName || '')}<span class="cell-sub">${escapeHtml(o.customerPhone || '')}</span></td>
+          <td>${escapeHtml(o.productName || '')}</td>
+          <td>${escapeHtml(o.qty || '')}</td>
           <td class="cell-strong">&pound;${Number(o.total || 0).toFixed(2)}</td>
           <td>
             <select class="status-select st-${status}" data-id="${o.id}" data-type="order">
@@ -1286,6 +1310,42 @@
       renderOrders();
     }, (err) => {
       ordersBody.innerHTML = `<tr class="empty-row"><td colspan="6">Couldn't load orders: ${err.message}</td></tr>`;
+    });
+
+    // ---------- REVIEWS (reviews collection) ----------
+
+    const reviewsCol = collection(db, 'reviews');
+    const reviewsBody = document.getElementById('reviewsBody');
+    const reviewsCount = document.getElementById('reviewsCount');
+
+    function formatReviewDate(timestamp) {
+      if (!timestamp || typeof timestamp.toDate !== 'function') return 'Just now';
+      return timestamp.toDate().toISOString().slice(0, 10);
+    }
+
+    onSnapshot(query(reviewsCol, orderBy('createdAt', 'desc')), (snap) => {
+      reviewsCount.textContent = `${snap.size} review${snap.size === 1 ? '' : 's'}`;
+      reviewsBody.innerHTML = '';
+
+      if (snap.empty) {
+        reviewsBody.innerHTML = '<tr class="empty-row"><td colspan="5">No reviews yet.</td></tr>';
+        return;
+      }
+
+      snap.forEach(docSnap => {
+        const r = docSnap.data();
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${escapeHtml(r.name || 'Anonymous')}</td>
+          <td>${'&#9733;'.repeat(Number(r.stars) || 0)}${'&#9734;'.repeat(5 - (Number(r.stars) || 0))}</td>
+          <td>${escapeHtml(r.text || '')}</td>
+          <td>${formatReviewDate(r.createdAt)}</td>
+          <td><button type="button" class="row-delete-btn" data-id="${docSnap.id}" data-type="review">Remove</button></td>
+        `;
+        reviewsBody.appendChild(tr);
+      });
+    }, (err) => {
+      reviewsBody.innerHTML = `<tr class="empty-row"><td colspan="5">Couldn't load reviews: ${err.message}</td></tr>`;
     });
 
     // ---------- STATUS + DELETE (event delegation) ----------
@@ -1314,6 +1374,9 @@
       } else if (type === 'order') {
         if (!confirm('Remove this order?')) return;
         try { await deleteDoc(doc(db, 'orders', id)); } catch (err) { alert(`Couldn't delete: ${err.message}`); }
+      } else if (type === 'review') {
+        if (!confirm('Remove this review?')) return;
+        try { await deleteDoc(doc(db, 'reviews', id)); } catch (err) { alert(`Couldn't delete: ${err.message}`); }
       }
     });
 
@@ -1377,9 +1440,9 @@
         const st = stockStatus(p.stock);
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${p.imageUrl ? `<img class="table-thumb" src="${p.imageUrl}" alt="${p.name}">` : ''}</td>
-          <td class="cell-strong">${p.name}</td>
-          <td>${p.category || ''}</td>
+          <td>${p.imageUrl ? `<img class="table-thumb" src="${escapeHtml(p.imageUrl)}" alt="${escapeHtml(p.name)}">` : ''}</td>
+          <td class="cell-strong">${escapeHtml(p.name)}</td>
+          <td>${escapeHtml(p.category || '')}</td>
           <td>&pound;${Number(p.price).toFixed(2)}</td>
           <td><input type="number" class="stock-input" min="0" step="1" value="${p.stock}" data-id="${p.id}"></td>
           <td><span class="stock-badge ${st.cls}">${st.label}</span></td>
@@ -1541,9 +1604,9 @@
       servicesCache.forEach(s => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${s.imageUrl ? `<img class="table-thumb" src="${s.imageUrl}" alt="${s.name}">` : ''}</td>
-          <td class="cell-strong">${s.name}</td>
-          <td>&pound;${Number(s.price).toFixed(2)} <span class="cell-sub">${s.priceUnit || ''}</span></td>
+          <td>${s.imageUrl ? `<img class="table-thumb" src="${escapeHtml(s.imageUrl)}" alt="${escapeHtml(s.name)}">` : ''}</td>
+          <td class="cell-strong">${escapeHtml(s.name)}</td>
+          <td>&pound;${Number(s.price).toFixed(2)} <span class="cell-sub">${escapeHtml(s.priceUnit || '')}</span></td>
           <td>${s.duration || 30} min</td>
           <td class="cell-actions">
             <button type="button" class="row-edit-btn" data-id="${s.id}">Edit</button>

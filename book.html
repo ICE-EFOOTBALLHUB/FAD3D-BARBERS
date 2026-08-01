@@ -1373,7 +1373,7 @@
 
   <script type="module">
     import {
-      db, collection, addDoc, doc, onSnapshot, query, orderBy, where, getDocs, serverTimestamp
+      db, collection, addDoc, doc, onSnapshot, query, orderBy, where, getDocs, serverTimestamp, escapeHtml
     } from './js/firebase-init.js';
 
     const menuBtn = document.getElementById('menuBtn');
@@ -1507,7 +1507,7 @@
         label.className = 'service-option';
         label.innerHTML = `
           <input type="checkbox" value="${s.id}" ${s._checked ? 'checked' : ''}>
-          <span>${s.name}</span>
+          <span>${escapeHtml(s.name)}</span>
           <span class="service-option-price">&pound;${Number(s.price).toFixed(2)}</span>
         `;
         const checkbox = label.querySelector('input');
