@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>Contact | FAD3D Barbers</title>
+<title>Track Your Order | FAD3D Barbers</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -390,6 +390,14 @@
     margin: 0 auto;
   }
 
+  .services-loading {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #888888;
+    text-align: center;
+    padding: 40px 0;
+  }
+
   .service-card {
     margin-bottom: 72px;
     opacity: 0;
@@ -442,6 +450,144 @@
 
   .offer-bottom-spacer {
     height: 56px;
+  }
+
+  /* ---------- STATUS TRACKER ---------- */
+
+  .status-note {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #666666;
+    text-align: center;
+    max-width: 620px;
+    margin: -32px auto 48px;
+  }
+
+  .status-group {
+    max-width: 720px;
+    margin: 0 auto 64px;
+  }
+
+  .status-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .status-group-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .status-group-title {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    font-size: clamp(18px, 3.4vw, 24px);
+    letter-spacing: 0.5px;
+    color: #000000;
+  }
+
+  .status-clear-btn {
+    background: none;
+    border: none;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    color: #b00020;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .status-empty {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 15px;
+    color: #888888;
+    padding: 24px;
+    text-align: center;
+    background: #f4f2f0;
+  }
+
+  .status-card {
+    background: #f4f2f0;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .status-card.is-gone {
+    opacity: 0.6;
+  }
+
+  .status-card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .status-card-title {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #000000;
+  }
+
+  .status-card-sub {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    color: #666666;
+    margin-top: 4px;
+  }
+
+  .status-badge {
+    flex-shrink: 0;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: #f5a623;
+    color: #000000;
+    white-space: nowrap;
+  }
+
+  .status-badge.st-confirmed,
+  .status-badge.st-in-progress { background: #7c1fa0; color: #ffffff; }
+  .status-badge.st-completed { background: #000000; color: #ffffff; }
+  .status-badge.st-cancelled,
+  .status-badge.st-rejected { background: #ffffff; color: #b00020; box-shadow: inset 0 0 0 1px #b00020; }
+  .status-badge.st-removed { background: #ffffff; color: #888888; box-shadow: inset 0 0 0 1px #cccccc; }
+
+  .status-card-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 13px;
+    color: #444444;
+  }
+
+  .status-card-price {
+    font-weight: 700;
+    color: #000000;
+  }
+
+  .status-remove-btn {
+    background: none;
+    border: none;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    color: #888888;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 2px;
   }
 
   /* ---------- CONTACTS ---------- */
@@ -921,58 +1067,42 @@
     }
   }
 
-  /* ---------- ABOUT PAGE INTRO ---------- */
+  /* ---------- SERVICES PAGE ---------- */
 
-  .page-intro {
-    width: 100%;
-    padding: 56px 24px 40px;
-  }
-
-  .page-intro-inner {
-    max-width: 720px;
-    margin: 0 auto;
+  .service-price {
+    font-family: 'Archivo Black', sans-serif;
+    font-weight: 400;
+    color: #7c1fa0;
+    font-size: clamp(22px, 4vw, 30px);
     text-align: center;
+    margin: 8px 0 24px;
   }
 
-  .page-intro .hero-heading {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .page-intro .hero-text {
-    max-width: 560px;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* ---------- ABOUT CTA (between about text and contact) ---------- */
-
-  .about-cta {
-    width: 100%;
-    padding: 8px 24px 64px;
-    text-align: center;
-  }
-
-  .about-cta-inner {
-    max-width: 640px;
-    margin: 0 auto;
-    opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-
-  .about-cta-inner.in-view {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .about-cta-text {
+  .service-price span {
     font-family: 'Helvetica Neue', Arial, sans-serif;
-    font-size: clamp(15px, 2.4vw, 18px);
-    line-height: 1.7;
-    color: #1a1a1a;
-    margin-bottom: 28px;
+    font-weight: 600;
+    font-size: 13px;
+    color: #777777;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .service-book-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 28px;
+  }
+
+  .service-book-row a.hero-btn {
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+    position: static;
+    opacity: 1;
+    transform: none;
+    animation: none;
   }
 </style>
 </head>
@@ -995,24 +1125,56 @@
     <a href="about.html">About</a>
     <a href="services.html">Services</a>
     <a href="products.html">Products</a>
-    <a href="reviews.html">Reviews</a>
-    <a href="contact.html">Location</a>
-    <a href="contact.html">Contact</a>
+    <a href="index.html#reviews">Reviews</a>
+    <a href="#contact">Location</a>
+    <a href="#contact">Contact</a>
   </div>
 
   <section class="page-intro">
     <div class="page-intro-inner">
-      <p class="hero-eyebrow">Get In Touch</p>
+      <p class="hero-eyebrow">Already Booked Or Ordered?</p>
       <h1 class="hero-heading">
-        <span class="line-one">VISIT</span>
-        <span class="line-two">FAD3D BARBERS</span>
+        <span class="line-one">TRACK YOUR</span>
+        <span class="line-two">STATUS</span>
       </h1>
       <p class="hero-text">
-        Questions about a cut, walk-in availability, or just need directions? Here's every way to find and reach us.
+        Live status for reservations and orders placed from this device, pulled straight from our system.
       </p>
-      <button class="hero-btn" onclick="window.location.href='book.html'">Book An Appointment</button>
     </div>
   </section>
+
+  <div class="purple-bar"></div>
+
+  <section class="offer" id="offer">
+    <div class="offer-inner">
+      <p class="status-note">
+        This list lives only in this browser &mdash; it's built from reservations and orders placed on this device, not an account login. Statuses update live as we process them.
+      </p>
+
+      <div class="status-group">
+        <div class="status-group-head">
+          <span class="status-group-title">Your Reservations</span>
+          <button type="button" class="status-clear-btn" id="clearBookingsBtn">Clear list</button>
+        </div>
+        <div id="bookingsStatusList">
+          <p class="status-empty">No reservations tracked on this device yet.</p>
+        </div>
+      </div>
+
+      <div class="status-group">
+        <div class="status-group-head">
+          <span class="status-group-title">Your Orders</span>
+          <button type="button" class="status-clear-btn" id="clearOrdersBtn">Clear list</button>
+        </div>
+        <div id="ordersStatusList">
+          <p class="status-empty">No orders tracked on this device yet.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="offer-bottom-spacer"></div>
+
 
   <div class="purple-bar"></div>
 
@@ -1073,9 +1235,9 @@
       <a href="about.html">About</a>
       <a href="services.html">Services</a>
       <a href="products.html">Products</a>
-      <a href="reviews.html">Reviews</a>
-      <a href="contact.html">Location</a>
-      <a href="contact.html">Contact</a>
+      <a href="index.html#reviews">Reviews</a>
+      <a href="#contact">Location</a>
+      <a href="#contact">Contact</a>
       <a href="status.html">Track Order</a>
     </nav>
 
@@ -1092,7 +1254,9 @@
     <p class="footer-copy">&copy; 2026 FAD3D Barbers. All rights reserved.</p>
   </footer>
 
-  <script>
+  <script type="module">
+    import { db, doc, onSnapshot } from './js/firebase-init.js';
+
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
     if (menuBtn && mobileMenu) {
@@ -1123,6 +1287,153 @@
       }, { threshold: 0.25 });
       contactObserver.observe(contactInner);
     }
+
+    // ---------- ORDER / RESERVATION STATUS TRACKER ----------
+    // book.html and order.html save {id, label} into these two localStorage
+    // keys right after a successful booking/order. This page reads those IDs
+    // back and opens a live Firestore listener per ID, so status changes made
+    // in the admin panel show up here without a refresh. Nothing here is tied
+    // to a login -- it's purely "what was placed from this browser."
+
+    const STORAGE_KEYS = { bookings: 'fad3d_bookings', orders: 'fad3d_orders' };
+    let activeUnsubs = { bookings: [], orders: [] };
+
+    function readTracked(type) {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEYS[type]);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      } catch (err) {
+        return [];
+      }
+    }
+
+    function writeTracked(type, arr) {
+      try {
+        localStorage.setItem(STORAGE_KEYS[type], JSON.stringify(arr));
+      } catch (err) {
+        // Private browsing / storage disabled / quota hit -- fail quietly,
+        // the page still works, it just won't remember next visit.
+      }
+    }
+
+    function removeTracked(type, id) {
+      writeTracked(type, readTracked(type).filter(item => item.id !== id));
+    }
+
+    function statusLabel(status) {
+      const s = status || 'pending';
+      return s.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+    }
+
+    function formatBookingWhen(b) {
+      if (!b.date || !b.time) return '';
+      const [y, m, d] = b.date.split('-').map(Number);
+      const [h, min] = b.time.split(':').map(Number);
+      const dt = new Date(y, (m || 1) - 1, d || 1, h || 0, min || 0);
+      const dateLabel = dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      const timeLabel = dt.toLocaleTimeString('en-GB', { hour: 'numeric', minute: '2-digit' });
+      return `${dateLabel}, ${timeLabel}`;
+    }
+
+    function renderGroup(type, listEl, emptyText) {
+      // Drop any listeners from the previous render so we don't leak them.
+      activeUnsubs[type].forEach(unsub => unsub());
+      activeUnsubs[type] = [];
+
+      const tracked = readTracked(type);
+      if (tracked.length === 0) {
+        listEl.innerHTML = `<p class="status-empty">${emptyText}</p>`;
+        return;
+      }
+
+      listEl.innerHTML = '';
+      const collectionName = type === 'bookings' ? 'bookings' : 'orders';
+
+      tracked.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'status-card';
+        card.innerHTML = `
+          <div class="status-card-top">
+            <div>
+              <div class="status-card-title">${item.label || (type === 'bookings' ? 'Reservation' : 'Order')}</div>
+              <div class="status-card-sub" data-role="sub">Loading status&hellip;</div>
+            </div>
+            <span class="status-badge" data-role="badge">&hellip;</span>
+          </div>
+          <div class="status-card-bottom">
+            <span class="status-card-price" data-role="price"></span>
+            <button type="button" class="status-remove-btn" data-id="${item.id}" data-type="${type}">Remove from list</button>
+          </div>
+        `;
+        listEl.appendChild(card);
+
+        const unsub = onSnapshot(doc(db, collectionName, item.id), (snap) => {
+          const badgeEl = card.querySelector('[data-role="badge"]');
+          const subEl = card.querySelector('[data-role="sub"]');
+          const priceEl = card.querySelector('[data-role="price"]');
+          const titleEl = card.querySelector('.status-card-title');
+
+          if (!snap.exists()) {
+            card.classList.add('is-gone');
+            badgeEl.className = 'status-badge st-removed';
+            badgeEl.textContent = 'Removed';
+            subEl.textContent = "This one's no longer in our system.";
+            priceEl.textContent = '';
+            return;
+          }
+
+          const d = snap.data();
+          const status = d.status || 'pending';
+          badgeEl.className = `status-badge st-${status}`;
+          badgeEl.textContent = statusLabel(status);
+
+          if (type === 'bookings') {
+            const names = Array.isArray(d.services) ? d.services.map(s => s.name).join(', ') : '';
+            titleEl.textContent = names || item.label || 'Reservation';
+            subEl.textContent = formatBookingWhen(d);
+            priceEl.textContent = `\u00A3${Number(d.totalPrice || 0).toFixed(2)}`;
+          } else {
+            titleEl.textContent = `${d.qty || 1} \u00D7 ${d.productName || item.label || 'Order'}`;
+            subEl.textContent = 'Order placed on this device';
+            priceEl.textContent = `\u00A3${Number(d.total || 0).toFixed(2)}`;
+          }
+        }, (err) => {
+          card.querySelector('[data-role="sub"]').textContent = `Couldn't load status: ${err.message}`;
+        });
+
+        activeUnsubs[type].push(unsub);
+      });
+    }
+
+    const bookingsList = document.getElementById('bookingsStatusList');
+    const ordersList = document.getElementById('ordersStatusList');
+    const EMPTY_TEXT = {
+      bookings: 'No reservations tracked on this device yet.',
+      orders: 'No orders tracked on this device yet.'
+    };
+
+    renderGroup('bookings', bookingsList, EMPTY_TEXT.bookings);
+    renderGroup('orders', ordersList, EMPTY_TEXT.orders);
+
+    document.getElementById('clearBookingsBtn').addEventListener('click', () => {
+      if (!confirm('Remove all reservations from this list? This only clears your device -- it does not cancel them.')) return;
+      writeTracked('bookings', []);
+      renderGroup('bookings', bookingsList, EMPTY_TEXT.bookings);
+    });
+
+    document.getElementById('clearOrdersBtn').addEventListener('click', () => {
+      if (!confirm('Remove all orders from this list? This only clears your device -- it does not cancel them.')) return;
+      writeTracked('orders', []);
+      renderGroup('orders', ordersList, EMPTY_TEXT.orders);
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.classList.contains('status-remove-btn')) return;
+      const { id, type } = e.target.dataset;
+      removeTracked(type, id);
+      renderGroup(type, type === 'bookings' ? bookingsList : ordersList, EMPTY_TEXT[type]);
+    });
   </script>
 
 </body>

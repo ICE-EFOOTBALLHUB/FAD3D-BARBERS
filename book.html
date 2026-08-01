@@ -1355,6 +1355,7 @@
       <a href="index.html#reviews">Reviews</a>
       <a href="#contact">Location</a>
       <a href="#contact">Contact</a>
+      <a href="status.html">Track Order</a>
     </nav>
 
     <a href="book.html" class="footer-book-btn">Book An Appointment</a>
@@ -1417,6 +1418,23 @@
         });
       }, { threshold: 0.25 });
       contactObserver.observe(contactInner);
+    }
+
+    // ---------- LOCAL STATUS TRACKING (for status.html) ----------
+    // Saves just the doc ID plus a short label so status.html can look the
+    // booking up live in Firestore later. No personal data (name/phone)
+    // stored here, only what's needed to find and label the entry.
+    function trackBookingLocally(id, label) {
+      try {
+        const key = 'fad3d_bookings';
+        const raw = localStorage.getItem(key);
+        const list = raw ? JSON.parse(raw) : [];
+        list.unshift({ id, label });
+        localStorage.setItem(key, JSON.stringify(list.slice(0, 30)));
+      } catch (err) {
+        // Storage unavailable (private browsing, quota, etc.) -- booking
+        // still succeeded, it just won't show on the status page.
+      }
     }
 
     // ---------- BOOKING FORM ----------
@@ -1681,7 +1699,7 @@
       bookSubmitBtn.textContent = 'Booking...';
 
       try {
-        await addDoc(collection(db, 'bookings'), {
+        const bookingRef = await addDoc(collection(db, 'bookings'), {
           customerName: name,
           customerPhone: phone,
           services: selected.map(s => ({ id: s.id, name: s.name, price: Number(s.price), duration: Number(s.duration || 30) })),
@@ -1692,6 +1710,8 @@
           status: 'pending',
           createdAt: serverTimestamp()
         });
+
+        trackBookingLocally(bookingRef.id, selected.map(s => s.name).join(', '));
 
         bookingFeedback.classList.remove('error');
         bookingFeedback.textContent = 'Reservation booked successfully! We\u2019ll see you then.';

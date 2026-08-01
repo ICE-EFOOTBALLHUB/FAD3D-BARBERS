@@ -1420,6 +1420,7 @@
       <a href="index.html#reviews">Reviews</a>
       <a href="#contact">Location</a>
       <a href="#contact">Contact</a>
+      <a href="status.html">Track Order</a>
     </nav>
 
     <a href="book.html" class="footer-book-btn">Book An Appointment</a>
@@ -1436,7 +1437,7 @@
   </footer>
 
   <script type="module">
-    import { db, collection, addDoc, serverTimestamp } from './js/firebase-init.js';
+    import { db, collection, addDoc, doc, getDoc, serverTimestamp } from './js/firebase-init.js';
 
     const menuBtn = document.getElementById('menuBtn');
     const mobileMenu = document.getElementById('mobileMenu');
@@ -1482,57 +1483,28 @@
       contactObserver.observe(contactInner);
     }
 
-    // ---------- ORDER FORM ----------
-
-    // Product catalogue. Kept in sync with the cards on products.html.
-    const PRODUCTS = {
-      'beard-oil': {
-        name: 'Beard Oil',
-        desc: 'A lightweight, fast-absorbing oil that softens and conditions facial hair while keeping the skin underneath calm and moisturised.',
-        price: 12.00,
-        stock: 34,
-        img: 'beard_oil.jpg'
-      },
-      'beard-balm': {
-        name: 'Beard Balm',
-        desc: 'A light-hold balm that tames flyaways and shapes your beard, made with natural ingredients that soften and moisturise.',
-        price: 14.00,
-        stock: 21,
-        img: 'beardbalm.jpg'
-      },
-      'sea-salt-spray': {
-        name: 'Sea Salt Spray',
-        desc: 'A texturising spray that builds effortless, matte, beach-style volume without weighing hair down.',
-        price: 16.00,
-        stock: 0,
-        img: 'seasaltspray.jpg'
-      },
-      'clipper-set': {
-        name: 'Full Clipper Set',
-        desc: 'A complete cordless clipper kit with guide combs, thinning and cutting scissors, and a comb for sharp cuts at home.',
-        price: 45.00,
-        stock: 12,
-        img: 'fullcutset.jpg'
-      },
-      'hair-clay': {
-        name: 'Hair Clay',
-        desc: 'A strong-hold, matte clay that builds natural texture and keeps styles in place all day without shine.',
-        price: 13.00,
-        stock: 3,
-        img: 'clay.jpg'
-      },
-      'premium-pomade': {
-        name: 'Premium Pomade',
-        desc: 'A classic, high-shine pomade with firm, long-lasting hold for sharp, styled looks that stay put.',
-        price: 15.00,
-        stock: 27,
-        img: 'premiumpomade.jpg'
+    // ---------- LOCAL STATUS TRACKING (for status.html) ----------
+    function trackOrderLocally(id, label) {
+      try {
+        const key = 'fad3d_orders';
+        const raw = localStorage.getItem(key);
+        const list = raw ? JSON.parse(raw) : [];
+        list.unshift({ id, label });
+        localStorage.setItem(key, JSON.stringify(list.slice(0, 30)));
+      } catch (err) {
+        // Storage unavailable -- order still succeeded either way.
       }
-    };
+    }
+
+    // ---------- ORDER FORM ----------
+    // Product now comes straight from Firestore (the same doc products.html
+    // reads), keyed by its real document ID from the ?product= param. This
+    // replaces the old hardcoded catalogue, which used slugs like
+    // "beard-oil" that never matched the random IDs Firestore actually
+    // generates for products added in the admin panel.
 
     const params = new URLSearchParams(window.location.search);
-    const productSlug = params.get('product');
-    const product = productSlug ? PRODUCTS[productSlug] : null;
+    const productId = params.get('product');
 
     const orderCardEl = document.getElementById('orderCard');
     const orderNotFound = document.getElementById('orderNotFound');
@@ -1540,13 +1512,46 @@
     const orderEyebrow = document.getElementById('orderEyebrow');
     const orderIntroText = document.getElementById('orderIntroText');
 
-    if (!product) {
-      // No product found for the given (or missing) slug.
-      orderContent.style.display = 'none';
-      orderNotFound.style.display = 'block';
-      orderEyebrow.textContent = 'Product Not Found';
-      orderIntroText.textContent = "The item you're looking for isn't available right now.";
-    } else {
+    // Hide the form and show a lightweight loading state while we fetch.
+    orderContent.style.display = 'none';
+    orderNotFound.style.display = 'block';
+    orderEyebrow.textContent = 'Loading...';
+    orderIntroText.textContent = "Hang tight, we're pulling up this item.";
+
+    async function loadProduct() {
+      if (!productId) {
+        orderEyebrow.textContent = 'Product Not Found';
+        orderIntroText.textContent = "The item you're looking for isn't available right now.";
+        return;
+      }
+
+      let snap;
+      try {
+        snap = await getDoc(doc(db, 'products', productId));
+      } catch (err) {
+        orderEyebrow.textContent = 'Product Not Found';
+        orderIntroText.textContent = `Couldn't load this item: ${err.message}`;
+        return;
+      }
+
+      if (!snap.exists()) {
+        orderEyebrow.textContent = 'Product Not Found';
+        orderIntroText.textContent = "The item you're looking for isn't available right now.";
+        return;
+      }
+
+      const data = snap.data();
+      const product = {
+        name: data.name || 'Product',
+        desc: data.description || '',
+        price: Number(data.price || 0),
+        stock: Number(data.stock || 0),
+        img: data.imageUrl || ''
+      };
+
+      orderContent.style.display = '';
+      orderNotFound.style.display = 'none';
+
       document.title = `Order ${product.name} | FAD3D Barbers`;
       orderEyebrow.textContent = 'Take The Shop Home';
 
@@ -1646,16 +1651,34 @@
             return;
           }
 
-          const total = product.price * qty;
-
           orderSubmitBtn.disabled = true;
           orderSubmitBtn.textContent = 'Placing order...';
 
           try {
-            await addDoc(collection(db, 'orders'), {
+            // Re-check stock against Firestore right before writing the order,
+            // since the page may have been open a while and stock could have
+            // changed (or sold out) in the meantime. Doesn't fully close the
+            // race window without a transaction, but catches the common case.
+            const freshSnap = await getDoc(doc(db, 'products', productId));
+            const freshStock = freshSnap.exists() ? Number(freshSnap.data().stock || 0) : 0;
+            if (qty > freshStock) {
+              orderFeedback.classList.add('error');
+              orderFeedback.textContent = freshStock <= 0
+                ? 'Sorry, this item just sold out.'
+                : `Sorry, only ${freshStock} left now. Please lower the quantity.`;
+              product.stock = freshStock;
+              qtyInput.max = String(freshStock);
+              updateTotal();
+              updateSubmitState();
+              return;
+            }
+
+            const total = product.price * qty;
+
+            const orderRef = await addDoc(collection(db, 'orders'), {
               customerName: name,
               customerPhone: phone,
-              productId: productSlug,
+              productId: productId,
               productName: product.name,
               qty,
               unitPrice: product.price,
@@ -1663,6 +1686,8 @@
               status: 'pending',
               createdAt: serverTimestamp()
             });
+
+            trackOrderLocally(orderRef.id, `${qty} \u00D7 ${product.name}`);
 
             orderFeedback.classList.remove('error');
             orderFeedback.textContent = `Thanks, ${name}! Your order for ${qty} x ${product.name} (\u00A3${total.toFixed(2)}) has been placed. We'll text updates to ${phone}.`;
@@ -1680,6 +1705,8 @@
         });
       }
     }
+
+    loadProduct();
   </script>
 
 </body>
