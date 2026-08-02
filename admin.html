@@ -1108,8 +1108,12 @@
     onAuthStateChanged(auth, (user) => {
       if (user) {
         unlockAdmin();
+        startReservationsListener();
+        startOrdersListener();
       } else {
         lockAdmin();
+        if (unsubReservations) { unsubReservations(); unsubReservations = null; }
+        if (unsubOrders) { unsubOrders(); unsubOrders = null; }
       }
     });
 
@@ -1260,12 +1264,16 @@
       });
     }
 
-    onSnapshot(query(bookingsCol, orderBy('createdAt', 'desc')), (snap) => {
-      reservationsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderReservations();
-    }, (err) => {
-      reservationsBody.innerHTML = `<tr class="empty-row"><td colspan="6">Couldn't load reservations: ${err.message}</td></tr>`;
-    });
+    let unsubReservations = null;
+    function startReservationsListener() {
+      if (unsubReservations) return;
+      unsubReservations = onSnapshot(query(bookingsCol, orderBy('createdAt', 'desc')), (snap) => {
+        reservationsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderReservations();
+      }, (err) => {
+        reservationsBody.innerHTML = `<tr class="empty-row"><td colspan="6">Couldn't load reservations: ${err.message}</td></tr>`;
+      });
+    }
 
     // ---------- ORDERS (orders collection) ----------
 
@@ -1305,12 +1313,16 @@
       });
     }
 
-    onSnapshot(query(ordersCol, orderBy('createdAt', 'desc')), (snap) => {
-      ordersCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-      renderOrders();
-    }, (err) => {
-      ordersBody.innerHTML = `<tr class="empty-row"><td colspan="6">Couldn't load orders: ${err.message}</td></tr>`;
-    });
+    let unsubOrders = null;
+    function startOrdersListener() {
+      if (unsubOrders) return;
+      unsubOrders = onSnapshot(query(ordersCol, orderBy('createdAt', 'desc')), (snap) => {
+        ordersCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderOrders();
+      }, (err) => {
+        ordersBody.innerHTML = `<tr class="empty-row"><td colspan="6">Couldn't load orders: ${err.message}</td></tr>`;
+      });
+    }
 
     // ---------- REVIEWS (reviews collection) ----------
 
