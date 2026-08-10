@@ -487,9 +487,11 @@
     text-align: center;
   }
 
-  .admin-lock-card img {
-    width: 56px;
-    height: 56px;
+  .admin-lock-card .admin-lock-brand {
+    font-family: 'Ultra', 'Helvetica Neue', serif;
+    color: #ffffff;
+    font-size: clamp(20px, 5vw, 28px);
+    letter-spacing: 1px;
     margin-bottom: 18px;
   }
 
@@ -755,7 +757,7 @@
 
 <div class="admin-lock-overlay" id="adminLockOverlay">
   <div class="admin-lock-card">
-    <img src="logo.png" alt="Nadeem Cuts logo">
+    <div class="admin-lock-brand">NADEEM CUTS</div>
     <h1>Admin Access</h1>
     <p>Enter the 6-digit access code to continue.</p>
     <form id="adminLockForm">
