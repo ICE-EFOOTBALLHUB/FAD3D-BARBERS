@@ -84,24 +84,6 @@ async function loadSocialLinks() {
   }
 }
 
-// ---------- CONTACT EMAIL (shared across all pages, editable from Admin) ----------
-// Reads settings/contact from Firestore and applies the email to any element
-// with data-contact="email" (sets both its text and its mailto: link).
-async function loadContactInfo() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'contact'));
-    const data = snap.exists() ? snap.data() : {};
-    const email = (data.email || '').trim();
-    if (!email) return;
-    document.querySelectorAll('[data-contact="email"]').forEach((el) => {
-      el.textContent = email;
-      el.href = `mailto:${email}`;
-    });
-  } catch (err) {
-    console.error('Could not load contact info:', err);
-  }
-}
-
 // ---------- CONTACT INFO (shared across all pages, editable from Admin) ----------
 // Reads settings/contact from Firestore ({ address, hours, phone, email }) and
 // applies it to any element with a matching data-contact="<key>" attribute.
@@ -156,7 +138,6 @@ export {
   uploadToCloudinary,
   loadSocialLinks,
   loadContactInfo,
-  loadContactInfo,
   escapeHtml,
   auth,
   onAuthStateChanged,
@@ -169,4 +150,3 @@ export {
   browserLocalPersistence,
   browserSessionPersistence
 };
-      
