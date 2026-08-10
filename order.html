@@ -55,13 +55,18 @@
   }
 
   .navbar-brand {
-    font-family: 'Ultra', 'Helvetica Neue', serif;
+    font-family: 'Archivo Black', 'Helvetica Neue', sans-serif;
     color: #ffffff;
-    font-size: clamp(14px, 4.5vw, 28px);
-    letter-spacing: 0.5px;
+    font-size: clamp(17px, 5vw, 30px);
+    letter-spacing: -0.3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: uppercase;
+  }
+
+  .navbar-brand .brand-accent {
+    color: #7c1fa0;
   }
 
   .menu-btn {
@@ -1255,8 +1260,7 @@
 
   <nav class="navbar">
     <a href="index.html" class="navbar-left" aria-label="Nadeem Cuts home">
-      <img src="logo.png" alt="Nadeem Cuts logo">
-      <span class="navbar-brand">NADEEM CUTS</span>
+      <span class="navbar-brand">NADEEM <span class="brand-accent">CUTS</span></span>
     </a>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span>

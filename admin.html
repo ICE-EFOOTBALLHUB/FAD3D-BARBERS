@@ -56,14 +56,18 @@
   }
 
   .navbar-brand {
-    font-family: 'Cinzel', 'Ultra', 'Helvetica Neue', serif;
-    font-weight: 700;
+    font-family: 'Archivo Black', 'Helvetica Neue', sans-serif;
     color: #ffffff;
-    font-size: clamp(14px, 4.5vw, 28px);
-    letter-spacing: 1px;
+    font-size: clamp(17px, 5vw, 30px);
+    letter-spacing: -0.3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: uppercase;
+  }
+
+  .navbar-brand .brand-accent {
+    color: #7c1fa0;
   }
 
   .navbar-tag {
@@ -772,8 +776,7 @@
 
   <nav class="navbar">
     <a href="index.html" class="navbar-left" aria-label="Nadeem Cuts home">
-      <img src="logo.png" alt="Nadeem Cuts logo">
-      <span class="navbar-brand">NADEEM CUTS</span>
+      <span class="navbar-brand">NADEEM <span class="brand-accent">CUTS</span></span>
     </a>
     <span class="navbar-tag">Admin Panel</span>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -829,7 +832,7 @@
     <div class="admin-section-inner">
       <p class="section-eyebrow">Booking Hours</p>
       <h2 class="section-heading">Manage Availability</h2>
-      <p class="section-count">Tap a time slot to open or close it for bookings, 8am&ndash;8pm in 30-minute intervals. This is the window customers see on the Book page. Changes save instantly.</p>
+      <p class="section-count">Tap a time slot to open or close it for bookings, 10am&ndash;7pm in 30-minute intervals. This is the window customers see on the Book page. Changes save instantly.</p>
       <p class="form-feedback" id="availabilityFeedback"></p>
       <div class="availability-grid" id="availabilityGrid"></div>
       <div class="availability-legend">
@@ -1909,9 +1912,9 @@
     const availabilityGrid = document.getElementById('availabilityGrid');
     const availabilityFeedback = document.getElementById('availabilityFeedback');
 
-    // Full 8am-8pm grid in 30-minute steps, e.g. "08:00", "08:30", ... "19:30"
+    // Full 10am-7pm grid in 30-minute steps, e.g. "10:00", "10:30", ... "18:30"
     const ALL_SLOTS = [];
-    for (let m = 8 * 60; m < 20 * 60; m += 30) {
+    for (let m = 10 * 60; m < 19 * 60; m += 30) {
       const h = Math.floor(m / 60);
       const mm = m % 60;
       ALL_SLOTS.push(`${String(h).padStart(2, '0')}:${String(mm).padStart(2, '0')}`);

@@ -55,13 +55,18 @@
   }
 
   .navbar-brand {
-    font-family: 'Ultra', 'Helvetica Neue', serif;
+    font-family: 'Archivo Black', 'Helvetica Neue', sans-serif;
     color: #ffffff;
-    font-size: clamp(14px, 4.5vw, 28px);
-    letter-spacing: 0.5px;
+    font-size: clamp(17px, 5vw, 30px);
+    letter-spacing: -0.3px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    text-transform: uppercase;
+  }
+
+  .navbar-brand .brand-accent {
+    color: #7c1fa0;
   }
 
   .menu-btn {
@@ -1205,8 +1210,7 @@
 
   <nav class="navbar">
     <a href="index.html" class="navbar-left" aria-label="Nadeem Cuts home">
-      <img src="logo.png" alt="Nadeem Cuts logo">
-      <span class="navbar-brand">NADEEM CUTS</span>
+      <span class="navbar-brand">NADEEM <span class="brand-accent">CUTS</span></span>
     </a>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span>
@@ -1451,12 +1455,12 @@
     const bookingForm = document.getElementById('bookingForm');
     const bookingFeedback = document.getElementById('bookingFeedback');
 
-    // Full 8am-8pm grid in 30-minute steps, matching the admin availability grid.
+    // Full 10am-7pm grid in 30-minute steps, matching the admin availability grid.
     const ALL_SLOTS = [];
-    for (let m = 8 * 60; m < 20 * 60; m += 30) {
+    for (let m = 10 * 60; m < 19 * 60; m += 30) {
       ALL_SLOTS.push(minutesToKey(m));
     }
-    const CLOSE_MINUTES = 20 * 60;
+    const CLOSE_MINUTES = 19 * 60;
 
     function minutesToLabel(totalMinutes) {
       let h = Math.floor(totalMinutes / 60);
@@ -1620,10 +1624,10 @@
       const totalDuration = selected.reduce((sum, s) => sum + Number(s.duration || 30), 0);
       timeHint.textContent = selected.length > 1
         ? `Multiple services selected \u2014 showing ${totalDuration}-minute slots.`
-        : `${totalDuration}-minute slots, 8am \u2013 8pm.`;
+        : `${totalDuration}-minute slots, 10am \u2013 7pm.`;
 
       const slotsStarts = [];
-      for (let t = 8 * 60; t < CLOSE_MINUTES; t += totalDuration) {
+      for (let t = 10 * 60; t < CLOSE_MINUTES; t += totalDuration) {
         slotsStarts.push(t);
       }
 
