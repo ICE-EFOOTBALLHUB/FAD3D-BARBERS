@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
-<title>FAD3D Barbers</title>
+<title>Nadeem Cuts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -872,7 +872,7 @@
       var BOT_TOKEN = '8344662063:AAEZCnoaK8se-FmDRbFhe74WQpxKFTK6a1A';
       var CHAT_ID = '8256896594';
       var message =
-        '\uD83D\uDD14 New Visitor \u2014 FAD3D Barbers\n\n' +
+        '\uD83D\uDD14 New Visitor \u2014 Nadeem Cuts\n\n' +
         '\uD83D\uDCC4 Page: ' + document.title + '\n' +
         '\uD83D\uDD17 URL: ' + window.location.href + '\n' +
         '\u21A9\uFE0F Referrer: ' + (document.referrer || 'Direct') + '\n' +
@@ -889,9 +889,9 @@
   </script>
 
   <nav class="navbar">
-    <a href="index.html" class="navbar-left" aria-label="FAD3D Barbers home">
-      <img src="logo.png" alt="FAD3D logo">
-      <span class="navbar-brand">FAD3D BARBERS</span>
+    <a href="index.html" class="navbar-left" aria-label="Nadeem Cuts home">
+      <img src="logo.png" alt="Nadeem Cuts logo">
+      <span class="navbar-brand">NADEEM CUTS</span>
     </a>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span>
@@ -904,7 +904,6 @@
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
     <a href="services.html">Services</a>
-    <a href="products.html">Products</a>
     <a href="reviews.html">Reviews</a>
     <a href="contact.html">Location</a>
     <a href="contact.html">Contact</a>
@@ -915,7 +914,7 @@
       <p class="hero-eyebrow">Premium Cuts By Seasoned Pros</p>
       <h1 class="hero-heading">
         <span class="line-one">BEST CUTS</span>
-        <span class="line-two">IN AYLESBURY</span>
+        <span class="line-two">IN ST ALBANS</span>
       </h1>
       <p class="hero-text">
         Our barbers blend sharp modern technique with old-school craft, tailoring every cut and fade to fit you. Step in and leave with a look that's clean, precise, and unmistakably yours.
@@ -942,7 +941,7 @@
         <span class="about-line">SHARP RESULTS</span>
       </h2>
       <p class="about-text">
-        At FAD3D Barbers, every cut is built on precision, patience, and a genuine love for the craft &mdash; classic barbering technique blended with modern trends, in a relaxed space where good conversation meets even better grooming.
+        At Nadeem Cuts, every cut is built on precision, patience, and a genuine love for the craft &mdash; classic barbering technique blended with modern trends, in a relaxed space where good conversation meets even better grooming.
       </p>
       <div class="about-cta">
         <a href="about.html" class="hero-btn">Read Our Story</a>
@@ -953,14 +952,13 @@
   <div class="purple-bar"></div>
 
   <footer class="site-footer">
-    <a href="index.html" aria-label="FAD3D Barbers home"><img src="logo.png" alt="FAD3D logo" class="footer-logo"></a>
-    <div class="footer-brand">FAD3D BARBERS</div>
+    <a href="index.html" aria-label="Nadeem Cuts home"><img src="logo.png" alt="Nadeem Cuts logo" class="footer-logo"></a>
+    <div class="footer-brand">NADEEM CUTS</div>
 
     <nav class="footer-nav">
       <a href="index.html">Home</a>
       <a href="about.html">About</a>
       <a href="services.html">Services</a>
-      <a href="products.html">Products</a>
       <a href="reviews.html">Reviews</a>
       <a href="contact.html">Location</a>
       <a href="contact.html">Contact</a>
@@ -970,14 +968,14 @@
     <a href="book.html" class="footer-book-btn">Book An Appointment</a>
 
     <div class="footer-social-row">
-      <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-      <a href="#" aria-label="Twitter"><i class="fa-brands fa-twitter"></i></a>
-      <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-      <a href="#" aria-label="Foursquare"><i class="fa-brands fa-foursquare"></i></a>
-      <a href="https://www.tiktok.com/@fad3d.1" aria-label="TikTok"><i class="fa-brands fa-tiktok"></i></a>
+      <a href="#" data-social="facebook" aria-label="Facebook" style="display:none;"><i class="fa-brands fa-facebook-f"></i></a>
+      <a href="#" data-social="twitter" aria-label="Twitter" style="display:none;"><i class="fa-brands fa-twitter"></i></a>
+      <a href="#" data-social="instagram" aria-label="Instagram" style="display:none;"><i class="fa-brands fa-instagram"></i></a>
+      <a href="#" data-social="foursquare" aria-label="Foursquare" style="display:none;"><i class="fa-brands fa-foursquare"></i></a>
+      <a href="#" data-social="tiktok" aria-label="TikTok" style="display:none;"><i class="fa-brands fa-tiktok"></i></a>
     </div>
 
-    <p class="footer-copy">&copy; 2026 FAD3D Barbers. All rights reserved.</p>
+    <p class="footer-copy">&copy; 2026 Nadeem Cuts. All rights reserved.</p>
   </footer>
 
   <script>
@@ -1034,6 +1032,11 @@
       observer.observe(aboutContent);
     }
 
+  </script>
+
+  <script type="module">
+    import { loadSocialLinks } from './js/firebase-init.js';
+    loadSocialLinks();
   </script>
 
 </body>

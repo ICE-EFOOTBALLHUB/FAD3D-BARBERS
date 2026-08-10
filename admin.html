@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light">
 <meta name="robots" content="noindex, nofollow">
-<title>Admin | FAD3D Barbers</title>
+<title>Admin | Nadeem Cuts</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Ultra&family=Archivo+Black&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -739,7 +739,7 @@
 
 <div class="admin-lock-overlay" id="adminLockOverlay">
   <div class="admin-lock-card">
-    <img src="logo.png" alt="FAD3D logo">
+    <img src="logo.png" alt="Nadeem Cuts logo">
     <h1>Admin Access</h1>
     <p>Enter the 6-digit access code to continue.</p>
     <form id="adminLockForm">
@@ -771,9 +771,9 @@
 </script>
 
   <nav class="navbar">
-    <a href="index.html" class="navbar-left" aria-label="FAD3D Barbers home">
-      <img src="logo.png" alt="FAD3D logo">
-      <span class="navbar-brand">FAD3D BARBERS</span>
+    <a href="index.html" class="navbar-left" aria-label="Nadeem Cuts home">
+      <img src="logo.png" alt="Nadeem Cuts logo">
+      <span class="navbar-brand">NADEEM CUTS</span>
     </a>
     <span class="navbar-tag">Admin Panel</span>
     <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
@@ -787,7 +787,6 @@
     <a href="index.html">Home</a>
     <a href="about.html">About</a>
     <a href="services.html#offer">Services</a>
-    <a href="products.html">Products</a>
     <a href="book.html">Book</a>
   </div>
 
@@ -847,7 +846,9 @@
   </section>
 
   <!-- ---------- ORDERS ---------- -->
-  <section class="admin-section alt">
+  <!-- ---------- ORDERS (hidden — client doesn't sell products yet; re-enable
+       by removing the style="display:none" below if that changes) ---------- -->
+  <section class="admin-section alt" style="display:none;">
     <div class="admin-section-inner">
       <p class="section-eyebrow">Shop</p>
       <h2 class="section-heading">Orders</h2>
@@ -871,8 +872,9 @@
     </div>
   </section>
 
-  <!-- ---------- PRODUCTS ---------- -->
-  <section class="admin-section">
+  <!-- ---------- PRODUCTS (hidden — client doesn't sell products yet; re-enable
+       by removing the style="display:none" below if that changes) ---------- -->
+  <section class="admin-section" style="display:none;">
     <div class="admin-section-inner">
       <p class="section-eyebrow">Inventory</p>
       <h2 class="section-heading">Manage Products</h2>
@@ -943,7 +945,7 @@
   </section>
 
   <!-- ---------- SERVICES ---------- -->
-  <section class="admin-section alt">
+  <section class="admin-section">
     <div class="admin-section-inner">
       <p class="section-eyebrow">Barbering</p>
       <h2 class="section-heading">Manage Services</h2>
@@ -1009,7 +1011,75 @@
   </section>
 
   <!-- ---------- REVIEWS ---------- -->
+  <!-- ---------- SOCIAL LINKS ---------- -->
+  <section class="admin-section alt">
+    <div class="admin-section-inner">
+      <p class="section-eyebrow">Website</p>
+      <h2 class="section-heading">Social Links</h2>
+      <p class="section-count">Leave any of these blank to hide that icon on the site. Paste the full link, e.g. https://instagram.com/yourpage</p>
+
+      <div class="admin-form-card">
+        <form id="socialsForm">
+          <div class="form-group">
+            <label for="socialFacebook">Facebook</label>
+            <input type="url" id="socialFacebook" placeholder="https://facebook.com/...">
+          </div>
+          <div class="form-group">
+            <label for="socialInstagram">Instagram</label>
+            <input type="url" id="socialInstagram" placeholder="https://instagram.com/...">
+          </div>
+          <div class="form-group">
+            <label for="socialTiktok">TikTok</label>
+            <input type="url" id="socialTiktok" placeholder="https://tiktok.com/@...">
+          </div>
+          <div class="form-group">
+            <label for="socialTwitter">Twitter / X</label>
+            <input type="url" id="socialTwitter" placeholder="https://x.com/...">
+          </div>
+          <div class="form-group">
+            <label for="socialFoursquare">Foursquare</label>
+            <input type="url" id="socialFoursquare" placeholder="https://foursquare.com/...">
+          </div>
+          <button type="submit" class="admin-submit-btn" id="socialsSubmitBtn">Save Social Links</button>
+          <p class="form-feedback" id="socialsFeedback"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- CONTACT INFO ---------- -->
   <section class="admin-section">
+    <div class="admin-section-inner">
+      <p class="section-eyebrow">Website</p>
+      <h2 class="section-heading">Contact Info</h2>
+      <p class="section-count">Shown in the contact panel on every page. Leave a field blank to keep whatever's currently on the site.</p>
+
+      <div class="admin-form-card">
+        <form id="contactForm">
+          <div class="form-group">
+            <label for="contactAddress">Address</label>
+            <input type="text" id="contactAddress" placeholder="e.g. St Albans, Hertfordshire">
+          </div>
+          <div class="form-group">
+            <label for="contactHours">Opening Hours</label>
+            <input type="text" id="contactHours" placeholder="e.g. Mon&ndash;Fri: 9am&ndash;6pm">
+          </div>
+          <div class="form-group">
+            <label for="contactPhone">Phone</label>
+            <input type="tel" id="contactPhone" placeholder="+44 ...">
+          </div>
+          <div class="form-group">
+            <label for="contactEmail">Email</label>
+            <input type="email" id="contactEmail" placeholder="hello@yourbusiness.co.uk">
+          </div>
+          <button type="submit" class="admin-submit-btn" id="contactSubmitBtn">Save Contact Info</button>
+          <p class="form-feedback" id="contactFeedback"></p>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section class="admin-section alt">
     <div class="admin-section-inner">
       <p class="section-eyebrow">Feedback</p>
       <h2 class="section-heading">Customer Reviews</h2>
@@ -1033,7 +1103,7 @@
   </section>
 
   <!-- ---------- ADMIN ACCESS CODE ---------- -->
-  <section class="admin-section alt">
+  <section class="admin-section">
     <div class="admin-section-inner">
       <p class="section-eyebrow">Security</p>
       <h2 class="section-heading">Admin Access Code</h2>
@@ -1067,7 +1137,7 @@
   </section>
 
   <footer class="admin-footer">
-    <p>&copy; 2026 FAD3D Barbers &mdash; Admin Panel. Internal use only.</p>
+    <p>&copy; 2026 Nadeem Cuts &mdash; Admin Panel. Internal use only.</p>
   </footer>
 
   <script type="module">
@@ -1110,6 +1180,8 @@
         unlockAdmin();
         startReservationsListener();
         startOrdersListener();
+        loadSocialsIntoForm();
+        loadContactIntoForm();
       } else {
         lockAdmin();
         if (unsubReservations) { unsubReservations(); unsubReservations = null; }
@@ -1194,6 +1266,110 @@
     const adminSignOutBtn = document.getElementById('adminSignOutBtn');
     if (adminSignOutBtn) {
       adminSignOutBtn.addEventListener('click', () => signOut(auth));
+    }
+
+    // ---------- SOCIAL LINKS ----------
+    // Stored as a single settings/socials doc: { facebook, instagram, tiktok,
+    // twitter, foursquare }. The public pages read this same doc (see
+    // loadSocialLinks() in js/firebase-init.js) and show/hide each footer
+    // icon based on whether a URL is set.
+    const socialsRef = doc(db, 'settings', 'socials');
+    const socialFields = {
+      facebook: document.getElementById('socialFacebook'),
+      instagram: document.getElementById('socialInstagram'),
+      tiktok: document.getElementById('socialTiktok'),
+      twitter: document.getElementById('socialTwitter'),
+      foursquare: document.getElementById('socialFoursquare')
+    };
+    const socialsForm = document.getElementById('socialsForm');
+    const socialsFeedback = document.getElementById('socialsFeedback');
+    const socialsSubmitBtn = document.getElementById('socialsSubmitBtn');
+
+    async function loadSocialsIntoForm() {
+      try {
+        const snap = await getDoc(socialsRef);
+        const data = snap.exists() ? snap.data() : {};
+        Object.entries(socialFields).forEach(([key, input]) => {
+          if (input) input.value = data[key] || '';
+        });
+      } catch (err) {
+        console.error('Could not load social links:', err);
+      }
+    }
+
+    if (socialsForm) {
+      socialsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        socialsSubmitBtn.disabled = true;
+        socialsSubmitBtn.textContent = 'Saving...';
+        socialsFeedback.classList.remove('error');
+        try {
+          const payload = {};
+          Object.entries(socialFields).forEach(([key, input]) => {
+            payload[key] = input ? input.value.trim() : '';
+          });
+          await setDoc(socialsRef, payload, { merge: true });
+          socialsFeedback.textContent = 'Social links updated.';
+        } catch (err) {
+          socialsFeedback.classList.add('error');
+          socialsFeedback.textContent = `Couldn't save: ${err.message}`;
+        } finally {
+          socialsSubmitBtn.disabled = false;
+          socialsSubmitBtn.textContent = 'Save Social Links';
+        }
+      });
+    }
+
+    // ---------- CONTACT INFO ----------
+    // Stored as a single settings/contact doc: { address, hours, phone, email }.
+    // Public pages read this doc (see loadContactInfo() in js/firebase-init.js)
+    // and only overwrite a field if it's actually set, so an empty field here
+    // just means "no change yet" rather than "blank it out on the site."
+    const contactRef = doc(db, 'settings', 'contact');
+    const contactFields = {
+      address: document.getElementById('contactAddress'),
+      hours: document.getElementById('contactHours'),
+      phone: document.getElementById('contactPhone'),
+      email: document.getElementById('contactEmail')
+    };
+    const contactForm = document.getElementById('contactForm');
+    const contactFeedback = document.getElementById('contactFeedback');
+    const contactSubmitBtn = document.getElementById('contactSubmitBtn');
+
+    async function loadContactIntoForm() {
+      try {
+        const snap = await getDoc(contactRef);
+        const data = snap.exists() ? snap.data() : {};
+        Object.entries(contactFields).forEach(([key, input]) => {
+          if (input) input.value = data[key] || '';
+        });
+      } catch (err) {
+        console.error('Could not load contact info:', err);
+      }
+    }
+
+    if (contactForm) {
+      contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        contactSubmitBtn.disabled = true;
+        contactSubmitBtn.textContent = 'Saving...';
+        contactFeedback.classList.remove('error');
+        try {
+          const payload = {};
+          Object.entries(contactFields).forEach(([key, input]) => {
+            const val = input ? input.value.trim() : '';
+            if (val) payload[key] = val;
+          });
+          await setDoc(contactRef, payload, { merge: true });
+          contactFeedback.textContent = 'Contact info updated.';
+        } catch (err) {
+          contactFeedback.classList.add('error');
+          contactFeedback.textContent = `Couldn't save: ${err.message}`;
+        } finally {
+          contactSubmitBtn.disabled = false;
+          contactSubmitBtn.textContent = 'Save Contact Info';
+        }
+      });
     }
 
     // ---------- MOBILE MENU ----------
