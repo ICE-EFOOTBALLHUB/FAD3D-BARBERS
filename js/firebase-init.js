@@ -60,6 +60,71 @@ function escapeHtml(str) {
   }[c]));
 }
 
+// ---------- SOCIAL LINKS (shared across all pages, editable from Admin) ----------
+// Reads settings/socials from Firestore and applies each URL to any element
+// on the page with a matching data-social="<key>" attribute. Elements with
+// no saved URL for their key are hidden rather than left as dead "#" links.
+async function loadSocialLinks() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'socials'));
+    const data = snap.exists() ? snap.data() : {};
+    document.querySelectorAll('[data-social]').forEach((el) => {
+      const key = el.getAttribute('data-social');
+      const url = (data[key] || '').trim();
+      if (url) {
+        el.href = url;
+        el.style.display = '';
+      } else {
+        el.style.display = 'none';
+      }
+    });
+  } catch (err) {
+    // Fail quietly on public pages — a social row just stays hidden.
+    console.error('Could not load social links:', err);
+  }
+}
+
+// ---------- CONTACT EMAIL (shared across all pages, editable from Admin) ----------
+// Reads settings/contact from Firestore and applies the email to any element
+// with data-contact="email" (sets both its text and its mailto: link).
+async function loadContactInfo() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'contact'));
+    const data = snap.exists() ? snap.data() : {};
+    const email = (data.email || '').trim();
+    if (!email) return;
+    document.querySelectorAll('[data-contact="email"]').forEach((el) => {
+      el.textContent = email;
+      el.href = `mailto:${email}`;
+    });
+  } catch (err) {
+    console.error('Could not load contact info:', err);
+  }
+}
+
+// ---------- CONTACT INFO (shared across all pages, editable from Admin) ----------
+// Reads settings/contact from Firestore ({ address, hours, phone, email }) and
+// applies it to any element with a matching data-contact="<key>" attribute.
+// For phone/email, which are <a> tags, it also updates the tel:/mailto: href.
+async function loadContactInfo() {
+  try {
+    const snap = await getDoc(doc(db, 'settings', 'contact'));
+    if (!snap.exists()) return;
+    const data = snap.data();
+    document.querySelectorAll('[data-contact]').forEach((el) => {
+      const key = el.getAttribute('data-contact');
+      const value = (data[key] || '').trim();
+      if (!value) return;
+      el.textContent = value;
+      if (key === 'email') el.href = `mailto:${value}`;
+      if (key === 'phone') el.href = `tel:${value.replace(/[^0-9+]/g, '')}`;
+    });
+  } catch (err) {
+    // Fail quietly on public pages — falls back to whatever's in the HTML.
+    console.error('Could not load contact info:', err);
+  }
+}
+
 async function uploadToCloudinary(file) {
   const formData = new FormData();
   formData.append("file", file);
@@ -89,6 +154,9 @@ export {
   where,
   serverTimestamp,
   uploadToCloudinary,
+  loadSocialLinks,
+  loadContactInfo,
+  loadContactInfo,
   escapeHtml,
   auth,
   onAuthStateChanged,
@@ -101,3 +169,4 @@ export {
   browserLocalPersistence,
   browserSessionPersistence
 };
+      
