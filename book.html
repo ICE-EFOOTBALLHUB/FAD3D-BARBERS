@@ -1375,7 +1375,7 @@
 
   <script type="module">
     import {
-      db, collection, addDoc, doc, onSnapshot, query, orderBy, where, getDocs, serverTimestamp, escapeHtml, loadSocialLinks, loadContactInfo
+      db, collection, addDoc, doc, getDoc, onSnapshot, query, orderBy, where, getDocs, serverTimestamp, escapeHtml, loadSocialLinks, loadContactInfo
     } from './js/firebase-init.js';
     loadSocialLinks();
     loadContactInfo();
@@ -1492,9 +1492,17 @@
     dateInput.value = todayKey();
 
     let servicesCache = [];
-    let openSlots = new Set(ALL_SLOTS); // admin-managed hours, from settings/availability
+    let openSlots = new Set(ALL_SLOTS); // admin-managed default hours, from settings/availability
+    let dateOverride = null; // Set of open slots just for the selected date (settings/dateAvailability), or null if that date has no override and uses the default hours
     let occupiedBlocks = new Set(); // 30-min blocks already booked on the selected date
     let selectedTime = null;
+
+    // The hours that actually apply to whichever date is currently selected:
+    // a per-date override if the admin set one (e.g. closed for a holiday,
+    // or shorter hours), otherwise the default weekly template.
+    function effectiveOpenSlots() {
+      return dateOverride !== null ? dateOverride : openSlots;
+    }
 
     function getSelectedServices() {
       return servicesCache.filter(s => s._checked);
@@ -1570,6 +1578,23 @@
       renderTimeGrid();
     });
 
+    // ---------- DATE-SPECIFIC OVERRIDE for the selected date ----------
+    // Admin can mark a particular future date closed, or give it different
+    // hours, from the "Date-Specific Availability" panel on the Admin page.
+    // Doc id = "YYYY-MM-DD" in the dateAvailability collection; an empty
+    // openSlots array means the shop is closed all day on that date.
+    async function loadDateOverrideForDate(dateStr) {
+      dateOverride = null;
+      try {
+        const snap = await getDoc(doc(db, 'dateAvailability', dateStr));
+        if (snap.exists() && Array.isArray(snap.data().openSlots)) {
+          dateOverride = new Set(snap.data().openSlots);
+        }
+      } catch (err) {
+        console.error('Could not load date override:', err);
+      }
+    }
+
     // ---------- EXISTING BOOKINGS for the selected date ----------
     async function loadOccupiedBlocksForDate(dateStr) {
       occupiedBlocks = new Set();
@@ -1590,10 +1615,13 @@
       renderTimeGrid();
     }
 
-    dateInput.addEventListener('change', () => {
+    async function handleDateChange() {
       selectedTime = null;
-      loadOccupiedBlocksForDate(dateInput.value);
-    });
+      await loadDateOverrideForDate(dateInput.value);
+      await loadOccupiedBlocksForDate(dateInput.value); // renders the grid when done
+    }
+
+    dateInput.addEventListener('change', handleDateChange);
 
     function isRangeAvailable(startKey, durationMinutes) {
       const startMin = keyToMinutes(startKey);
@@ -1605,7 +1633,7 @@
       }
       for (let m = startMin; m < startMin + durationMinutes; m += 30) {
         const key = minutesToKey(m);
-        if (!openSlots.has(key) || occupiedBlocks.has(key)) return false;
+        if (!effectiveOpenSlots().has(key) || occupiedBlocks.has(key)) return false;
       }
       return true;
     }
@@ -1616,6 +1644,14 @@
 
       if (selected.length === 0) {
         timeHint.textContent = 'Select a service above to see available times.';
+        selectedTime = null;
+        updateSubmitState();
+        return;
+      }
+
+      // Admin has marked this specific date closed (e.g. a holiday or day off).
+      if (dateOverride !== null && dateOverride.size === 0) {
+        timeHint.textContent = "We're closed on this date \u2014 please choose another day.";
         selectedTime = null;
         updateSubmitState();
         return;
@@ -1679,7 +1715,7 @@
       }
     });
 
-    loadOccupiedBlocksForDate(dateInput.value);
+    handleDateChange();
 
     bookingForm.addEventListener('submit', async (e) => {
       e.preventDefault();

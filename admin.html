@@ -402,6 +402,7 @@
   .form-group input[type="text"],
   .form-group input[type="number"],
   .form-group input[type="password"],
+  .form-group input[type="date"],
   .form-group select,
   .form-group textarea {
     width: 100%;
@@ -675,6 +676,17 @@
     }
   }
 
+  .override-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 4px;
+  }
+
+  .override-actions .row-edit-btn {
+    background: #ffffff;
+  }
+
   .availability-legend {
     display: flex;
     flex-direction: column;
@@ -844,6 +856,45 @@
           <span class="legend-swatch legend-swatch-closed"></span>
           <span class="legend-label">Unavailable</span>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------- DATE-SPECIFIC AVAILABILITY ---------- -->
+  <section class="admin-section">
+    <div class="admin-section-inner">
+      <p class="section-eyebrow">Booking Hours</p>
+      <h2 class="section-heading">Date-Specific Availability</h2>
+      <p class="section-count">Override the hours above for one future date &mdash; useful for holidays, days off, or a shorter day. Customers already book any future date; anything you close or edit here only affects that single date.</p>
+
+      <div class="form-group" style="max-width:260px;">
+        <label for="overrideDateInput">Date to customize</label>
+        <input type="date" id="overrideDateInput">
+      </div>
+
+      <p class="form-feedback" id="overrideStatusText" style="color:#000;"></p>
+
+      <div id="overrideControls" style="display:none;">
+        <div class="override-actions">
+          <button type="button" class="row-edit-btn" id="closeDayBtn">Close this day entirely</button>
+          <button type="button" class="row-edit-btn" id="resetDayBtn">Reset to default hours</button>
+        </div>
+        <div class="availability-grid" id="overrideGrid" style="margin-top:16px;"></div>
+        <p class="form-feedback" id="overrideFeedback"></p>
+      </div>
+
+      <div class="table-wrap" style="margin-top:32px;">
+        <p class="section-count">Upcoming overrides</p>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="overridesBody"></tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -1972,6 +2023,177 @@
         showFeedback(availabilityFeedback, `Couldn't save: ${err.message}`, true);
       } finally {
         btn.disabled = false;
+      }
+    });
+
+    // ---------- DATE-SPECIFIC AVAILABILITY (per-day overrides) ----------
+    // Stored in the 'dateAvailability' collection, one doc per date
+    // (doc id = "YYYY-MM-DD", field openSlots: string[]). A date with no
+    // doc here just uses the default hours above. An empty openSlots array
+    // means the shop is closed all day on that date. book.html reads this
+    // same collection to work out what a customer can pick for a given date.
+
+    const dateAvailabilityCol = collection(db, 'dateAvailability');
+    const overrideDateInput = document.getElementById('overrideDateInput');
+    const overrideStatusText = document.getElementById('overrideStatusText');
+    const overrideControls = document.getElementById('overrideControls');
+    const overrideGrid = document.getElementById('overrideGrid');
+    const overrideFeedback = document.getElementById('overrideFeedback');
+    const closeDayBtn = document.getElementById('closeDayBtn');
+    const resetDayBtn = document.getElementById('resetDayBtn');
+    const overridesBody = document.getElementById('overridesBody');
+
+    function todayKeyLocal() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    }
+    overrideDateInput.min = todayKeyLocal();
+
+    let overrideSlotsCache = null; // null = selected date has no override doc (uses default hours)
+
+    function statusLabelFor(slotsSet) {
+      if (slotsSet === null) return 'currently uses the default hours above';
+      if (slotsSet.size === 0) return 'is currently marked closed all day';
+      return `has custom hours set (${slotsSet.size} slot${slotsSet.size === 1 ? '' : 's'} open, overrides the default)`;
+    }
+
+    function renderOverrideGrid() {
+      overrideGrid.innerHTML = '';
+      // Start from the override if one exists, otherwise show the default
+      // template so the admin can see (and start editing from) real hours.
+      const activeSet = overrideSlotsCache !== null ? overrideSlotsCache : openSlotsCache;
+      ALL_SLOTS.forEach(key => {
+        const isOpen = activeSet.has(key);
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = `avail-slot ${isOpen ? 'open' : 'closed'}`;
+        btn.dataset.slot = key;
+        btn.textContent = slotLabel(key);
+        overrideGrid.appendChild(btn);
+      });
+    }
+
+    async function loadOverrideForDate(dateStr) {
+      overrideFeedback.textContent = '';
+      overrideControls.style.display = '';
+      try {
+        const snap = await getDoc(doc(db, 'dateAvailability', dateStr));
+        overrideSlotsCache = (snap.exists() && Array.isArray(snap.data().openSlots))
+          ? new Set(snap.data().openSlots)
+          : null;
+        overrideStatusText.textContent = `${dateStr} ${statusLabelFor(overrideSlotsCache)}.`;
+      } catch (err) {
+        overrideStatusText.textContent = `Couldn't load ${dateStr}: ${err.message}`;
+        overrideSlotsCache = null;
+      }
+      renderOverrideGrid();
+    }
+
+    overrideDateInput.addEventListener('change', () => {
+      if (!overrideDateInput.value) {
+        overrideControls.style.display = 'none';
+        return;
+      }
+      loadOverrideForDate(overrideDateInput.value);
+    });
+
+    overrideGrid.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.avail-slot');
+      if (!btn || !overrideDateInput.value) return;
+      const key = btn.dataset.slot;
+      // First edit on a date with no override yet starts from the default
+      // template, so toggling one slot doesn't silently open/close every
+      // other slot on that date.
+      const base = overrideSlotsCache !== null ? overrideSlotsCache : new Set(openSlotsCache);
+      const next = new Set(base);
+      if (next.has(key)) next.delete(key); else next.add(key);
+      btn.disabled = true;
+      try {
+        await setDoc(doc(db, 'dateAvailability', overrideDateInput.value), {
+          openSlots: Array.from(next),
+          updatedAt: serverTimestamp()
+        });
+        overrideSlotsCache = next;
+        overrideStatusText.textContent = `${overrideDateInput.value} ${statusLabelFor(overrideSlotsCache)}.`;
+      } catch (err) {
+        showFeedback(overrideFeedback, `Couldn't save: ${err.message}`, true);
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    closeDayBtn.addEventListener('click', async () => {
+      if (!overrideDateInput.value) return;
+      closeDayBtn.disabled = true;
+      try {
+        await setDoc(doc(db, 'dateAvailability', overrideDateInput.value), {
+          openSlots: [],
+          updatedAt: serverTimestamp()
+        });
+        overrideSlotsCache = new Set();
+        overrideStatusText.textContent = `${overrideDateInput.value} ${statusLabelFor(overrideSlotsCache)}.`;
+        renderOverrideGrid();
+      } catch (err) {
+        showFeedback(overrideFeedback, `Couldn't save: ${err.message}`, true);
+      } finally {
+        closeDayBtn.disabled = false;
+      }
+    });
+
+    resetDayBtn.addEventListener('click', async () => {
+      if (!overrideDateInput.value) return;
+      resetDayBtn.disabled = true;
+      try {
+        await deleteDoc(doc(db, 'dateAvailability', overrideDateInput.value));
+        overrideSlotsCache = null;
+        overrideStatusText.textContent = `${overrideDateInput.value} ${statusLabelFor(overrideSlotsCache)}.`;
+        renderOverrideGrid();
+      } catch (err) {
+        showFeedback(overrideFeedback, `Couldn't save: ${err.message}`, true);
+      } finally {
+        resetDayBtn.disabled = false;
+      }
+    });
+
+    // Live list of every upcoming override, so the admin can see at a glance
+    // which future dates have already been closed or customized, and clear
+    // any of them without having to remember/re-enter the date above.
+    onSnapshot(query(dateAvailabilityCol, orderBy('__name__', 'asc')), (snap) => {
+      const today = todayKeyLocal();
+      const rows = snap.docs.filter(d => d.id >= today);
+      if (rows.length === 0) {
+        overridesBody.innerHTML = '<tr><td colspan="3" style="color:#888; font-style:italic;">No upcoming overrides &mdash; every future date uses the default hours.</td></tr>';
+        return;
+      }
+      overridesBody.innerHTML = rows.map(d => {
+        const slots = Array.isArray(d.data().openSlots) ? d.data().openSlots : [];
+        const label = slots.length === 0 ? 'Closed all day' : `Custom hours (${slots.length} slot${slots.length === 1 ? '' : 's'} open)`;
+        return `
+          <tr>
+            <td>${escapeHtml(d.id)}</td>
+            <td>${label}</td>
+            <td><button type="button" class="row-delete-btn" data-reset-date="${d.id}">Reset</button></td>
+          </tr>
+        `;
+      }).join('');
+    }, (err) => {
+      overridesBody.innerHTML = `<tr><td colspan="3" class="error">Couldn't load: ${err.message}</td></tr>`;
+    });
+
+    overridesBody.addEventListener('click', async (e) => {
+      const btn = e.target.closest('[data-reset-date]');
+      if (!btn) return;
+      const dateStr = btn.dataset.resetDate;
+      if (!confirm(`Reset ${dateStr} back to the default hours?`)) return;
+      try {
+        await deleteDoc(doc(db, 'dateAvailability', dateStr));
+        if (overrideDateInput.value === dateStr) {
+          overrideSlotsCache = null;
+          overrideStatusText.textContent = `${dateStr} ${statusLabelFor(overrideSlotsCache)}.`;
+          renderOverrideGrid();
+        }
+      } catch (err) {
+        alert(`Couldn't reset ${dateStr}: ${err.message}`);
       }
     });
   </script>
