@@ -1,3 +1,4 @@
+/*! ICEWS-WM | Built by ICE WEB SOLUTIONS | https://icewebsolutions.vercel.app | (c) 2026 | MIT License */
 // ---------- FIREBASE INIT (shared across pages) ----------
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
 import {
@@ -30,13 +31,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.10.0/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCw8H7nAicBcO94uSfn3Ac0MsTrmhkTt4o",
-  authDomain: "fad3dbarber.firebaseapp.com",
-  projectId: "fad3dbarber",
-  storageBucket: "fad3dbarber.firebasestorage.app",
-  messagingSenderId: "799129393328",
-  appId: "1:799129393328:web:d4445932d4311738fb0375",
-  measurementId: "G-9ZSDDNX58P"
+  apiKey: "AIzaSyCV9AFjAKqMkZ5e8ZQf0m5hf5OS0QVB2AA",
+  authDomain: "fadedbarbers2-fabce.firebaseapp.com",
+  projectId: "fadedbarbers2-fabce",
+  storageBucket: "fadedbarbers2-fabce.firebasestorage.app",
+  messagingSenderId: "435519708485",
+  appId: "1:435519708485:web:33bc79d039fda2f3b6322c",
+  measurementId: "G-BTGV21B0Z2"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -58,53 +59,6 @@ function escapeHtml(str) {
     '"': '&quot;',
     "'": '&#39;'
   }[c]));
-}
-
-// ---------- SOCIAL LINKS (shared across all pages, editable from Admin) ----------
-// Reads settings/socials from Firestore and applies each URL to any element
-// on the page with a matching data-social="<key>" attribute. Elements with
-// no saved URL for their key are hidden rather than left as dead "#" links.
-async function loadSocialLinks() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'socials'));
-    const data = snap.exists() ? snap.data() : {};
-    document.querySelectorAll('[data-social]').forEach((el) => {
-      const key = el.getAttribute('data-social');
-      const url = (data[key] || '').trim();
-      if (url) {
-        el.href = url;
-        el.style.display = '';
-      } else {
-        el.style.display = 'none';
-      }
-    });
-  } catch (err) {
-    // Fail quietly on public pages — a social row just stays hidden.
-    console.error('Could not load social links:', err);
-  }
-}
-
-// ---------- CONTACT INFO (shared across all pages, editable from Admin) ----------
-// Reads settings/contact from Firestore ({ address, hours, phone, email }) and
-// applies it to any element with a matching data-contact="<key>" attribute.
-// For phone/email, which are <a> tags, it also updates the tel:/mailto: href.
-async function loadContactInfo() {
-  try {
-    const snap = await getDoc(doc(db, 'settings', 'contact'));
-    if (!snap.exists()) return;
-    const data = snap.data();
-    document.querySelectorAll('[data-contact]').forEach((el) => {
-      const key = el.getAttribute('data-contact');
-      const value = (data[key] || '').trim();
-      if (!value) return;
-      el.textContent = value;
-      if (key === 'email') el.href = `mailto:${value}`;
-      if (key === 'phone') el.href = `tel:${value.replace(/[^0-9+]/g, '')}`;
-    });
-  } catch (err) {
-    // Fail quietly on public pages — falls back to whatever's in the HTML.
-    console.error('Could not load contact info:', err);
-  }
 }
 
 async function uploadToCloudinary(file) {
@@ -136,8 +90,6 @@ export {
   where,
   serverTimestamp,
   uploadToCloudinary,
-  loadSocialLinks,
-  loadContactInfo,
   escapeHtml,
   auth,
   onAuthStateChanged,
@@ -150,4 +102,5 @@ export {
   browserLocalPersistence,
   browserSessionPersistence
 };
-                    
+
+  

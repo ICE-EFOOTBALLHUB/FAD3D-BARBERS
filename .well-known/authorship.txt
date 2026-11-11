@@ -1,0 +1,13 @@
+Authorship statement
+====================
+Author:   ICE WEB SOLUTIONS
+Website:  https://icewebsolutions.vercel.app
+Project:  FAD3D Barbers
+Date:     2026-11-11
+License:  MIT
+
+This project (frontend and backend integration) was designed and built end
+to end by ICE WEB SOLUTIONS. The file MANIFEST.sha256 in the repository root lists the
+SHA-256 of every file as released on the date above.
+
+MANIFEST.sha256 SHA-256: 4c6d8c12ab6bc2e6caade7bda40b05e7e80256a0a7588e90f8f120c068a7ad4f
